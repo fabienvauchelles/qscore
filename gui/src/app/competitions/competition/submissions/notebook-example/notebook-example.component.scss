@@ -1,0 +1,15 @@
+@import "../../../../../scss/variables";
+
+
+p {
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+
+    &:first-child {
+        margin-top: 0;
+    }
+}
+
+.input-group-append .btn > .fa:first-child {
+    margin-right: 0;
+}

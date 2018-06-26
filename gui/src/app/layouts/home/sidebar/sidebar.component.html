@@ -1,0 +1,131 @@
+<div class="sidebar">
+    <nav class="sidebar-nav">
+        <ul class="nav">
+            <li class="nav-title text-center">
+                <span>Menu</span>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link"
+                   routerLinkActive="active"
+                   [routerLink]="['/competitions']"
+                   [routerLinkActiveOptions]="{exact:true}">
+                    <i class="fa fa-rocket"></i>
+                    Competitions
+                </a>
+            </li>
+
+            <li class="nav-item"
+                *ngIf="authService.admin">
+                <a class="nav-link"
+                   routerLinkActive="active"
+                   [routerLink]="['/players']"
+                   [routerLinkActiveOptions]="{exact:true}">
+                    <i class="fa fa-users"></i>
+                    Players
+                </a>
+            </li>
+
+            <li class="divider"></li>
+
+            <ng-container *ngIf="competition">
+                <li class="nav-title text-center">
+                    <span>{{competition.title_short}}</span>
+                </li>
+
+                <li class="nav-item"
+                    *ngIf="authService.admin">
+                    <a class="nav-link"
+                       routerLinkActive="active"
+                       [routerLink]="['/competitions', competition.id, 'update']"
+                       [routerLinkActiveOptions]="{exact:true}">
+                        <i class="fa fa-edit"></i>
+                        Edit info
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link"
+                       routerLinkActive="active"
+                       [routerLink]="['/competitions', competition.id, 'info']"
+                       [routerLinkActiveOptions]="{exact:true}">
+                        <i class="fa fa-bookmark"></i>
+                        Description
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link"
+                       routerLinkActive="active"
+                       [routerLink]="['/competitions', competition.id, 'evaluation']"
+                       [routerLinkActiveOptions]="{exact:true}">
+                        <i class="fa fa-flask"></i>
+                        Evaluation
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link"
+                       routerLinkActive="active"
+                       [routerLink]="['/competitions', competition.id, 'rules']"
+                       [routerLinkActiveOptions]="{exact:true}">
+                        <i class="fa fa-gavel"></i>
+                        Rules
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link"
+                       routerLinkActive="active"
+                       [routerLink]="['/competitions', competition.id, 'materials']"
+                       [routerLinkActiveOptions]="{exact:true}">
+                        <i class="fa fa-database"></i>
+                        Data
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link"
+                       routerLinkActive="active"
+                       [routerLink]="['/competitions', competition.id, 'submissions']"
+                       [routerLinkActiveOptions]="{exact:true}">
+                        <i class="fa fa-pencil"></i>
+                        Submissions
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link"
+                       routerLinkActive="active"
+                       [routerLink]="['/competitions', competition.id, 'leaderboard']"
+                       [routerLinkActiveOptions]="{exact:true}">
+                        <i class="fa fa-trophy"></i>
+                        Leaderboard
+                    </a>
+                </li>
+
+                <li class="nav-item"
+                    *ngIf="authService.admin">
+                    <a class="nav-link"
+                       routerLinkActive="active"
+                       [routerLink]="['/competitions', competition.id, 'players']"
+                       [routerLinkActiveOptions]="{exact:true}">
+                        <i class="fa fa-users"></i>
+                        Players
+                    </a>
+                </li>
+            </ng-container>
+
+            <li class="nav-item nav-item-down">
+                <a class="nav-link"
+                   href="https://github.com/fabienvauchelles/qscore"
+                   target="_blank">
+                    <i class="fa fa-github"></i>
+                    View on Github
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <sidebar-minimizer></sidebar-minimizer>
+</div>

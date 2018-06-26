@@ -1,0 +1,33 @@
+version: '3'
+services:
+  qs-platform-test:
+    image: qscore/platform-engine:latest
+    ports:
+      - "3001:3001"
+    env_file:
+      - variables.env
+    links:
+      - postgres
+      - rabbitmq
+      - redis
+
+  qs-score-test:
+    image: qscore/score-engine:latest
+    env_file:
+      - variables.env
+    links:
+      - qs-platform-test
+      - rabbitmq
+
+  postgres:
+    image: postgres:9.6
+    env_file:
+      - variables.env
+
+  rabbitmq:
+    image: rabbitmq:3.7
+    env_file:
+      - variables.env
+
+  redis:
+    image: redis

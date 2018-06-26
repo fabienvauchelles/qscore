@@ -1,0 +1,107 @@
+<!doctype html>
+<html>
+
+<head>
+    <base href="./">
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Qscore - Quick Scoring platform for Data Science">
+    <meta name="author" content="Fabien Vauchelles">
+    <meta name="keyword" content="machinelearning,datascience,score,artificialintelligence,python">
+
+    <link rel="shortcut icon" href="assets/img/favicon.png">
+
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu:700" rel="stylesheet">
+
+    <title>Qscore - Quick Scoring platform for Data Science</title>
+
+    <style>
+        /* App Loading */
+        .spinner-container {
+            position: absolute;
+            left: 0; right: 0;
+            top: 0; bottom: 0;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: #fff;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 40px;
+            text-align: center;
+            font-size: 10px;
+        }
+
+        .spinner > div {
+            background-color: #00afec;
+            height: 100%;
+            width: 6px;
+            display: inline-block;
+
+            -webkit-animation: sk-stretchdelay 1.2s infinite ease-in-out;
+            animation: sk-stretchdelay 1.2s infinite ease-in-out;
+        }
+
+        .spinner .rect2 {
+            -webkit-animation-delay: -1.1s;
+            animation-delay: -1.1s;
+        }
+
+        .spinner .rect3 {
+            -webkit-animation-delay: -1.0s;
+            animation-delay: -1.0s;
+        }
+
+        .spinner .rect4 {
+            -webkit-animation-delay: -0.9s;
+            animation-delay: -0.9s;
+        }
+
+        .spinner .rect5 {
+            -webkit-animation-delay: -0.8s;
+            animation-delay: -0.8s;
+        }
+
+        @-webkit-keyframes sk-stretchdelay {
+            0%, 40%, 100% { -webkit-transform: scaleY(0.4) }
+            20% { -webkit-transform: scaleY(1.0) }
+        }
+
+        @keyframes sk-stretchdelay {
+            0%, 40%, 100% {
+                transform: scaleY(0.4);
+                -webkit-transform: scaleY(0.4);
+            }  20% {
+                   transform: scaleY(1.0);
+                   -webkit-transform: scaleY(1.0);
+               }
+        }
+    </style>
+</head>
+
+<body class="app header-fixed sidebar-fixed">
+
+<!-- Enable bootstrap 4 theme -->
+<script>window.__theme = 'bs4';</script>
+
+<!-- App Loading... -->
+<div class="spinner-container">
+    <div class="spinner">
+        <div class="rect1"></div>
+        <div class="rect2"></div>
+        <div class="rect3"></div>
+        <div class="rect4"></div>
+        <div class="rect5"></div>
+    </div>
+</div>
+
+</body>
+
+</html>

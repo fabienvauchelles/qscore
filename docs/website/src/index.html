@@ -1,0 +1,289 @@
+<!doctype html>
+
+<html>
+
+<head>
+    <meta charset="utf-8">
+
+    <title>QScore</title>
+
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+
+    <!-- Rich Card: Twitter -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:url" content="http://qscore.io" />
+    <meta name="twitter:site" content="@fabienv" />
+    <meta name="twitter:creator" content="@fabienv" />
+    <meta name="twitter:title" content="QScore" />
+    <meta name="twitter:description" content="QScore is a competition platform for Data Science" />
+    <meta name="twitter:image" content="http://qscore.io/assets/images/logo120.jpg" />
+
+    <!-- Rich Card: OpenGraph (Facebook, Google+, PinInterest) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="http://qscore.io" />
+    <meta property="og:title" content="QScore" />
+    <meta property="og:description" content="QScore is a competition platform for Data Science" />
+    <meta property="og:image" content="http://qscore.io/assets/images/logo200.jpg" />
+
+    <link rel="icon" type="image/png" href="assets/images/logo32.png"/>
+
+    <!-- build:css({.tmp/serve,src}) styles/vendor.css -->
+    <link rel="stylesheet" href="vendor.css">
+    <!-- endbuild -->
+
+    <!-- build:css({.tmp/serve,src}) styles/app.css -->
+    <link rel="stylesheet" href="index.css">
+    <!-- inject:css -->
+    <!-- css files will be automatically insert here -->
+    <!-- endinject -->
+    <!-- endbuild -->
+</head>
+
+<body>
+<!--[if lt IE 10]>
+<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
+    your browser</a> to improve your experience.</p>
+<![endif]-->
+
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-fixed-top navbar-inverse">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">
+                QScore
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="http://docs.qscore.io" target="_blank">
+                    <i class="fa fa-info-circle"></i> Documentation
+                </a></li>
+
+                <li><a href="https://github.com/fabienvauchelles/qscore/issues" target="_blank">
+                    <i class="fa fa-envelope"></i> Contact
+                </a></li>
+
+                <li><a href="https://github.com/fabienvauchelles/qscore" target="_blank">
+                    <i class="fa fa-code-fork"></i> Fork on Github
+                </a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- JUMBOTRON -->
+<section id="jumbotron">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="title">
+                    <div class="title-header">
+                        <img src="assets/images/logo322.png" alt="qscore">
+                    </div>
+
+                    <div class="title-description">
+                        <p>
+                            QScore is a <span class="highlight">competition platform</span> for Data Science.
+                        </p>
+
+                        <p>
+                            It is simple, scalable and can host your competition in a minute.
+                        </p>
+
+                        <p>
+                            It works with
+                            <a href="https://nodejs.org" target="_blank">Node.js</a>,
+                            <a href="https://www.python.org/" target="_blank">Python</a>,
+                            <a href="https://www.rabbitmq.com" target="_blank">RabbitMQ</a>,
+                            <a href="https://redis.io" target="_blank">Redis</a>,
+                            <a href="https://auth0.com" target="_blank">Auth0</a>,
+                            <a href="https://angular.io" target="_blank">AngularJS</a>'s
+                            <a href="https://coreui.io" target="_blank">CoreUI</a>
+                            and it is <span class="highlight">open source</span>!
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+                <div class="install panel panel-default">
+                    <div class="install-header">
+                        Install the latest version of QScore
+                    </div>
+
+                    <a class="install-version"
+                        href="http://docs.qscore.io/en/master/installation/simple"
+                        target="_blank">
+                        <i class="fa fa-cloud-download"></i> QScore 1.0.0
+                    </a>
+
+                    <div class="install-how">
+                        <div class="install-links">
+                            <iframe src="http://ghbtns.com/github-btn.html?user=fabienvauchelles&repo=qscore&type=watch&count=true"
+                                    allowtransparency="true" frameborder="0" scrolling="0" width="110" height="20"></iframe>
+
+                            <iframe src="http://ghbtns.com/github-btn.html?user=fabienvauchelles&repo=qscore&type=fork&count=true"
+                                    allowtransparency="true" frameborder="0" scrolling="0" width="110" height="20"></iframe>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- FEATURES -->
+<section id="features">
+    <div class="container">
+        <h2>
+            Features
+        </h2>
+
+        <div class="row">
+            <div class="feature col-md-4 col-sm-6">
+                <div class="feature-icon">
+                    <div class="fa fa-rocket"></div>
+                </div>
+
+                <div class="feature-title">
+                    Scalable
+                </div>
+
+                <div class="feature-description">
+                    <ul>
+                        <li>Support thousands of users</li>
+                        <li>In a short time</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="feature col-md-4 col-sm-6">
+                <div class="feature-icon">
+                    <div class="fa fa-thumbs-up"></div>
+                </div>
+
+                <div class="feature-title">
+                    Simple
+                </div>
+
+                <div class="feature-description">
+                    <ul>
+                        <li>Deploy with Docker</li>
+                        <li>Authentification with Auth0</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="feature col-md-4 col-sm-6">
+                <div class="feature-icon">
+                    <div class="fa fa-code"></div>
+                </div>
+
+                <div class="feature-title">
+                    Easy submission
+                </div>
+
+                <div class="feature-description">
+                    <ul>
+                        <li>Submit from your Notebook</li>
+                        <li>No file transfer problem</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- STARS -->
+
+<section id="stars">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h2>Like the project ?</h2>
+            </div>
+
+            <div class="col-md-6 stars">
+                <div class="stars-text">
+                    Add a star on Github !
+                </div>
+
+                <div class="stars-links">
+                    <iframe
+                            src="http://ghbtns.com/github-btn.html?user=fabienvauchelles&repo=qscore&type=watch&count=true&size=large"
+                            allowtransparency="true" frameborder="0" scrolling="0" width="170" height="30"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- CONTRIBUTE -->
+<section id="contribute">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h2>Contribute ?</h2>
+
+                <p>
+                    You can open
+                    <a href="https://github.com/fabienvauchelles/qscore/issues" target="_blank">an issue on
+                        Github </a>
+                    for any feedback<br/>
+                    (bug, question, request, pull request, etc.)<br/>
+                    or
+                    <a href="https://github.com/fabienvauchelles/qscore" target="_blank">fork the project</a>.
+                </p>
+            </div>
+
+            <div class="col-md-6">
+                <h2 class="second">More info ?</h2>
+
+                <p>
+                    Check the <a href="http://docs.qscore.io">documentation</a> !<br/>
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- CREDITS -->
+<section id="credits">
+    <div class="container">
+        <div class="credits-text">
+            The QScore project is developped by <a href="http://fabien.vauchelles.com" target="_blank">Fabien
+            Vauchelles</a>.
+        </div>
+    </div>
+</section>
+
+
+<!-- build:js(src) scripts/vendor.js -->
+<script src="../node_modules/lodash/index.js"></script>
+<script src="../node_modules/jquery/dist/jquery.js"></script>
+<script src="../node_modules/bootstrap-sass/assets/javascripts/bootstrap.js"></script>
+<!-- endbuild -->
+
+<!-- build:js({.tmp/serve,.tmp/partials}) scripts/app.js -->
+<script src="index.js"></script>
+<!-- endbuild -->
+
+</body>
+
+</html>

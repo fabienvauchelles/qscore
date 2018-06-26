@@ -1,0 +1,18 @@
+$fonts: (
+        ('Roboto', 300, normal, 'Roboto-Light'),
+        ('Roboto', 400, normal, 'Roboto-Regular'),
+        ('Roboto', 700, normal, 'Roboto-Bold')
+);
+
+@each $font-family, $font-weight, $font-style, $filename in $fonts {
+    @font-face {
+        font-family: $font-family;
+        src: url('../assets/fonts/#{$filename}-webfont.eot');
+        src: url('../assets/fonts/#{$filename}-webfont.eot?#iefix') format('embedded-opentype'),
+        url('../assets/fonts/#{$filename}-webfont.woff') format('woff'),
+        url('../assets/fonts/#{$filename}-webfont.ttf') format('truetype'),
+        url('../assets/fonts/#{$filename}-webfont.svg#robotobold') format('svg');
+        font-weight: $font-weight;
+        font-style: $font-style;
+    }
+}

@@ -1,0 +1,4 @@
+pika==0.11.2
+PyJWT==1.6.1
+python-dateutil==2.7.0
+requests==2.18.4

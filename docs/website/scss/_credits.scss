@@ -1,0 +1,17 @@
+#credits {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background: $brand-primary-dark;
+
+    .credits-text {
+        font-size: 14px;
+        font-weight: 300;
+        text-align: center;
+
+        color: $body-bg;
+
+        a {
+            color: $body-bg;
+        }
+    }
+}

@@ -1,0 +1,27 @@
+#contribute {
+    color: $body-bg;
+    background: $brand-primary;
+
+    h2 {
+        text-align: left;
+    }
+
+    p {
+        margin-top: 30px;
+    }
+
+    a {
+        font-weight: 400;
+
+        color: $body-bg;
+    }
+
+    input {
+    }
+
+    @media screen and (max-width: $screen-md) {
+        .second {
+            margin-top: 30px;
+        }
+    }
+}

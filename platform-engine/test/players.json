@@ -1,0 +1,20 @@
+[
+    {
+        "sub": "stuff-oauth2|0123456789",
+        "name": "John Lebidelon",
+        "email": "john.lebidelon@gmail.com",
+        "picture_url": "https://mypicture-url.com"
+    },
+    {
+        "sub": "misc-oauth2|999999999",
+        "name": "Mark Dawson",
+        "email": "mark203@outlook.fr",
+        "picture_url": "https://thepics.com/00001"
+    },
+    {
+        "sub": "other-oauth2|592348234",
+        "name": "Bernard Stock",
+        "email": "bernard.stock@gmail.com",
+        "picture_url": "https://have.a.nice.picture.com/img12.png"
+    }
+]

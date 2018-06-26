@@ -1,0 +1,16 @@
+*.pyc
+*.pyo
+env
+env*
+dist
+build
+*.egg
+*.egg-info
+_mailinglist
+.tox
+.cache/
+.idea/
+.ipynb_checkpoints
+*.log
+venv
+notebooks/

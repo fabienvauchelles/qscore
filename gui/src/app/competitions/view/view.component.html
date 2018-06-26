@@ -1,0 +1,69 @@
+<div class="card card-competition">
+
+    <div class="card-image"
+         [ngStyle]="{'background-image': 'url(' + competition.picture_url + ')'}">
+    </div>
+
+    <div class="card-body">
+        <div class="competition-title">
+            <i class="fa fa-lock"
+               *ngIf="competition.password_needed"></i>
+
+            <i class="fa fa-user-secret"
+               *ngIf="competition.hidden"></i>
+
+            {{competition.title}}
+
+            <span class="badge badge-pill badge-success"
+                  *ngIf="competition.published">opened</span>
+
+            <span class="badge badge-pill badge-danger"
+                  *ngIf="!competition.published">closed</span>
+
+            <span class="competition-players-count float-right">
+                <i class="fa fa-users"></i>
+                {{competition.players_count}}
+            </span>
+        </div>
+
+        <div class="competition-dates">
+            <span class="competition-dates-start">{{competition.date_start | date: 'dd/MM/yyyy HH:mm'}}</span>
+            -
+            <span class="competition-dates-end">{{competition.date_end | date: 'dd/MM/yyyy HH:mm'}}</span>
+        </div>
+
+        <div class="competition-description">{{competition.description_short}}</div>
+
+        <div class="competition-actions">
+            <div class="row">
+                <div class="col-6">
+                    <button type="button"
+                            class="btn btn-outline-primary"
+                            (click)="view()">
+                        <ng-container *ngIf="competition.token">
+                            <i class="fa fa-eye"></i>
+                            View Competition
+                        </ng-container>
+
+                        <ng-container *ngIf="!competition.token">
+                            <i class="fa fa-sign-in"></i>
+                            Join Competition
+                        </ng-container>
+                    </button>
+                </div>
+
+                <div class="col-6">
+                    <a href="/leaderboards/{{competition.id}}"
+                       target="_blank"
+                       class="btn btn-outline-primary">
+                        <i class="fa fa-trophy"></i>
+                        Open Leaderboard
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

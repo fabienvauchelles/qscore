@@ -1,0 +1,32 @@
+.table-outline {
+    border: 1px solid $table-border-color;
+
+    td {
+        vertical-align: middle;
+    }
+}
+
+.table-align-middle {
+
+    td {
+        vertical-align: middle;
+    }
+}
+
+.table-clear {
+    td {
+        border: 0;
+    }
+}
+
+th.center,
+td.center {
+    text-align: center;
+}
+
+th.actions,
+td.actions {
+    .btn > .fa {
+        margin-right: 0;
+    }
+}

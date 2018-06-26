@@ -1,0 +1,30 @@
+@import "../../../../scss/variables";
+
+.fa-check {
+    color: $green;
+}
+
+.fa-times {
+    color: $red;
+}
+
+.valid td {
+    background: rgba($green, 0.5);
+}
+
+.invalid td {
+    background: rgba($red, 0.5);
+}
+
+.card-header .float-right {
+    margin-left: 15px;
+}
+
+.best-submission {
+    font-family: $font-family-sans-serif;
+}
+
+.best-submission-score {
+    font-weight: bold;
+    font-color: $green;
+}

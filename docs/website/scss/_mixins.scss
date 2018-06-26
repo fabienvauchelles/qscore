@@ -1,0 +1,14 @@
+@mixin rounded($size) {
+    position: relative;
+
+    width: $size;
+    min-width: $size;
+    height: $size;
+    min-height: $size;
+    line-height: $size;
+
+    border-radius: 50%;
+    border: solid;
+
+    transition-duration: $default-transition-duration;
+}

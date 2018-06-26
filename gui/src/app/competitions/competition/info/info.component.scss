@@ -1,0 +1,40 @@
+@import "../../../../scss/variables";
+
+
+.card-title {
+    .card-image {
+        padding-bottom: 200px;
+    }
+
+    .card-image-title {
+        height: 55px;
+
+        padding-left: 1.25rem;
+
+        font-family: $font-family-monospace;
+        font-weight: 700;
+        font-size: 20px;
+    }
+}
+
+
+.card-overview {
+    .col-form-label {
+        font-weight: bold;
+    }
+
+    .form-group {
+        margin-bottom: 0;
+    }
+}
+
+
+.card-actions {
+    .btn {
+        width: 100%;
+
+        &:not(:first-child) {
+            margin-top: 10px;
+        }
+    }
+}

@@ -1,0 +1,34 @@
+section {
+    padding-top: 45px;
+    padding-bottom: 45px;
+
+    h2 {
+        margin: 0;
+
+        font-size: 34px;
+        font-weight: 400;
+
+        text-align: center;
+    }
+}
+
+.commandline {
+    font-family: 'Courier New';
+    font-size: 14px;
+
+    background: #383838;
+
+    border-radius: $border-radius-large;
+
+    .line {
+        color: #ffed79;
+    }
+
+    .line-tab {
+        margin-left: 35px;
+    }
+
+    .prefix {
+        color: #FF8080;
+    }
+}

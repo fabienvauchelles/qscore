@@ -1,0 +1,45 @@
+// Size
+$grid-gutter-width: 30px;
+$container-tablet: (720px + $grid-gutter-width);
+$container-desktop: (800px + $grid-gutter-width);
+$container-large-desktop: 840px + $grid-gutter-width;
+$screen-xs: 480px;
+$screen-sm: 768px;
+$screen-md: 992px;
+$screen-lg: 1200px;
+
+
+// Colors
+$logo-color2: #A21B23;
+$text-color: #666;
+$brand-primary: #00afec;
+//$brand-primary: #4CAF50;
+$brand-primary-dark: darken($brand-primary, 5%);
+$body-bg: #fff;
+$body-bg-alternate: #F9F9F9;
+
+
+// Fonts
+$text-font: 'Roboto', sans-serif;
+$font-size-base: 16px;
+$title1-size: 30px;
+$title2-size: 24px;
+$font-weight: 300;
+
+
+// Radius
+$border-radius-base: 4px;
+$border-radius-large: 6px;
+$border-radius-small: 3px;
+$panel-border-radius: $border-radius-large;
+
+
+// Navbar
+$navbar-height: 50px;
+//$navbar-padding-horizontal: 0px;
+$navbar-inverse-bg: $brand-primary;
+$navbar-inverse-link-color: $body-bg;
+
+
+// Animation
+$default-transition-duration: .3s;

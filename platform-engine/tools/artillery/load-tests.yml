@@ -1,0 +1,37 @@
+config:
+  target: 'http://localhost:3001/api'
+  phases:
+    - duration: 120
+      arrivalRate: 10
+      name: "Warm up the application"
+  processor: "./build-jwt.js"
+scenarios:
+  - flow:
+    - post:
+        url: "/players/me"
+        beforeRequest:
+          - generateToken
+          - fillTokenToBody
+    - get:
+        url: "/competitions"
+        beforeRequest: fillTokenToHeaders
+        capture:
+          json: "$[0].id"
+          as: "competitionId"
+    - post:
+        url: "/competitions/{{ competitionId }}/register"
+        beforeRequest: fillTokenToHeaders
+    - get:
+        url: "/competitions/{{ competitionId }}"
+        beforeRequest: fillTokenToHeaders
+        capture:
+          json: "$.token"
+          as: "submissionToken"
+    - loop:
+      - post:
+          url: "/submissions"
+          beforeRequest:
+            - fillSubmissionTokenToHeaders
+            - attachFile
+      count: 10
+

@@ -1,0 +1,77 @@
+<div class="animated fadeIn">
+
+    <div class="row"
+         *ngIf="authService.admin">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fa fa-align-justify"></i>
+                    Actions
+                </div>
+                <div class="card-body">
+                    <a class="btn btn-primary"
+                       [routerLink]="['create']">
+                        <i class="fa fa-plus-square"></i>
+                        Create competition
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card"
+                 *ngIf="competitionsRegistered.length > 0">
+                <div class="card-header">
+                    <i class="fa fa-rocket"></i>
+                    My Competitions
+                </div>
+
+                <div class="card-body">
+
+                    <div class="row">
+
+                        <div class="col-12 col-lg-6"
+                             *ngFor="let competition of competitionsRegistered">
+
+                            <competition-view [value]="competition"
+                                              (onView)="view(competition)"></competition-view>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card"
+                 *ngIf="competitionsUnregistered.length > 0">
+                <div class="card-header">
+                    <i class="fa fa-rocket"></i>
+                    Available Competitions
+                </div>
+
+                <div class="card-body">
+
+                    <div class="row">
+
+                        <div class="col-6"
+                             *ngFor="let competition of competitionsUnregistered">
+
+                            <competition-view [value]="competition"
+                                              (onView)="register(competition)"></competition-view>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

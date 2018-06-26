@@ -1,0 +1,149 @@
+#!/usr/bin/env groovy
+
+node {
+
+    try {
+        stage('checkout') {
+            sh 'echo checkout'
+
+            checkout scm
+        }
+
+
+        stage('build backend') {
+            sh 'echo build backend'
+
+            parallel(
+                'score-engine': {
+                    dir('score-engine') {
+                        score_engine = docker.build('qscore/score-engine', '.')
+                    }
+                },
+                'platform-engine': {
+                    dir('platform-engine') {
+                        platform_engine = docker.build('qscore/platform-engine', '.')
+                    }
+                }
+            )
+        }
+
+
+        stage('tests') {
+            sh 'echo tests'
+            withEnv([
+                'NODE_ENV=test',
+                'NG_QS_AUTH_PLAYER_AUDIENCE=https://test.com',
+                'AUTH_PLAYER_ISSUER=https://issuer.test.com',
+                'AUTH_PLAYER_TYPE=secret',
+                'AUTH_PLAYER_SECRET=ceciestunsecret',
+                'AUTH_ADMIN_SECRET=ceciestaussiunsecret',
+                'DOCKER=1'
+            ]) {
+                dir('platform-engine') {
+                    sh 'npm install'
+                    sh './node_modules/.bin/gulp test:docker:image --no-color'
+                }
+            }
+        }
+
+
+        stage('build frontend') {
+            sh 'echo build frontend'
+
+            parallel(
+                'gui': {
+                    dir('gui') {
+                        sh 'npm install'
+                        sh 'npm run-script postinstall'
+                        sh 'npm run-script build:prod'
+                    }
+                }
+            )
+        }
+
+
+        stage('deploy') {
+            if (JOB_BASE_NAME == "qscore") {
+                sh 'echo deploy'
+
+                parallel(
+                    'score-engine': {
+                        docker.withRegistry(QS_DOCKER_REGISTRY, 'docker-registry-login-qscore') {
+                            // Push to registry
+                            score_engine.push('${BUILD_NUMBER}')
+                            score_engine.push('latest')
+                        }
+
+                        // Send docker-compose files to PROD
+                        sh 'scp deployment/distributed/docker-compose.score.yml ${QS_SCORE_USER}@${QS_SCORE_HOST}:~'
+
+                        // Purge previous existing and non running containers and images
+                        sh "ssh ${QS_SCORE_USER}@${QS_SCORE_HOST} 'docker container prune -f'"
+                        sh "ssh ${QS_SCORE_USER}@${QS_SCORE_HOST} 'docker image prune -f'"
+                    },
+                    'platform-engine': {
+                        docker.withRegistry(QS_DOCKER_REGISTRY, 'docker-registry-login-qscore') {
+                            // Push to registry
+                            platform_engine.push('${BUILD_NUMBER}')
+                            platform_engine.push('latest')
+                        }
+
+                        // Send docker-compose files to PROD
+                        sh 'scp deployment/distributed/docker-compose.platform.yml ${QS_PLATFORM_USER}@${QS_PLATFORM_HOST}:~'
+
+                        // Send HA proxy config to PROD
+                        sh 'scp -r deployment/distributed/haproxy ${QS_PLATFORM_USER}@${QS_PLATFORM_HOST}:~'
+
+                        // Purge previous existing and non running containers and images
+                        sh "ssh ${QS_PLATFORM_USER}@${QS_PLATFORM_HOST} 'docker container prune -f'"
+                        sh "ssh ${QS_PLATFORM_USER}@${QS_PLATFORM_HOST} 'docker image prune -f'"
+                    }
+                )
+            }
+        }
+
+
+        stage('launch') {
+            if (JOB_BASE_NAME == "qscore") {
+                sh 'echo launch'
+
+                parallel(
+                    'score-engine': {
+                        // Pull images (uses the registry, even if not directly visible here)
+                        sh "ssh ${QS_SCORE_USER}@${QS_SCORE_HOST} 'docker-compose -f docker-compose.score.yml pull'"
+
+                        // Compose on target
+                        sh "ssh ${QS_SCORE_USER}@${QS_SCORE_HOST} 'docker-compose -f docker-compose.score.yml -p qscore up -d'"
+                    },
+
+                    'platform-engine': {
+                        // Pull images (uses the registry, even if not directly visible here)
+                        sh "ssh ${QS_PLATFORM_USER}@${QS_PLATFORM_HOST} 'docker-compose -f docker-compose.platform.yml pull'"
+
+                        // Compose on target
+                        sh "ssh ${QS_PLATFORM_USER}@${QS_PLATFORM_HOST} 'docker-compose -f docker-compose.platform.yml -p qscore up -d'"
+                    },
+
+                    'gui': {
+                        // Send GUI to azure
+                        dir('gui/dist') {
+                            azureUpload blobProperties: [detectContentType: true], storageCredentialId: 'qscore-staticcontent', storageType: 'blobstorage',
+                                containerName: 'gui', filesPath: 'index.html', cleanUpContainerOrShare: true
+
+                            azureUpload blobProperties: [detectContentType: true], storageCredentialId: 'qscore-staticcontent', storageType: 'blobstorage',
+                                containerName: 'gui', filesPath: '*.*', excludeFilesPath: 'index.html', virtualPath: 'public'
+                        }
+
+                        dir('gui/dist/assets') {
+                            azureUpload blobProperties: [detectContentType: true], storageCredentialId: 'qscore-staticcontent', storageType: 'blobstorage',
+                                containerName: 'gui', filesPath: '**', virtualPath: 'assets'
+                        }
+                    }
+                )
+            }
+        }
+    } catch (e) {
+        currentBuild.result = "FAIL"
+        throw e
+    }
+}

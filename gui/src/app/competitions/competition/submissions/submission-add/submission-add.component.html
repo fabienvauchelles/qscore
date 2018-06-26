@@ -1,0 +1,43 @@
+<div class="form-horizontal">
+    <div class="form-group row">
+        <label class="col-12 col-md-2 col-form-label"
+               for="datafile">File</label>
+
+        <div class="col-12 col-md-10">
+            <input type="file"
+                   id="datafile"
+                   name="datafile"
+                   class="form-control"
+                   placeholder="Datafile"
+                   (change)="dataUpload($event)"/>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-12 col-md-2 col-form-label"
+               for="comment">Comment</label>
+
+        <div class="col-12 col-md-10">
+            <input type="text"
+                   id="comment"
+                   name="comment"
+                   [(ngModel)]="comment"
+                   class="form-control"
+                   placeholder="Comment"/>
+        </div>
+    </div>
+</div>
+
+<div class="form-horizontal">
+    <div class="form-group row">
+        <div class="col-12">
+            <button type="click"
+                    class="btn btn-primary float-right"
+                    [disabled]="!datafile"
+                    (click)="addWithConfirm()">
+                <i class="fa fa-paper-plane"></i>
+                Submit
+            </button>
+        </div>
+    </div>
+</div>

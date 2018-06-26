@@ -1,0 +1,11 @@
+// scss-lint:disable QualifyingElement
+hr.transparent {
+    border-top: 1px solid transparent;
+}
+
+
+.code {
+    font-family: $font-family-code;
+
+    font-weight: normal;
+}

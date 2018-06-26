@@ -1,0 +1,30 @@
+@import "../../../../scss/variables";
+
+.img-avatar {
+    height: 35px;
+
+    margin-right: 5px;
+}
+
+.table-leads {
+    td, th {
+        vertical-align: middle;
+    }
+}
+
+.card-header .float-right {
+    margin-left: 15px;
+}
+
+.best-submission {
+    font-family: $font-family-sans-serif;
+}
+
+.best-submission-score {
+    font-weight: bold;
+    font-color: $green;
+}
+
+.rank {
+    width: 80px;
+}

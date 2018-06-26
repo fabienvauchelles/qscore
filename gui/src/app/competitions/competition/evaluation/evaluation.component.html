@@ -1,0 +1,35 @@
+<div class="animated fadeIn">
+
+    <div class="row"
+         *ngIf="competition">
+        <div class="col-12">
+
+            <div class="card">
+                <div class="card-header">
+                    <i class="fa fa-flask"></i>
+                    Evaluation Metric
+                </div>
+
+                <div class="card-body"
+                     [innerHTML]="competition.eval_metric">
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-12">
+
+            <div class="card">
+                <div class="card-header">
+                    <i class="fa fa-file"></i>
+                    File submission format
+                </div>
+
+                <div class="card-body"
+                     [innerHTML]="competition.eval_format">
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

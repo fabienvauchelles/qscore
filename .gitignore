@@ -1,0 +1,16 @@
+# OS generated files #
+.DS_Store
+ehthumbs.db
+Icon?
+Thumbs.db
+
+# IDE files
+.idea
+*.swp
+*.iml
+
+# Data
+data
+
+# Redis
+dump.rdb

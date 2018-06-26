@@ -1,0 +1,74 @@
+<div class="animated fadeIn">
+
+    <div class="row"
+         *ngIf="competition">
+
+        <div class="col-12">
+
+            <div class="card card-title">
+                <div class="card-image"
+                     [ngStyle]="{'background-image': 'url(' + competition.picture_url + ')'}">
+                    <div class="card-image-title">{{competition.title}}</div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="col-12"
+             *ngIf="competition.password_needed">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fa fa-key"></i>
+                    Password
+                </div>
+
+                <div class="card-body">
+                    <input type="password"
+                           id="password"
+                           name="password"
+                           class="form-control"
+                           placeholder="Enter the competition password"
+                           [(ngModel)]="password"/>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-12">
+
+            <div class="card card-description">
+                <div class="card-header">
+                    <i class="fa fa-bookmark"></i>
+                    Competition Rules
+                </div>
+
+                <div class="card-body"
+                     [innerHTML]="competition.rules"></div>
+
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col-6">
+                            <button type="button"
+                                    class="btn btn-success col-12"
+                                    (click)="accept()">
+                                <i class="fa fa-check"></i>
+                                Accept Rules
+                            </button>
+                        </div>
+
+                        <div class="col-6">
+                            <button type="button"
+                                    class="btn btn-danger col-12"
+                                    (click)="refuse()">
+                                <i class="fa fa-check"></i>
+                                Refuse Rules
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

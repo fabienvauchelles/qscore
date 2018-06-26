@@ -1,0 +1,600 @@
+<div class="animated fadeIn">
+
+    <form novalidate
+          [formGroup]="form"
+          (ngSubmit)="edit()">
+
+        <div class="row">
+            <div class="col-12">
+
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fa fa-info-circle"></i>
+                        Competition Information
+                    </div>
+
+                    <div class="card-body">
+                        <div class="row form-group">
+                            <label class="col-12 col-md-2 col-form-label"
+                                   for="title">Long Title</label>
+
+                            <div class="col-12 col-md-10">
+                                <input type="text"
+                                       class="form-control"
+                                       [ngClass]="{'is-invalid' : title.invalid && (title.dirty || title.touched)}"
+                                       id="title"
+                                       placeholder="Enter the long title of the competition"
+                                       name="title"
+                                       formControlName="title">
+
+                                <div *ngIf="title.invalid && (title.dirty || title.touched)"
+                                     class="invalid-feedback">
+
+                                    <div *ngIf="title.errors.required">
+                                        Title is required.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="row form-group">
+                            <label class="col-12 col-md-2 col-form-label"
+                                   for="title_short">Short Title</label>
+
+                            <div class="col-12 col-md-10">
+                                <input type="text"
+                                       class="form-control"
+                                       [ngClass]="{'is-invalid' : title_short.invalid && (title_short.dirty || title_short.touched)}"
+                                       id="title_short"
+                                       placeholder="Enter the short title for the sidebar"
+                                       name="title_short"
+                                       formControlName="title_short">
+
+                                <div *ngIf="title_short.invalid && (title_short.dirty || title_short.touched)"
+                                     class="invalid-feedback">
+
+                                    <div *ngIf="title_short.errors.required">
+                                        Short title is required.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <label class="col-12 col-md-2 col-form-label"
+                                   for="scorer_class">Scorer Class</label>
+
+                            <div class="col-12 col-md-10">
+                                <input type="text"
+                                       class="form-control"
+                                       [ngClass]="{'is-invalid' : scorer_class.invalid && (scorer_class.dirty || scorer_class.touched)}"
+                                       id="scorer_class"
+                                       placeholder="Enter the scorer class for the scorer"
+                                       name="scorer_class"
+                                       formControlName="scorer_class">
+
+                                <div *ngIf="scorer_class.invalid && (scorer_class.dirty || scorer_class.touched)"
+                                     class="invalid-feedback">
+
+                                    <div *ngIf="scorer_class.errors.required">
+                                        Scorer class is required.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <label class="col-12 col-md-2 col-form-label"
+                                   for="password">Password</label>
+
+                            <div class="col-12 col-md-10">
+                                <input type="password"
+                                       class="form-control"
+                                       id="password"
+                                       placeholder="Enter the password for the competition"
+                                       name="password"
+                                       formControlName="password">
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <label class="col-8 col-md-2 col-form-label">Published</label>
+
+                            <div class="col-4 col-md-10 col-form-label">
+                                <label class="switch switch-text switch-primary">
+                                    <input type="checkbox"
+                                           class="switch-input"
+                                           name="published"
+                                           formControlName="published">
+                                    <span class="switch-label" data-on="Yes" data-off="No"></span>
+                                    <span class="switch-handle"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <label class="col-8 col-md-2 col-form-label">Hidden</label>
+
+                            <div class="col-4 col-md-10 col-form-label">
+                                <label class="switch switch-text switch-primary">
+                                    <input type="checkbox"
+                                           class="switch-input"
+                                           name="hidden"
+                                           formControlName="hidden">
+                                    <span class="switch-label" data-on="Yes" data-off="No"></span>
+                                    <span class="switch-handle"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <label class="col-12 col-md-2 col-form-label"
+                                   for="submission_delay">Submission delay (in ms)</label>
+
+                            <div class="col-12 col-md-10">
+                                <input type="number"
+                                       class="form-control"
+                                       [ngClass]="{'is-invalid' : submission_delay.invalid && (submission_delay.dirty || submission_delay.touched)}"
+                                       id="submission_delay"
+                                       placeholder="Enter the waiting delay in milliseconds between 2 submissions"
+                                       name="submission_delay"
+                                       formControlName="submission_delay">
+
+                                <div *ngIf="submission_delay.invalid && (submission_delay.dirty || submission_delay.touched)"
+                                     class="invalid-feedback">
+
+                                    <div *ngIf="submission_delay.errors.required">
+                                        Submission delay is required.
+                                    </div>
+
+                                    <div *ngIf="submission_delay.errors.min">
+                                        Submission delay must be equal or greater than 0.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <label class="col-8 col-md-2 col-form-label">Score order</label>
+
+                            <div class="col-4 col-md-10 col-form-label">
+                                <label class="switch switch-text switch-primary">
+                                    <input type="checkbox"
+                                           class="switch-input"
+                                           name="score_order"
+                                           formControlName="score_order">
+                                    <span class="switch-label" data-on="Desc" data-off="Asc"></span>
+                                    <span class="switch-handle"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <label class="col-12 col-md-2 col-form-label"
+                                   for="picture_url">Picture URL</label>
+
+                            <div class="col-12 col-md-10">
+                                <input type="url"
+                                       class="form-control"
+                                       [ngClass]="{'is-invalid' : picture_url.invalid && (picture_url.dirty || picture_url.touched)}"
+                                       id="picture_url"
+                                       placeholder="Enter the URL of the competition background image"
+                                       name="picture_url"
+                                       formControlName="picture_url">
+
+                                <div *ngIf="picture_url.invalid && (picture_url.dirty || picture_url.touched)"
+                                     class="invalid-feedback">
+
+                                    <div *ngIf="picture_url.errors.required">
+                                        Picture URL is required.
+                                    </div>
+
+                                    <div *ngIf="picture_url.errors.pattern">
+                                        Value is not an URL.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <label class="col-12 col-md-2 col-form-label"
+                                   for="date_start">Starting date</label>
+
+                            <div class="col-12 col-md-10">
+                                <input type="text"
+                                       class="form-control"
+                                       [ngClass]="{'is-invalid' : date_start.invalid && (date_start.dirty || date_start.touched)}"
+                                       id="date_start"
+                                       placeholder="Enter the starting date and time for the competition (format: 'dd/MM/yyyy HH:mm')"
+                                       name="date_start"
+                                       formControlName="date_start">
+
+                                <div *ngIf="date_start.invalid && (date_start.dirty || date_start.touched)"
+                                     class="invalid-feedback">
+
+                                    <div *ngIf="date_start.errors.required">
+                                        Starting date is required.
+                                    </div>
+
+                                    <div *ngIf="date_start.errors.pattern">
+                                        Date format must be 'dd/MM/yyyy HH:mm'
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <label class="col-12 col-md-2 col-form-label"
+                                   for="date_end">Ending date</label>
+
+                            <div class="col-12 col-md-10">
+                                <input type="text"
+                                       class="form-control"
+                                       [ngClass]="{'is-invalid' : date_end.invalid && (date_end.dirty || date_end.touched)}"
+                                       id="date_end"
+                                       placeholder="Enter the ending date and time for the competition (format: 'dd/MM/yyyy HH:mm')"
+                                       name="date_end"
+                                       formControlName="date_end">
+
+                                <div *ngIf="date_end.invalid && (date_end.dirty || date_end.touched)"
+                                     class="invalid-feedback">
+
+                                    <div *ngIf="date_end.errors.required">
+                                        Ending date is required.
+                                    </div>
+
+                                    <div *ngIf="date_end.errors.pattern">
+                                        Date format must be 'dd/MM/yyyy HH:mm'
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-footer">
+                        <div class="pull-right">
+                            <button type="submit"
+                                    class="btn btn-sm btn-primary"
+                                    [disabled]="!form.valid || form.pristine"
+                                    [processing]="editProcessing">
+                                <i class="fa fa-save"></i>
+                                <span *ngIf="!modeUpdate">Create</span>
+                                <span *ngIf="modeUpdate">Update</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fa fa-align-justify"></i>
+                        Competition Description
+                    </div>
+
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label class="col-form-label">Long Description (HTML)</label>
+
+                                    <codemirror id="description"
+                                                [config]="codemirrorConfigHtml"
+                                                class="form-control"
+                                                [ngClass]="{'is-invalid' : description.invalid && (description.dirty || description.touched)}"
+                                                formControlName="description"></codemirror>
+
+                                    <div *ngIf="description.invalid && (description.dirty || description.touched)"
+                                         class="invalid-feedback">
+
+                                        <div *ngIf="description.errors.required">
+                                            Long description is required.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label class="col-form-label">Short Description (HTML)</label>
+
+                                    <codemirror id="description_short"
+                                                [config]="codemirrorConfigHtml"
+                                                class="form-control"
+                                                [ngClass]="{'is-invalid' : description_short.invalid && (description_short.dirty || description_short.touched)}"
+                                                formControlName="description_short"></codemirror>
+
+                                    <div *ngIf="description_short.invalid && (description_short.dirty || description_short.touched)"
+                                         class="invalid-feedback">
+
+                                        <div *ngIf="description_short.errors.required">
+                                            Short description is required.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-footer">
+                        <div class="pull-right">
+                            <button type="submit"
+                                    class="btn btn-sm btn-primary"
+                                    [disabled]="!form.valid || form.pristine"
+                                    [processing]="editProcessing">
+                                <i class="fa fa-save"></i>
+                                <span *ngIf="!modeUpdate">Create</span>
+                                <span *ngIf="modeUpdate">Update</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fa fa-flask"></i>
+                        Competition Evaluation
+                    </div>
+
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label class="col-form-label">Evaluation Metric (HTML)</label>
+
+                                    <codemirror id="eval_metric"
+                                                [config]="codemirrorConfigHtml"
+                                                class="form-control"
+                                                [ngClass]="{'is-invalid' : eval_metric.invalid && (eval_metric.dirty || eval_metric.touched)}"
+                                                formControlName="eval_metric"></codemirror>
+
+                                    <div *ngIf="eval_metric.invalid && (eval_metric.dirty || eval_metric.touched)"
+                                         class="invalid-feedback">
+
+                                        <div *ngIf="eval_metric.errors.required">
+                                            Evaluation metric is required.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label class="col-form-label">File submission format (HTML)</label>
+
+                                    <codemirror id="eval_format"
+                                                [config]="codemirrorConfigHtml"
+                                                class="form-control"
+                                                [ngClass]="{'is-invalid' : eval_format.invalid && (eval_format.dirty || eval_format.touched)}"
+                                                formControlName="eval_format"></codemirror>
+
+                                    <div *ngIf="eval_format.invalid && (eval_format.dirty || eval_format.touched)"
+                                         class="invalid-feedback">
+
+                                        <div *ngIf="eval_format.errors.required">
+                                            File submission format is required.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-footer">
+                        <div class="pull-right">
+                            <button type="submit"
+                                    class="btn btn-sm btn-primary"
+                                    [disabled]="!form.valid || form.pristine"
+                                    [processing]="editProcessing">
+                                <i class="fa fa-save"></i>
+                                <span *ngIf="!modeUpdate">Create</span>
+                                <span *ngIf="modeUpdate">Update</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fa fa-gavel"></i>
+                        Competition Rules
+                    </div>
+
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label class="col-form-label">Rules (HTML)</label>
+
+                                    <codemirror id="rules"
+                                                [config]="codemirrorConfigHtml"
+                                                class="form-control"
+                                                [ngClass]="{'is-invalid' : rules.invalid && (rules.dirty || rules.touched)}"
+                                                formControlName="rules"></codemirror>
+
+                                    <div *ngIf="rules.invalid && (rules.dirty || rules.touched)"
+                                         class="invalid-feedback">
+
+                                        <div *ngIf="rules.errors.required">
+                                            Rules are required.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-footer">
+                        <div class="pull-right">
+                            <button type="submit"
+                                    class="btn btn-sm btn-primary"
+                                    [disabled]="!form.valid || form.pristine"
+                                    [processing]="editProcessing">
+                                <i class="fa fa-save"></i>
+                                <span *ngIf="!modeUpdate">Create</span>
+                                <span *ngIf="modeUpdate">Update</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fa fa-database"></i>
+                        Data
+                    </div>
+
+                    <div class="card-body">
+                        <div class="row materials"
+                             *ngIf="modeUpdate">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label class="col-form-label">Data file</label>
+
+                                    <div class="material"
+                                         *ngFor="let material of materials">
+                                        <div class="material-name">{{material.filename}}</div>
+
+                                        <div class="material-actions">
+                                            <button type="click"
+                                                    (click)="removeMaterialWithConfirm(material, $event)"
+                                                    class="btn btn-sm btn-outline-danger">
+                                                <i class="fa fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div class="material-add">
+                                        <div class="input-group">
+                                            <input type="file"
+                                                   id="datafile"
+                                                   name="datafile"
+                                                   class="form-control"
+                                                   placeholder="Datafile"
+                                                (change)="dataUpload($event)"/>
+
+                                            <div class="input-group-append">
+                                                <button type="click"
+                                                        (click)="addMaterial($event)"
+                                                        class="btn btn-outline-secondary">
+                                                    <i class="fa fa-plus"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label class="col-form-label">Data Description (HTML)</label>
+
+                                    <codemirror id="materials_description"
+                                                [config]="codemirrorConfigHtml"
+                                                class="form-control"
+                                                [ngClass]="{'is-invalid' : materials_description.invalid && (materials_description.dirty || materials_description.touched)}"
+                                                formControlName="materials_description"></codemirror>
+
+                                    <div *ngIf="materials_description.invalid && (materials_description.dirty || materials_description.touched)"
+                                         class="invalid-feedback">
+
+                                        <div *ngIf="materials_description.errors.required">
+                                            Data Description is required.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-footer">
+                        <div class="pull-right">
+                            <button type="submit"
+                                    class="btn btn-sm btn-primary"
+                                    [disabled]="!form.valid || form.pristine"
+                                    [processing]="editProcessing">
+                                <i class="fa fa-save"></i>
+                                <span *ngIf="!modeUpdate">Create</span>
+                                <span *ngIf="modeUpdate">Update</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fa fa-trophy"></i>
+                        Leaderboard Page Source Code
+                    </div>
+
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label class="col-form-label">HTML</label>
+
+                                    <codemirror id="leaderboard_html"
+                                                [config]="codemirrorConfigHtml"
+                                                class="form-control"
+                                                formControlName="leaderboard_html"></codemirror>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label class="col-form-label">CSS</label>
+
+                                    <codemirror id="leaderboard_css"
+                                                [config]="codemirrorConfigCss"
+                                                class="form-control"
+                                                formControlName="leaderboard_css"></codemirror>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label class="col-form-label">Javascript</label>
+
+                                    <codemirror id="leaderboard_js"
+                                                [config]="codemirrorConfigJs"
+                                                class="form-control"
+                                                formControlName="leaderboard_js"></codemirror>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-footer">
+                        <div class="pull-right">
+                            <button type="submit"
+                                    class="btn btn-sm btn-primary"
+                                    [disabled]="!form.valid || form.pristine"
+                                    [processing]="editProcessing">
+                                <i class="fa fa-save"></i>
+                                <span *ngIf="!modeUpdate">Create</span>
+                                <span *ngIf="modeUpdate">Update</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </form>
+</div>

@@ -1,0 +1,246 @@
+// IE10&11 Flexbox fix
+@media all and (-ms-high-contrast: none) {
+    html {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+// app-dashboard and app-root are Angular2+ selectors. You can add here your own selectors if you need.
+.app,
+app-dashboard,
+app-root {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.app-header {
+    flex: 0 0 $navbar-height;
+}
+
+.app-body {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+    overflow-x: hidden;
+
+    .main {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .sidebar {
+        // $sidebar-width is the width of the columns
+        flex: 0 0 $sidebar-width;
+        // put the nav on the left
+        order: -1;
+    }
+}
+
+//
+// header
+//
+.header-fixed {
+    .app-header {
+        position: fixed;
+        z-index: $zindex-sticky;
+        width: 100%;
+    }
+    .app-body {
+        margin-top: $navbar-height;
+    }
+}
+
+//
+// Sidebar
+//
+.sidebar-hidden {
+    .sidebar {
+        margin-left: - $sidebar-width;
+    }
+}
+
+.sidebar-fixed {
+    .sidebar {
+        position: fixed;
+        z-index: $zindex-sticky - 1;
+        width: $sidebar-width;
+        height: calc(100vh - #{$navbar-height});
+        // margin-top: - $navbar-height;
+
+        // .sidebar-nav {
+        //   height: calc(100vh - #{$navbar-height});
+        // }
+    }
+
+    .main {
+        margin-left: $sidebar-width;
+    }
+
+    &.sidebar-hidden {
+        .main {
+            margin-left: 0;
+        }
+    }
+}
+
+.sidebar-off-canvas {
+    .sidebar {
+        position: fixed;
+        z-index: $zindex-sticky - 1;
+        height: calc(100vh - #{$navbar-height});
+    }
+}
+
+@include media-breakpoint-up(lg) {
+    .sidebar-compact {
+        .sidebar {
+            flex: 0 0 $sidebar-compact-width;
+        }
+
+        &.sidebar-hidden {
+            .sidebar {
+                margin-left: - $sidebar-compact-width;
+            }
+        }
+
+        &.sidebar-fixed {
+            .main {
+                margin-left: $sidebar-compact-width;
+            }
+
+            .sidebar {
+                width: $sidebar-compact-width;
+            }
+
+            &.sidebar-hidden {
+                .main {
+                    margin-left: 0;
+                }
+            }
+        }
+        .sidebar-minimizer {
+            display: none;
+        }
+    }
+
+    .sidebar-minimized {
+        .sidebar {
+            flex: 0 0 $sidebar-minimized-width;
+        }
+
+        &.sidebar-hidden {
+            .sidebar {
+                margin-left: - $sidebar-minimized-width;
+            }
+        }
+
+        &.sidebar-fixed {
+            .main {
+                margin-left: $sidebar-minimized-width;
+            }
+
+            .sidebar {
+                width: $sidebar-minimized-width;
+            }
+
+            &.sidebar-hidden {
+                .main {
+                    margin-left: 0;
+                }
+            }
+        }
+    }
+}
+
+
+//
+// Animations
+//
+.app-header,
+.sidebar,
+.main,
+
+.sidebar-nav {
+    transition: width $layout-transition-speed;
+}
+
+
+//
+// Mobile layout
+//
+
+@include media-breakpoint-down(md) {
+    .app-header.navbar {
+        position: fixed !important;
+        z-index: $zindex-sticky;
+        width: 100%;
+        text-align: center;
+        background-color: $navbar-brand-bg;
+        @include borders($navbar-brand-border);
+
+        .navbar-toggler {
+            @if (lightness( $navbar-brand-bg ) > 40) {
+                color: $navbar-color;
+            } @else {
+                color: #fff;
+            }
+        }
+
+        .navbar-brand {
+            position: absolute;
+            left: 50%;
+            margin-left: - ($navbar-brand-width / 2);
+        }
+    }
+
+    .app-body {
+        margin-top: $navbar-height;
+    }
+
+
+    .sidebar {
+        position: fixed;
+        z-index: $zindex-sticky - 1;
+        width: $mobile-sidebar-width;
+        height: calc(100vh - #{$navbar-height});
+        margin-left: - $mobile-sidebar-width;
+
+        .sidebar-nav,
+        .nav {
+            width: $mobile-sidebar-width;
+            min-height: calc(100vh - #{$navbar-height});
+        }
+
+        .sidebar-minimizer {
+            display: none;
+        }
+    }
+
+    .main {
+        margin-left: 0 !important;
+    }
+
+    // .aside-menu {
+    //   margin-right: - $aside-menu-width;
+    // }
+
+    .sidebar-hidden {
+        .sidebar {
+            margin-left: - $mobile-sidebar-width;
+        }
+    }
+
+    .sidebar-mobile-show {
+        .sidebar {
+            width: $mobile-sidebar-width;
+            margin-left: 0;
+        }
+
+        .main {
+            margin-right: - $mobile-sidebar-width !important;
+            margin-left: $mobile-sidebar-width !important;
+        }
+    }
+}

@@ -1,0 +1,22 @@
+#stars {
+    color: $body-bg;
+    background: $brand-primary-dark;
+    
+    h2 {
+        text-align: left;
+    }
+
+    .stars {
+        display: flex;
+        align-items: center;
+
+        margin-top: 10px;
+    }
+
+    .stars-text {
+    }
+    
+    .stars-links {
+        margin-left: 10px;
+    }
+}

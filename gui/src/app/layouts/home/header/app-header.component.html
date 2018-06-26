@@ -1,0 +1,41 @@
+<header class="app-header navbar">
+    <button type="button"
+            class="navbar-toggler d-lg-none"
+            sidebarTogglerMobile>
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <a class="navbar-brand"
+       [routerLink]="['/']"></a>
+
+    <button type="button"
+            class="navbar-toggler d-md-down-none"
+            sidebarToggler>
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <ul class="nav navbar-nav ml-auto">
+        <li class="nav-item dropdown" dropdown placement="bottom right">
+            <a class="nav-link"
+               data-toggle="dropdown"
+               href="#"
+               role="button"
+               aria-haspopup="true"
+               aria-expanded="false"
+               dropdownToggle
+               (click)="false">
+                {{name}}
+
+                <img [src]="pictureUrl" class="img-avatar"/>
+            </a>
+
+            <div class="dropdown-menu dropdown-menu-right" *dropdownMenu aria-labelledby="simple-dropdown">
+                <button type="click"
+                        class="dropdown-item"
+                        (click)="logout()">
+                    <i class="fa fa-lock"></i> Logout
+                </button>
+            </div>
+        </li>
+    </ul>
+</header>

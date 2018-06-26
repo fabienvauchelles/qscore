@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+
+  platform-engine1:
+    image: qscore.azurecr.io/qscore/platform-engine:latest
+    restart: always
+    env_file:
+      - platform.env
+
+  platform-engine2:
+    image: qscore.azurecr.io/qscore/platform-engine:latest
+    restart: always
+    env_file:
+      - platform.env
+
+  platform-engine3:
+    image: qscore.azurecr.io/qscore/platform-engine:latest
+    restart: always
+    env_file:
+      - platform.env
+
+  platform-engine4:
+    image: qscore.azurecr.io/qscore/platform-engine:latest
+    restart: always
+    env_file:
+      - platform.env
+
+  haproxy:
+    image: haproxy
+    ports:
+      - "80:80"
+    volumes:
+      - ./haproxy:/usr/local/etc/haproxy:ro
+    links:
+      - platform-engine1
+      - platform-engine2
+      - platform-engine3
+      - platform-engine4

@@ -1,0 +1,22 @@
+.navbar {
+    font-size: 14px;
+
+    .navbar-brand {
+        font-size: 22px;
+        font-weight: 400;
+    }
+
+    .navbar-nav {
+        .fa {
+            margin-right: 2px;
+        }
+
+        li {
+            transition-duration: $default-transition-duration;
+
+            &:hover {
+                background: $brand-primary-dark;
+            }
+        }
+    }
+}

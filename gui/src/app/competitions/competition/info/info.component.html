@@ -1,0 +1,130 @@
+<div class="animated fadeIn">
+
+    <div class="row"
+         *ngIf="competition">
+
+        <div class="col-12 order-0">
+            <div class="card card-title">
+                <div class="card-image"
+                     [ngStyle]="{'background-image': 'url(' + competition.picture_url + ')'}">
+                    <div class="card-image-title">{{competition.title}}</div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-12 order-last col-lg-9 order-lg-1">
+            <div class="card card-description">
+                <div class="card-header">
+                    <i class="fa fa-align-justify"></i>
+                    Competition Description
+                </div>
+
+                <div class="card-body"
+                     [innerHTML]="competition.description">
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-12 col-lg-3 order-lg-2">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card card-overview">
+                        <div class="card-header">
+                            <i class="fa fa-bookmark"></i>
+                            Overview
+                        </div>
+
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <div class="col-6 col-form-label">Opened</div>
+                                <div class="col-6">
+                                    <div class="form-control-plaintext">
+                                <span class="badge badge-pill badge-success"
+                                      *ngIf="competition.published">yes</span>
+
+                                        <span class="badge badge-pill badge-danger"
+                                              *ngIf="!competition.published">no</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-6 col-form-label">Players</div>
+                                <div class="col-6">
+                                    <div class="form-control-plaintext">{{competition.players_count}}</div>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-6 col-form-label">Start at</div>
+                                <div class="col-6">
+                                    <div class="form-control-plaintext">{{competition.date_start | date: 'dd/MM/yyyy HH:mm'}}</div>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-6 col-form-label">End at</div>
+                                <div class="col-6">
+                                    <div class="form-control-plaintext">{{competition.date_end | date: 'dd/MM/yyyy HH:mm'}}</div>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-6 col-form-label">Max submissions</div>
+                                <div class="col-6">
+                                    <div class="form-control-plaintext">
+                                        <ng-container *ngIf="competition.submission_delay > 0">
+                                            {{submission_delay}}
+                                        </ng-container>
+
+                                        <ng-container *ngIf="competition.submission_delay <= 0">
+                                            Illimited
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card card-actions">
+                        <div class="card-header">
+                            <i class="fa fa-rocket"></i>
+                            Actions
+                        </div>
+
+                        <div class="card-block">
+                            <a href="/leaderboards/{{competition.id}}"
+                               target="_blank"
+                               class="btn btn-outline-primary">
+                                <i class="fa fa-trophy"></i>
+                                Open Leaderboard
+                            </a>
+
+                            <button type="button"
+                                    class="btn btn-outline-primary"
+                                    (click)="unregisterWithConfirm()">
+                                <i class="fa fa-sign-out"></i>
+                                Leave Competition
+                            </button>
+
+                            <button type="button"
+                                    class="btn btn-outline-danger"
+                                    (click)="removeWithConfirm()"
+                                    *ngIf="authService.admin">
+                                <i class="fa fa-trash"></i>
+                                Delete Competition
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

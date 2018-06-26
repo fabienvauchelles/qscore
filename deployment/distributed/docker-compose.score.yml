@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+
+  score-engine1:
+    image: qscore.azurecr.io/qscore/score-engine:latest
+    restart: always
+    env_file:
+      - score.env
+
+  score-engine2:
+    image: qscore.azurecr.io/qscore/score-engine:latest
+    restart: always
+    env_file:
+      - score.env
+
+  score-engine3:
+    image: qscore.azurecr.io/qscore/score-engine:latest
+    restart: always
+    env_file:
+      - score.env
+
+  score-engine4:
+    image: qscore.azurecr.io/qscore/score-engine:latest
+    restart: always
+    env_file:
+      - score.env

@@ -1,0 +1,17 @@
+{
+    "name": "artillery",
+    "version": "1.0.0",
+    "description": "QScore Load Test",
+    "author": {
+        "name": "Fabien Vauchelles",
+        "url": "http://fabien.vauchelles.com"
+    },
+    "url": "https://github.com/fabienvauchelles/qscore",
+    "repository": "fabienvauchelles/qscore",
+    "license": "Apache-2.0",
+    "main": "index.js",
+    "dependencies": {
+        "jsonwebtoken": "^8.2.1",
+        "uuid": "^3.2.1"
+    }
+}

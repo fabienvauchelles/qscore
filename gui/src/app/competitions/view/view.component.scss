@@ -1,0 +1,58 @@
+@import "../../../scss/variables";
+
+.card-competition {
+    border: 0;
+
+    .card-image {
+        padding-bottom: 30%;
+    }
+
+    .card-body {
+        padding: 0.5rem 0 1.25rem 0;
+    }
+}
+
+
+.competition-title {
+    font-family: $font-family-monospace;
+    font-weight: 700;
+    font-size: 16px;
+
+    .fa {
+        margin-right: 5px;
+
+        color: $gray-400;
+    }
+}
+
+
+.competition-players-count {
+    font-family: $font-family-sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+
+    color: $gray-700;
+
+    .fa {
+        margin-right: 3px;
+    }
+}
+
+
+.competition-dates {
+    margin-bottom: 10px;
+
+    color: $blue-dark;
+}
+
+
+.competition-description {
+    margin-bottom: 10px;
+}
+
+
+.competition-actions {
+    .btn {
+        width: 100%;
+    }
+}

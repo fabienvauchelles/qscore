@@ -1,0 +1,26 @@
+<div
+    class="modal fade"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="myModalLabel"
+    aria-hidden="true"
+    bsModal
+    #modal="bs-modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h4 class="modal-title">{{title}}</h4>
+            </div>
+
+            <div class="modal-body">
+                <p>{{description}}</p>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="no()">No</button>
+                <button type="button" class="btn btn-primary" (click)="yes()">Yes</button>
+            </div>
+        </div>
+    </div>
+</div>

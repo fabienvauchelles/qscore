@@ -1,0 +1,63 @@
+#features {
+    background: $body-bg-alternate;
+
+    .feature {
+        margin-top: 30px;
+
+        text-align: center;
+
+        &:hover {
+            .feature-icon {
+                color: #fff;
+                background: $brand-primary;
+
+                .fa {
+                    transform: rotate(180deg);
+                }
+            }
+        }
+    }
+
+    .feature-icon {
+        @include rounded(100px);
+
+        margin: auto;
+
+        color: $brand-primary;
+        border-color: $brand-primary;
+        border-width: 4px;
+
+        .fa {
+            position: absolute;
+            top: 24px;
+            left: 23px;
+
+            font-size: 45px;
+
+            transition-duration: 1s;
+        }
+    }
+
+    .feature-title {
+        margin-top: 10px;
+        color: $brand-primary;
+
+        font-size: 24px;
+        font-weight: 400;
+
+        small {
+            font-size: $font-size-base;
+            font-weight: 300;
+        }
+    }
+
+    .feature-description {
+        margin-top: 10px;
+
+        text-align: left;
+
+        ul {
+            list-style-type: square;
+        }
+    }
+}

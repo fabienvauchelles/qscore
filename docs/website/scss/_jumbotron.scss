@@ -1,0 +1,107 @@
+#jumbotron {
+    padding-top: 20px;
+
+    .title {
+    }
+
+    .title-header {
+        @media screen and (max-width: $screen-sm) {
+            text-align: center;
+        }
+    }
+
+    .title-description {
+        margin-top: 20px;
+
+        @media screen and (max-width: $screen-sm) {
+            width: 350px;
+
+            margin-left: auto;
+            margin-right: auto;
+        }
+    }
+
+    .install {
+        width: 350px;
+
+        margin-top: 60px;
+
+        @media screen and (max-width: $screen-sm) {
+            margin-top: 30px;
+            margin-right: auto;
+        }
+        margin-left: auto;
+
+        text-align: center;
+
+        background: $brand-primary;
+        color: $body-bg;
+
+        .panel-body {
+            padding: 10px 15px;
+        }
+    }
+
+    .install-header {
+        margin-top: 10px;
+        margin-bottom: 10px;
+
+        opacity: .7;
+    }
+
+    .install-version {
+        display: block;
+
+        margin-top: 10px;
+        margin-bottom: 10px;
+        padding: 10px 15px;
+
+        font-size: 26px;
+        font-weight: 400;
+
+        color: #fff;
+        background: $brand-primary-dark;
+
+        .fa {
+            margin-right: 5px;
+        }
+
+        &:hover {
+            color: $brand-primary-dark;
+            background: #fff;
+
+            text-decoration: none;
+        }
+    }
+
+    .install-how {
+        width: 100%;
+
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
+    .install-command {
+        width: 70%;
+
+        margin: 0 auto;
+        padding: 5px 15px;
+    }
+
+    .install-links {
+        margin-top: 10px;
+        margin-left: 35px;
+
+        text-align: center;
+    }
+
+    .install-join {
+        font-size: 16px;
+        font-weight: 300;
+
+        a {
+            color: $body-bg;
+            font-weight: 400;
+        }
+    }
+}
