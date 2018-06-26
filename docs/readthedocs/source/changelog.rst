@@ -9,4 +9,4 @@ Changelog
 Features
 --------
 
-* *init*: Creation of QScore
+* **init**: Creation of QScore
