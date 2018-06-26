@@ -177,6 +177,11 @@
                 }
             }
         }
+
+        &.nav-link-github {
+            display: flex;
+            flex-flow: row;
+        }
     }
 
     //  ex. <a class="nav-link nav-dropdown-toggle" href="#">Components</a>
