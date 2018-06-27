@@ -80,6 +80,10 @@ In *Allowed Callback URLs*, write your server URL :
 .. image:: step_8.jpg
 
 
+.. WARNING::
+    Don't forget the /callback
+
+
 Step 5: Save the application
 ----------------------------
 

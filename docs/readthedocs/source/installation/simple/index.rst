@@ -65,22 +65,22 @@ Copy the configuration template:
 
 ::
 
-    cp variables.examples.env variables.env
+    cp variables.example.env variables.env
 
 
-Fill the missing parameters in variables.env:
+Fill the missing parameters in :code:`variables.env`:
 
-============================== ========================================================================== ================================================
-Parameter                      Description                                                                Example
-============================== ========================================================================== ================================================
-AUTH_PLAYER_ISSUER             Use Domain from Auth0. Template is: https://<domain>/                      https://stuff.eu.auth0.com/
-AUTH_PLAYER_JWKS_URI           Use Domain from Auth0. Template is: https://<domain>/.well-known/jwks.json https://stuff.eu.auth0.com/.well-known/jwks.json
-NG_QS_AUTH_PLAYER_AUDIENCE     Use Identifier from Auth0                                                  https://www.stuff.com
-NG_QS_AUTH_PLAYER_CLIENT_ID    Use Client ID from Auth0                                                   0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ
-NG_QS_AUTH_PLAYER_DOMAIN       Use Domain from Auth0                                                      stuff.eu.auth0.com
-NG_QS_AUTH_PLAYER_REDIRECT_URI Use your server URL like http://<your server url>/callback                 http://localhost:3000/callback
-AUTH_ADMIN_SECRET              Use a random string                                                        FgkqZ41Qlal410q40calw412SQSF
-============================== ========================================================================== ================================================
+============================== ============================================================================== ================================================
+Parameter                      Description                                                                    Example
+============================== ============================================================================== ================================================
+AUTH_PLAYER_ISSUER             Use **Domain** from Auth0. Template is: https://<domain>/                      https://stuff.eu.auth0.com/
+AUTH_PLAYER_JWKS_URI           Use **Domain** from Auth0. Template is: https://<domain>/.well-known/jwks.json https://stuff.eu.auth0.com/.well-known/jwks.json
+NG_QS_AUTH_PLAYER_AUDIENCE     Use **Identifier** from Auth0                                                  https://www.stuff.com
+NG_QS_AUTH_PLAYER_CLIENT_ID    Use **Client** ID from Auth0                                                   0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ
+NG_QS_AUTH_PLAYER_DOMAIN       Use **Domain** from Auth0                                                      stuff.eu.auth0.com
+NG_QS_AUTH_PLAYER_REDIRECT_URI Use your server URL like http://<your server url>/callback                     http://localhost:3000/callback
+AUTH_ADMIN_SECRET              Use a random string                                                            FgkqZ41Qlal410q40calw412SQSF
+============================== ============================================================================== ================================================
 
 
 
