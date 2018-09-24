@@ -347,4 +347,92 @@ describe('Submissions - Allow leaderboard', function test() {
             })
         ;
     });
+
+
+    it('should allow user to submit', () => {
+        this.timeout(config.test.timeout);
+
+        const opts = {
+            method: 'POST',
+            url: `api/competitions/${competition.id}/players/${playerData.sub}`,
+        };
+
+        return requestPlayerAdmin(opts)
+            .then((res) => {
+                expect(res.statusCode).to.eql(204);
+            })
+        ;
+    });
+
+
+    it('should have 1 allowed player in the competition', () => {
+        this.timeout(config.test.timeout);
+
+        const opts = {
+            method: 'GET',
+            url: `api/competitions/${competition.id}/players`,
+        };
+
+        return requestPlayerAdmin(opts)
+            .then((res) => {
+                expect(res.statusCode).to.eql(200);
+
+                const playerFound = res.body[0];
+                expect(playerFound.allow_leaderboard).to.eql(true);
+            })
+        ;
+    });
+
+
+    it('should submit a valid file with score 0.3', () => {
+        this.timeout(config.test.timeout);
+
+        const formData = _.merge({
+            datafile: fs.createReadStream(path.join(__dirname, 'score-030.csv')),
+        }, data.submissions[0]);
+
+        const opts = {
+            method: 'POST',
+            url: 'api/submissions',
+            formData,
+            auth: {
+                bearer: competition.token,
+            },
+        };
+
+        return request(opts)
+            .then((res) => {
+                expect(res.statusCode).to.eql(200);
+
+                const submissionFound = res.body;
+                expect(submissionFound.comment).to.eql(data.submissions[0].comment);
+            })
+        ;
+    });
+
+
+    it('should wait to process submission', () => Promise.delay(config.test.submissions.wait));
+
+
+    it('should have again a lead with a 1 score of 0.3', () => {
+        this.timeout(config.test.timeout);
+
+        const opts = {
+            method: 'GET',
+            url: `api/leads/${competition.id}`,
+        };
+
+        return request(opts)
+            .then((res) => {
+                expect(res.statusCode).to.eql(200);
+
+                const leadsFound = res.body;
+                expect(leadsFound).to.have.lengthOf(1);
+
+                const leadFound = leadsFound[0];
+                expect(leadFound.rank).to.be.eql(1);
+                expect(leadFound.score).to.be.eql(0.3);
+            })
+        ;
+    });
 });
