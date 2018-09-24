@@ -159,11 +159,11 @@ class LeadsController {
 
         function getRank(cId, pSub) {
             return competitionsController
-                .getCompetitionScoreOrder(cId)
-                .then((order) => database.query(`
+                .getCompetitionAttributes(cId, ['score_order'])
+                .then((attributes) => database.query(`
 select rank
 from (
-    select player_sub, rank() over (order by score ${order ? 'DESC': 'ASC'}, score_updated_at ) as rank 
+    select player_sub, rank() over (order by score ${attributes.score_order ? 'DESC': 'ASC'}, score_updated_at ) as rank 
     from leads 
     where competition_id = :competitionId
 ) as ranked
@@ -204,8 +204,8 @@ where player_sub=:playerSub
         winston.debug('[LeadsController] createOrUpdateLeadFromSubmission(): submission.id=', submission.id);
 
         return competitionsController
-            .getCompetitionScoreOrder(submission.competition_id)
-            .then((order) => LeadModel
+            .getCompetitionAttributes(submission.competition_id, ['score_order'])
+            .then((attributes) => LeadModel
                 .find({
                     where: {
                         player_sub: submission.player_sub,
@@ -215,7 +215,7 @@ where player_sub=:playerSub
                 })
                 .then((lead) => {
                     if (lead) {
-                        if (order) {
+                        if (attributes.score_order) {
                             if (submission.score > lead.score) {
                                 lead.score = submission.score;
                                 lead.score_updated_at = new Date();

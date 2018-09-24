@@ -167,10 +167,10 @@ class SubmissionsController {
         );
 
         return competitionsController
-            .getCompetitionScoreOrder(competitionId)
-            .then((order) => {
+            .getCompetitionAttributes(competitionId, ['score_order'])
+            .then((attributes) => {
                 let scoreOrder;
-                if (order) {
+                if (attributes.score_order) {
                     scoreOrder = 'DESC';
                 }
                 else {

@@ -596,26 +596,34 @@ class CompetitionsController {
     }
 
 
-    getCompetitionScoreOrder(competitionId) {
+    getCompetitionAttributes(competitionId, attributes) {
         if (!competitionId ||
             competitionId.length <= 0) {
             return Promise.reject(new WrongParameterError('competitionId'));
         }
 
-        winston.debug('[CompetitionsController] getCompetitionScoreOrder(): competitionId=', competitionId);
+        if (!attributes ||
+            attributes.length <= 0) {
+            return Promise.reject(new WrongParameterError('attributes'));
+        }
+
+        winston.debug(
+            '[CompetitionsController] getCompetitionAttributes(): competitionId=', competitionId,
+            ' / attributes=', attributes.join(',')
+        );
 
         return CompetitionModel.find({
             where: {
                 id: competitionId,
             },
-            attributes: ['score_order'],
+            attributes,
         })
             .tap((competition) => {
                 if (!competition) {
                     throw new CompetitionNotFoundError(competitionId);
                 }
             })
-            .then((competition) => competition.score_order)
+            .then((competition) => _.pick(competition, attributes))
         ;
     }
 
