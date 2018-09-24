@@ -59,6 +59,7 @@ export class InfoComponent implements OnInit {
             .getCompetitionById$(this._competitionId, [
                 'title', 'picture_url', 'players_count', 'description',
                 'published', 'date_start', 'date_end', 'submission_delay',
+                'leaderboard_hidden'
             ])
             .subscribe({
                 next: (competition) => {

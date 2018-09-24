@@ -94,7 +94,8 @@
                     </a>
                 </li>
 
-                <li class="nav-item">
+                <li class="nav-item"
+                    *ngIf="!competition.leaderboard_hidden">
                     <a class="nav-link"
                        routerLinkActive="active"
                        [routerLink]="['/competitions', competition.id, 'leaderboard']"

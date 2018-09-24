@@ -77,6 +77,7 @@ export abstract class CompetitionEditComponent implements OnInit, HasModificatio
             password: [void 0],
             published: [void 0, Validators.required],
             hidden: [void 0, Validators.required],
+            leaderboard_hidden: [void 0, Validators.required],
             submission_delay: [void 0, Validators.compose([
                 Validators.required,
                 Validators.min(0),
@@ -129,6 +130,10 @@ export abstract class CompetitionEditComponent implements OnInit, HasModificatio
 
     get hidden() {
         return this.form.get('hidden');
+    }
+
+    get leaderboard_hidden() {
+        return this.form.get('leaderboard_hidden');
     }
 
     get submission_delay() {
@@ -204,6 +209,7 @@ export abstract class CompetitionEditComponent implements OnInit, HasModificatio
             scorer_class: newCompetition.scorer_class,
             password: newCompetition.password,
             hidden: newCompetition.hidden,
+            leaderboard_hidden: newCompetition.leaderboard_hidden,
             published: newCompetition.published,
             submission_delay: newCompetition.submission_delay,
             score_order: newCompetition.score_order,

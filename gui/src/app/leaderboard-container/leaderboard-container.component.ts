@@ -92,10 +92,15 @@ export class LeaderboardContainerComponent implements OnInit, OnDestroy {
                 error: (err) => {
                     console.error('Error:', err);
 
-                    this._informationsService.error(
-                        'Leaderboard',
-                        `Cannot get leads: ${err.message}`,
-                    );
+                    if (err.status === 403) {
+                        this._router.navigate(['/competitions', this._competitionId]);
+                    }
+                    else {
+                        this._informationsService.error(
+                            'Leaderboard',
+                            `Cannot get leads: ${err.message}`,
+                        );
+                    }
                 }
             })
         ;

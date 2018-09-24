@@ -82,7 +82,9 @@ export class CompetitionComponent implements OnInit, OnDestroy {
             .switchMap((params) => {
                 const competitionId = params['competitionId'];
 
-                return this._competitionsService.getCompetitionById$(competitionId, ['title_short']);
+                return this._competitionsService.getCompetitionById$(competitionId, [
+                    'title_short', 'leaderboard_hidden'
+                ]);
             })
             .subscribe((competition) => {
                 this._eventsService.emit(new EventCompetitionSelected(competition));

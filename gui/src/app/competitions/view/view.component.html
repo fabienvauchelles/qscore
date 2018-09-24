@@ -52,7 +52,8 @@
                     </button>
                 </div>
 
-                <div class="col-6">
+                <div class="col-6"
+                     *ngIf="!competition.leaderboard_hidden">
                     <a href="/leaderboards/{{competition.id}}"
                        target="_blank"
                        class="btn btn-outline-primary">

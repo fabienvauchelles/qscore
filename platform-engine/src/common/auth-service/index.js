@@ -31,25 +31,25 @@ class AuthService {
     }
 
 
-    checkJwtPlayer() {
-        if (!this._checkJwtPlayerImpl) {
-            const checkJwtPlayerImpl = expressJwt({
+    getJwtPlayer() {
+        if (!this._getJwtPlayerImpl) {
+            const getJwtPlayerImpl = expressJwt({
                 secret: this.getSecret(),
                 audience: config.auth.player.audience,
                 issuer: config.auth.player.issuer,
                 algorithms: this.getAlgorithms(),
             });
 
-            this._checkJwtPlayerImpl = (req, res, next) => {
+            this._getJwtPlayerImpl = (req, res, next) => {
                 // If token exists in query, copy it in the headers
                 if (req.query &&
                     req.query.token) {
                     req.headers['authorization'] = `Bearer ${req.query.token}`;
                 }
 
-                checkJwtPlayerImpl(req, res, (err) => {
+                getJwtPlayerImpl(req, res, (err) => {
                     if (err) {
-                        return next(err);
+                        req.jwt_err = err;
                     }
 
                     if (req.user &&
@@ -66,7 +66,20 @@ class AuthService {
             };
         }
 
-        return this._checkJwtPlayerImpl;
+        return this._getJwtPlayerImpl;
+    }
+
+
+    checkJwtPlayer() {
+        return (req, res, next) => {
+            this.getJwtPlayer()(req, res, () => {
+                if (req.jwt_err) {
+                    return next(req.jwt_err);
+                }
+
+                return next();
+            })
+        };
     }
 
 

@@ -147,6 +147,12 @@ const competitionMapping = {
         },
     },
 
+    leaderboard_hidden: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+    },
+
     leaderboard_html: {
         type: Sequelize.TEXT,
     },

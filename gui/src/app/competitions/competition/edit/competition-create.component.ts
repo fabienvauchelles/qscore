@@ -434,6 +434,7 @@ export class CompetitionCreateComponent extends CompetitionEditComponent {
             '',
             false,
             true,
+            false,
             0,
             true,
             void 0,

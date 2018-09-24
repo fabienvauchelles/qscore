@@ -33,6 +33,13 @@ class LeadNotFoundError extends LeadError {
 }
 
 
+class LeadNotAllowedError extends LeadError {
+    constructor(competitionId) {
+        super(`Lead ${competitionId} not allowed`, competitionId);
+    }
+}
+
+
 
 class LeadValidationError extends Error {
     constructor(message) {
@@ -47,7 +54,7 @@ class LeadsController {
     constructor() {}
 
 
-    getAllLeads(competitionId, offset = 0, limit = 10) {
+    getAllLeads(competitionId, admin, offset = 0, limit = 10) {
         if (!competitionId ||
             competitionId.length <= 0) {
             return Promise.reject(new WrongParameterError('competitionId'));
@@ -58,11 +65,17 @@ class LeadsController {
             '/ limit=', limit);
 
         return competitionsController
-            .getCompetitionScoreOrder(competitionId)
-            .then((order) => Promise.all([
-                getPaginatedLeads(competitionId, order, offset, limit),
-                getLeadsCount(competitionId),
-            ]))
+            .getCompetitionAttributes(competitionId, ['score_order', 'leaderboard_hidden'])
+            .then((attributes) => {
+                if (attributes.leaderboard_hidden && !admin) {
+                    throw new LeadNotAllowedError(competitionId);
+                }
+
+                return Promise.all([
+                    getPaginatedLeads(competitionId, attributes.score_order, offset, limit),
+                    getLeadsCount(competitionId),
+                ]);
+            })
             .catch(CompetitionNotFoundError, () => {
                 throw new LeadNotFoundError(competitionId);
             })
@@ -292,5 +305,6 @@ module.exports = {
     leadsController: new LeadsController(),
     LeadError,
     LeadNotFoundError,
+    LeadNotAllowedError,
     LeadValidationError,
 };
