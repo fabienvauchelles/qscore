@@ -1,0 +1,14 @@
+#videos {
+    background: $body-bg-alternate;
+
+    .video {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        iframe {
+            width: 560px;
+            height: 315px;
+        }
+    }
+}
