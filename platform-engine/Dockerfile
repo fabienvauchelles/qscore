@@ -12,4 +12,4 @@ RUN npm install --production
 
 ADD src src
 
-CMD pm2 start --no-daemon src/index.js
+CMD node src/index.js

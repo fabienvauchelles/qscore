@@ -53,9 +53,12 @@ node {
             parallel(
                 'gui': {
                     dir('gui') {
-                        sh 'npm install'
-                        sh 'npm run-script postinstall'
-                        sh 'npm run-script build:prod'
+                        frontend = docker.build('qscore/frontend', '''\
+                        --build-arg NG_QS_AUTH_PLAYER_AUDIENCE=${NG_QS_AUTH_PLAYER_AUDIENCE} \
+                        --build-arg NG_QS_AUTH_PLAYER_CLIENT_ID=${NG_QS_AUTH_PLAYER_CLIENT_ID} \
+                        --build-arg NG_QS_AUTH_PLAYER_DOMAIN=${NG_QS_AUTH_PLAYER_DOMAIN} \
+                        --build-arg NG_QS_AUTH_PLAYER_REDIRECT_URI=${NG_QS_AUTH_PLAYER_REDIRECT_URI} \
+                        ./ ''')
                     }
                 }
             )
@@ -83,6 +86,9 @@ node {
                     },
                     'platform-engine': {
                         docker.withRegistry(QS_DOCKER_REGISTRY, 'docker-registry-login-qscore') {
+                            frontend.push('${BUILD_NUMBER}')
+                            frontend.push('latest')
+
                             // Push to registry
                             platform_engine.push('${BUILD_NUMBER}')
                             platform_engine.push('latest')
@@ -122,22 +128,6 @@ node {
 
                         // Compose on target
                         sh "ssh ${QS_PLATFORM_USER}@${QS_PLATFORM_HOST} 'docker-compose -f docker-compose.platform.yml -p qscore up -d'"
-                    },
-
-                    'gui': {
-                        // Send GUI to azure
-                        dir('gui/dist') {
-                            azureUpload blobProperties: [detectContentType: true], storageCredentialId: 'qscore-staticcontent', storageType: 'blobstorage',
-                                containerName: 'gui', filesPath: 'index.html', cleanUpContainerOrShare: true
-
-                            azureUpload blobProperties: [detectContentType: true], storageCredentialId: 'qscore-staticcontent', storageType: 'blobstorage',
-                                containerName: 'gui', filesPath: '*.*', excludeFilesPath: 'index.html', virtualPath: 'public'
-                        }
-
-                        dir('gui/dist/assets') {
-                            azureUpload blobProperties: [detectContentType: true], storageCredentialId: 'qscore-staticcontent', storageType: 'blobstorage',
-                                containerName: 'gui', filesPath: '**', virtualPath: 'assets'
-                        }
                     }
                 )
             }

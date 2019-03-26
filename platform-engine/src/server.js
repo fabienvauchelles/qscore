@@ -10,6 +10,7 @@ const
     morgan = require('morgan'),
     Promise = require('bluebird'),
     url = require('url'),
+    redis = require('redis'),
     socketIO = require('socket.io'),
     redisAdapter = require('socket.io-redis'),
     winston = require('winston');
@@ -130,7 +131,13 @@ class Server {
                 )
             )
             .then(() => {
-                this._serverIO.adapter(redisAdapter(config.redis));
+                let clientsOpts = void 0;
+                if (config.redis.password) {
+                    clientsOpts = { auth_pass: config.redis.password };
+                }
+                const pub = redis.createClient(config.redis.port, config.redis.host, clientsOpts);
+                const sub = redis.createClient(config.redis.port, config.redis.host, clientsOpts);
+                this._serverIO.adapter(redisAdapter({ pubClient: pub, subClient: sub }));
                 events.start(this._serverIO);
             })
         ;

@@ -1,4 +1,4 @@
-FROM continuumio/miniconda3:4.3.14
+FROM continuumio/miniconda3:4.5.11
 
 # Change timezone
 RUN echo "Europe/Paris" > /etc/timezone && \

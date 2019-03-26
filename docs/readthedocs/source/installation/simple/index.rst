@@ -84,15 +84,14 @@ AUTH_ADMIN_SECRET              Use a random string                              
 
 
 
-Build the frontend
-==================
+Load the environment
+====================
 
 Go in the :code:`deployment/simple` directory:
 
 ::
 
-    ./build_frontend.sh
-
+    export $(cat variables.env | grep "^[^#]" | xargs)
 
 
 Deploy the project
