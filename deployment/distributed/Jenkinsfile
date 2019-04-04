@@ -124,7 +124,7 @@ node {
                     sh "ssh ${QS_PLATFORM_HOST} 'docker-compose -f docker-compose.platform.yml pull'"
 
                     // Compose on target
-                    sh "ssh {QS_PLATFORM_HOST} 'docker-compose -f docker-compose.platform.yml -p qscore up -d'"
+                    sh "ssh ${QS_PLATFORM_HOST} 'docker-compose -f docker-compose.platform.yml -p qscore up -d'"
                 }
             )
         }
