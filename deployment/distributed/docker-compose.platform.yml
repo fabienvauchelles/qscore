@@ -3,31 +3,31 @@ version: '3'
 services:
 
   frontend:
-    image: qscore.azurecr.io/qscore/frontend:latest
+    image: qscoreregistry.azurecr.io/qscore/frontend:latest
     restart: always
     ports:
       - "3000:3000"
 
   platform-engine1:
-    image: qscore.azurecr.io/qscore/platform-engine:latest
+    image: qscoreregistry.azurecr.io/qscore/platform-engine:latest
     restart: always
     env_file:
       - platform.env
 
   platform-engine2:
-    image: qscore.azurecr.io/qscore/platform-engine:latest
+    image: qscoreregistry.azurecr.io/qscore/platform-engine:latest
     restart: always
     env_file:
       - platform.env
 
   platform-engine3:
-    image: qscore.azurecr.io/qscore/platform-engine:latest
+    image: qscoreregistry.azurecr.io/qscore/platform-engine:latest
     restart: always
     env_file:
       - platform.env
 
   platform-engine4:
-    image: qscore.azurecr.io/qscore/platform-engine:latest
+    image: qscoreregistry.azurecr.io/qscore/platform-engine:latest
     restart: always
     env_file:
       - platform.env
