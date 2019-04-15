@@ -2,7 +2,6 @@ import {NgModule} from '@angular/core';
 import {Routes, RouterModule} from '@angular/router';
 import {AuthGuard} from './common/auth/auth.guard';
 import {HomeLayoutComponent} from './layouts/home/home-layout.component';
-import {CallbackComponent} from './callback/callback.component';
 import {AdminGuard} from './common/auth/admin.guard';
 
 
@@ -40,7 +39,7 @@ export const routes: Routes = [
 
     {
         path: 'callback',
-        component: CallbackComponent,
+        loadChildren: './callback/callback.module#CallbackModule',
     },
 ];
 

@@ -62,7 +62,29 @@ describe('Players - CRUD', function test() {
     it('should not create a player with an incomplete profile', () => {
         this.timeout(config.test.timeout);
 
-        const token = signPlayer(_.omit(playerData, 'email'));
+        const token = signPlayer(_.omit(playerData.base, 'email'));
+
+        const opts = {
+            method: 'POST',
+            url: 'api/players/me',
+            json: {
+                token,
+                player: playerData.extra,
+            },
+        };
+
+        return request(opts)
+            .then((res) => {
+                expect(res.statusCode).to.eql(400);
+            })
+        ;
+    });
+
+
+    it('should not create a player with an incomplete extra profile', () => {
+        this.timeout(config.test.timeout);
+
+        const token = signPlayer(playerData.base);
 
         const opts = {
             method: 'POST',
@@ -81,17 +103,20 @@ describe('Players - CRUD', function test() {
     it('should create the 1st player', () => {
         this.timeout(config.test.timeout);
 
-        const token = signPlayer(playerData);
+        const token = signPlayer(playerData.base);
 
         const opts = {
             method: 'POST',
             url: 'api/players/me',
-            json: {token},
+            json: {
+                token,
+                player: playerData.extra,
+            },
         };
 
         return request(opts)
             .then((res) => {
-                expect(res.statusCode).to.eql(204);
+                expect(res.statusCode).to.eql(200);
             })
         ;
     });
@@ -102,7 +127,7 @@ describe('Players - CRUD', function test() {
 
         const opts = {
             method: 'GET',
-            url: `api/players/${playerData.sub}`,
+            url: `api/players/${playerData.base.sub}`,
         };
 
         return requestPlayerAdmin(opts)
@@ -112,11 +137,115 @@ describe('Players - CRUD', function test() {
                 player = res.body;
 
                 expect(player.sub).to.be.a('string');
+
                 expect(
                     _.omit(player, ['created_at', 'updated_at'])
-                ).to.deep.equal(playerData);
+                ).to.deep.equal(playerData.merge);
             })
         ;
+    });
+
+
+    it('should override the 1st player without extra information', () => {
+        this.timeout(config.test.timeout);
+
+        const token = signPlayer(_.merge({}, playerData.base, {
+            name: 'a new name',
+        }));
+
+        const opts = {
+            method: 'POST',
+            url: 'api/players/me',
+            json: {
+                token,
+            },
+        };
+
+        return request(opts)
+            .then((res) => {
+                expect(res.statusCode).to.eql(200);
+            })
+        ;
+    });
+
+
+    it('should get the 1st player with new basic information', () => {
+        this.timeout(config.test.timeout);
+
+        const opts = {
+            method: 'GET',
+            url: `api/players/${playerData.base.sub}`,
+        };
+
+        return requestPlayerAdmin(opts)
+            .then((res) => {
+                expect(res.statusCode).to.eql(200);
+
+                player = res.body;
+
+                expect(player.sub).to.be.a('string');
+
+                expect(
+                    _.omit(player, ['created_at', 'updated_at'])
+                ).to.deep.equal(_.merge({}, playerData.merge, {
+                    name_orig: 'a new name',
+                    picture_url: playerData.base.picture_url,
+                }));
+            })
+            ;
+    });
+
+
+    it('should override the 1st player with extra information', () => {
+        this.timeout(config.test.timeout);
+
+        const token = signPlayer(playerData.base);
+
+        const opts = {
+            method: 'POST',
+            url: 'api/players/me',
+            json: {
+                token,
+                player: {
+                    name: 'other name',
+                    picture_url: 'http://stuff.picture.com',
+                },
+            },
+        };
+
+        return request(opts)
+            .then((res) => {
+                expect(res.statusCode).to.eql(200);
+            })
+        ;
+    });
+
+
+    it('should get the 1st player with new extra information', () => {
+        this.timeout(config.test.timeout);
+
+        const opts = {
+            method: 'GET',
+            url: `api/players/${playerData.base.sub}`,
+        };
+
+        return requestPlayerAdmin(opts)
+            .then((res) => {
+                expect(res.statusCode).to.eql(200);
+
+                player = res.body;
+
+                expect(player.sub).to.be.a('string');
+
+                expect(
+                    _.omit(player, ['created_at', 'updated_at'])
+                ).to.deep.equal(_.merge({}, playerData.merge, {
+                    name: 'other name',
+                    name_extra: 'other name',
+                    picture_url: 'http://stuff.picture.com',
+                }));
+            })
+            ;
     });
 
 
@@ -153,17 +282,20 @@ describe('Players - CRUD', function test() {
             picture_url: 'https://nopicture.com',
         });
 
-        const token = signPlayer(playerData);
+        const token = signPlayer(playerData.base);
 
         const opts = {
             method: 'POST',
             url: 'api/players/me',
-            json: {token},
+            json: {
+                token,
+                player: playerData.extra,
+            },
         };
 
         return request(opts)
             .then((res) => {
-                expect(res.statusCode).to.eql(204);
+                expect(res.statusCode).to.eql(200);
             })
         ;
     });
@@ -174,7 +306,7 @@ describe('Players - CRUD', function test() {
 
         const opts = {
             method: 'GET',
-            url: `api/players/${playerData.sub}`,
+            url: `api/players/${playerData.base.sub}`,
         };
 
         return requestPlayerAdmin(opts)
@@ -186,7 +318,7 @@ describe('Players - CRUD', function test() {
                 expect(player.sub).to.be.a('string');
                 expect(
                     _.omit(player, ['created_at', 'updated_at'])
-                ).to.deep.equal(playerData);
+                ).to.deep.equal(playerData.merge);
             })
         ;
     });
@@ -195,17 +327,20 @@ describe('Players - CRUD', function test() {
     it('should create a 2nd player', () => {
         this.timeout(config.test.timeout);
 
-        const token = signPlayer(playersData[1]);
+        const token = signPlayer(playersData[1].base);
 
         const opts = {
             method: 'POST',
             url: 'api/players/me',
-            json: {token},
+            json: {
+                token,
+                player: playersData[1].extra,
+            },
         };
 
         return request(opts)
             .then((res) => {
-                expect(res.statusCode).to.eql(204);
+                expect(res.statusCode).to.eql(200);
             })
         ;
     });
@@ -216,7 +351,7 @@ describe('Players - CRUD', function test() {
 
         const opts = {
             method: 'GET',
-            url: `api/players/${playersData[1].sub}`,
+            url: `api/players/${playersData[1].base.sub}`,
         };
 
         return requestPlayerAdmin(opts)
@@ -228,7 +363,7 @@ describe('Players - CRUD', function test() {
                 expect(player2.sub).to.be.a('string');
                 expect(
                     _.omit(player2, ['created_at', 'updated_at'])
-                ).to.deep.equal(playersData[1]);
+                ).to.deep.equal(playersData[1].merge);
             })
             ;
     });
@@ -256,8 +391,8 @@ describe('Players - CRUD', function test() {
     it('should not create a player with an existing email', () => {
         this.timeout(config.test.timeout);
 
-        const otherPlayer = _.merge({}, playersData[2], {
-            email: playersData[0].email,
+        const otherPlayer = _.merge({}, playersData[1].base, {
+            email: playersData[0].base.email,
         });
 
         const token = signPlayer(otherPlayer);
@@ -265,7 +400,10 @@ describe('Players - CRUD', function test() {
         const opts = {
             method: 'POST',
             url: 'api/players/me',
-            json: {token},
+            json: {
+                token,
+                player: playersData[2].extra,
+            },
         };
 
         return request(opts)
@@ -281,7 +419,7 @@ describe('Players - CRUD', function test() {
 
         const opts = {
             method: 'DELETE',
-            url: `api/players/${playersData[0].sub}`,
+            url: `api/players/${playersData[0].base.sub}`,
         };
 
         return requestPlayerAdmin(opts)
@@ -297,7 +435,7 @@ describe('Players - CRUD', function test() {
 
         const opts = {
             method: 'DELETE',
-            url: `api/players/${playersData[1].sub}`,
+            url: `api/players/${playersData[1].base.sub}`,
         };
 
         return requestPlayerAdmin(opts)

@@ -32,13 +32,11 @@ import {SidebarComponent} from './layouts/home/sidebar/sidebar.component';
 import {SidebarMinimizerComponent} from './layouts/home/sidebar/minimizer/sidebar-minimizer.component';
 import {ModalsComponent} from './common/modals/modals.component';
 import {ConfirmModalComponent} from './common/modals/confirm/confirm.component';
-import {CallbackComponent} from './callback/callback.component';
 
 const APP_COMPONENTS = [
     AppHeaderComponent,
     SidebarComponent,
     SidebarMinimizerComponent,
-    CallbackComponent,
     ModalsComponent,
     ConfirmModalComponent
 ];

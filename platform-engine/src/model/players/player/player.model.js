@@ -26,6 +26,18 @@ const playerMapping = {
         },
     },
 
+    name_orig: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        validate: {
+            notEmpty: true,
+        },
+    },
+
+    name_extra: {
+        type: Sequelize.STRING,
+    },
+
     email: {
         type: Sequelize.STRING,
         allowNull: false,

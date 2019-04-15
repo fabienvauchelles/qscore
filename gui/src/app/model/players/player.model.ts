@@ -13,3 +13,18 @@ export class PlayersPaginated {
                 public players: Player[]) {
     }
 }
+
+
+
+export class PlayerCreate {
+    constructor(public name: string,
+                public picture_url: string) {
+    }
+
+    toJson() {
+        return {
+            name: this.name,
+            picture_url: this.picture_url,
+        };
+    }
+}

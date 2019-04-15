@@ -83,7 +83,7 @@ function requestAsync(opts) {
 function requestPlayerAsync(opts, sub) {
     opts.auth = {
         bearer: signPlayer({
-            sub: sub || playersData[0].sub,
+            sub: sub || playersData[0].base.sub,
             scope: '',
         }),
     };
@@ -95,7 +95,7 @@ function requestPlayerAsync(opts, sub) {
 function requestPlayerAdminAsync(opts) {
     opts.auth = {
         bearer: signPlayer({
-            sub: playersData[0].sub,
+            sub: playersData[0].base.sub,
             scope: 'admin',
         }),
     };
@@ -142,17 +142,23 @@ function testHooksCleanInit(data) {
         ////////////
 
         function createPlayer(player) {
-            const token = signPlayer(player);
+            const
+                token = signPlayer(player.base),
+                json = {token};
+
+            if (player.extra) {
+                json.player = player.extra;
+            }
 
             const opts = {
                 method: 'POST',
                 url: 'api/players/me',
-                json: {token},
+                json,
             };
 
             return requestAsync(opts)
                 .then((res) => {
-                    expect(res.statusCode).to.eql(204);
+                    expect(res.statusCode).to.eql(200);
                 })
             ;
         }

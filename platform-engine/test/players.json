@@ -1,20 +1,58 @@
 [
     {
-        "sub": "stuff-oauth2|0123456789",
-        "name": "John Lebidelon",
-        "email": "john.lebidelon@gmail.com",
-        "picture_url": "https://mypicture-url.com"
+        "base": {
+            "sub": "stuff-oauth2|0123456789",
+            "name": "John Lebidelon",
+            "email": "john.lebidelon@gmail.com",
+            "picture_url": "https://mypicture-url.com"
+        },
+        "extra": {
+            "name": "John Lebidelon BIS",
+            "picture_url": "https://other.picture-url.com"
+        },
+        "merge": {
+            "sub": "stuff-oauth2|0123456789",
+            "name": "John Lebidelon BIS",
+            "name_orig": "John Lebidelon",
+            "name_extra": "John Lebidelon BIS",
+            "email": "john.lebidelon@gmail.com",
+            "picture_url": "https://other.picture-url.com"
+        }
     },
     {
-        "sub": "misc-oauth2|999999999",
-        "name": "Mark Dawson",
-        "email": "mark203@outlook.fr",
-        "picture_url": "https://thepics.com/00001"
+        "base": {
+            "sub": "misc-oauth2|999999999",
+            "name": "Mark Dawson",
+            "email": "mark203@outlook.fr",
+            "picture_url": "https://thepics.com/00001"
+        },
+        "extra": {
+            "name": "Mark Dawson BIS",
+            "picture_url": "https://thepics.com/22222"
+        },
+        "merge": {
+            "sub": "misc-oauth2|999999999",
+            "name": "Mark Dawson BIS",
+            "name_orig": "Mark Dawson",
+            "name_extra": "Mark Dawson BIS",
+            "email": "mark203@outlook.fr",
+            "picture_url": "https://thepics.com/22222"
+        }
     },
     {
-        "sub": "other-oauth2|592348234",
-        "name": "Bernard Stock",
-        "email": "bernard.stock@gmail.com",
-        "picture_url": "https://have.a.nice.picture.com/img12.png"
+        "base": {
+            "sub": "other-oauth2|592348234",
+            "name": "Bernard Stock",
+            "email": "bernard.stock@gmail.com",
+            "picture_url": "https://have.a.nice.picture.com/img12.png"
+        },
+        "merge": {
+            "sub": "other-oauth2|592348234",
+            "name": "Bernard Stock",
+            "name_orig": "Bernard Stock",
+            "name_extra": null,
+            "email": "bernard.stock@gmail.com",
+            "picture_url": "https://have.a.nice.picture.com/img12.png"
+        }
     }
 ]

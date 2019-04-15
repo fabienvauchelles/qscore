@@ -164,7 +164,7 @@ describe('Submissions - Allow leaderboard', function test() {
 
         const opts = {
             method: 'POST',
-            url: `api/competitions/${competition.id}/players/${playerData.sub}`,
+            url: `api/competitions/${competition.id}/players/${playerData.base.sub}`,
         };
 
         return requestPlayerAdmin(opts)
@@ -203,7 +203,7 @@ describe('Submissions - Allow leaderboard', function test() {
 
         const opts = {
             method: 'DELETE',
-            url: `api/competitions/${competition.id}/players/${playerData.sub}`,
+            url: `api/competitions/${competition.id}/players/${playerData.base.sub}`,
         };
 
         return requestPlayerAdmin(opts)
@@ -354,7 +354,7 @@ describe('Submissions - Allow leaderboard', function test() {
 
         const opts = {
             method: 'POST',
-            url: `api/competitions/${competition.id}/players/${playerData.sub}`,
+            url: `api/competitions/${competition.id}/players/${playerData.base.sub}`,
         };
 
         return requestPlayerAdmin(opts)

@@ -51,7 +51,9 @@ class PlayersController extends Controller {
 
 
     registerMe(req, res) {
-        const token = req.body.token;
+        const
+            token = req.body.token,
+            playerExtra = req.body.player;
 
         if (!token ||
             token.length <= 0) {
@@ -60,9 +62,9 @@ class PlayersController extends Controller {
 
         return authService
             .verifyJwt(token)
-            .then((player) => playersController.createOrUpdatePlayer(player))
-            .then(() => {
-                this.sendNoData(res);
+            .then((player) => playersController.registerPlayer(player, playerExtra))
+            .then((player) => {
+                this.sendData(res, player);
             })
             .catch(PlayerProfileIncompleteError, (err) => {
                 throw new BadRequestError(err.message);

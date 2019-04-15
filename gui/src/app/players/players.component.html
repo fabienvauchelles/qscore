@@ -50,10 +50,20 @@
 
                             <tbody>
                             <tr *ngFor="let player of players">
-                                <td>
+                                <td class="player-cell">
                                     <img class="img-avatar"
                                          [src]="player.picture_url" />
-                                    {{player.name}} ({{player.sub}})
+
+                                    <div class="player-name">
+                                        <div *ngIf="player.name_extra">
+                                            {{player.name_extra}} ({{player.sub}})
+                                            <div class="player-name-sub">{{player.name_orig}}</div>
+                                        </div>
+
+                                        <div *ngIf="!player.name_extra">
+                                            {{player.name_orig}} ({{player.sub}})
+                                        </div>
+                                    </div>
                                 </td>
 
                                 <td>{{player.email}}</td>

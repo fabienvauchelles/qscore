@@ -6,13 +6,12 @@ import {Injectable} from '@angular/core';
 import * as auth0 from 'auth0-js';
 import {environment} from '../../../environments/environment';
 import {PlayersService} from '../../model/players/players.service';
+import {PlayerCreate} from "../../model/players/player.model";
 
 
 
 @Injectable()
 export class AuthService {
-
-    public profile: any;
 
     private _refreshSubscription: any;
     private _auth0: any;
@@ -31,9 +30,9 @@ export class AuthService {
     }
 
 
-    init() {
-        // Load existing information
-        this._loadProfile();
+    get profile() {
+        const profileData = localStorage.getItem('profile');
+        return JSON.parse(profileData);
     }
 
 
@@ -67,10 +66,10 @@ export class AuthService {
         console.log('[AuthService] logout()');
 
         // Remove tokens and expiry time from localStorage
+        localStorage.removeItem('profile');
         localStorage.removeItem('access_token');
         localStorage.removeItem('expires_at');
         localStorage.removeItem('scopes');
-        this.profile = void 0;
 
         // Unschedule renewal
         this._unscheduleRenewal();
@@ -80,9 +79,7 @@ export class AuthService {
     }
 
 
-    registerMe() {
-        console.log('[AuthService] registerMe()');
-
+    parseHash(): any {
         return new Promise((resolve, reject) => {
             // When Auth0 hash parsed, get profile
             this._auth0.parseHash((err, authResult) => {
@@ -90,23 +87,36 @@ export class AuthService {
                     return reject(err);
                 }
 
-                this._playersService.registerMe$(authResult.idToken)
-                    .subscribe({
-                        next: () => {
-                            this._saveAuthResult(authResult);
-
-                            return resolve();
-                        },
-                        error: (err2) => reject(err2)
-                    })
-                ;
+                return resolve(authResult);
             });
-        })
+        });
     }
 
 
-    private _saveAuthResult(authResult) {
-        if (!authResult || !authResult.accessToken) {
+    registerMe(authResult: any, player: PlayerCreate) {
+        console.log('[AuthService] registerMe()');
+
+        return new Promise((resolve, reject) => {
+            this._playersService.registerMe$(authResult.idToken, player)
+                .subscribe({
+                    next: (profile) => {
+                        this._saveAuthResult(authResult, profile);
+
+                        this._scheduleRenewal();
+
+                        return resolve();
+                    },
+                    error: (err) => reject(err)
+                })
+            ;
+        });
+    }
+
+
+    private _saveAuthResult(authResult, profile) {
+        if (!authResult ||
+            !authResult.accessToken ||
+            !profile) {
             return;
         }
 
@@ -116,37 +126,11 @@ export class AuthService {
 
         localStorage.setItem('access_token', authResult.accessToken);
 
+        const profileData = JSON.stringify(profile);
+        localStorage.setItem('profile', profileData);
+
         const scopes = decodeURIComponent(authResult.scope || '');
         localStorage.setItem('scopes', JSON.stringify(scopes.split(' ')));
-
-        this._loadProfile();
-    }
-
-
-    private _loadProfile() {
-        if (!this.accessToken) {
-            this.profile = void 0;
-            return;
-        }
-
-        // Schedule renewal
-        this._scheduleRenewal();
-
-        // Use access token to retrieve player's profile and set session
-        this._auth0.client.userInfo(this.accessToken, (err, profile) => {
-            if (err) {
-                this.profile = void 0;
-                console.error('[AuthService] Error: cannot retrieve player profile:', err);
-                return;
-            }
-
-            if (profile.picture) {
-                profile.picture_url = profile.picture;
-                delete profile.picture;
-            }
-
-            this.profile = profile;
-        });
     }
 
 
@@ -200,7 +184,7 @@ export class AuthService {
                 return;
             }
 
-            this._saveAuthResult(authResult);
+            this._saveAuthResult(authResult, this.profile);
         });
     }
 }

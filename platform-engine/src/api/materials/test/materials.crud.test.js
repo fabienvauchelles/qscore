@@ -126,7 +126,7 @@ describe('Materials - CRUD', function test() {
         this.timeout(config.test.timeout);
 
         const token = signPlayer({
-            sub: playerData.sub,
+            sub: playerData.base.sub,
             scope: '',
         });
 
@@ -215,7 +215,7 @@ describe('Materials - CRUD', function test() {
         this.timeout(config.test.timeout);
 
         const token = signPlayer({
-            sub: playerData.sub,
+            sub: playerData.base.sub,
             scope: '',
         });
 

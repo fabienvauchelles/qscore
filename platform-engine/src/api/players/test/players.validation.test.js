@@ -24,8 +24,12 @@ describe('Players - validation', function test() {
     it('should not create a player with wrong picture URL', () => {
         this.timeout(config.test.timeout);
 
-        const newData = _.merge({}, playerData, {
+        const newData = _.merge({}, playerData.base, {
             picture_url: 'this is not an url',
+        });
+
+        const newDataExtra = _.merge({}, playerData.extra, {
+            picture_url: 'this is not an url BIS',
         });
 
         const token = signPlayer(newData);
@@ -33,7 +37,10 @@ describe('Players - validation', function test() {
         const opts = {
             method: 'POST',
             url: 'api/players/me',
-            json: {token},
+            json: {
+                token,
+                player: newDataExtra,
+            },
         };
 
         return request(opts)
@@ -50,7 +57,7 @@ describe('Players - validation', function test() {
         it(`should not create a player with ${field} empty`, () => {
             this.timeout(config.test.timeout);
 
-            const newData = _.merge({}, playerData);
+            const newData = _.merge({}, playerData.base);
             delete newData[field];
 
             const token = signPlayer(newData);
@@ -58,7 +65,10 @@ describe('Players - validation', function test() {
             const opts = {
                 method: 'POST',
                 url: 'api/players/me',
-                json: {token},
+                json: {
+                    token,
+                    player: playerData.extra,
+                },
             };
 
             return request(opts)
@@ -72,7 +82,7 @@ describe('Players - validation', function test() {
         it(`should not create a player with ${field} full of spaces`, () => {
             this.timeout(config.test.timeout);
 
-            const newData = _.merge({}, playerData);
+            const newData = _.merge({}, playerData.base);
             newData[field] = '               ';
 
             const token = signPlayer(newData);
@@ -80,7 +90,10 @@ describe('Players - validation', function test() {
             const opts = {
                 method: 'POST',
                 url: 'api/players/me',
-                json: {token},
+                json: {
+                    token,
+                    player: playerData.extra,
+                },
             };
 
             return request(opts)

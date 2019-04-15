@@ -40,7 +40,6 @@ class PlayerProfileIncompleteError extends PlayerError {
 }
 
 
-
 class PlayerValidationError extends Error {
     constructor(message) {
         super(`Player validation error: ${message}`);
@@ -142,7 +141,7 @@ limit :limit
     }
 
 
-    createOrUpdatePlayer(playerRaw) {
+    registerPlayer(playerRaw, playerExtraRaw) {
         if (!playerRaw ||
             !_.isObject(playerRaw)) {
             return Promise.reject(new WrongParameterError('playerRaw'));
@@ -155,7 +154,7 @@ limit :limit
 
         if (!playerRaw.name ||
             playerRaw.name.length <= 0) {
-            return Promise.reject(new PlayerProfileIncompleteError(playerRaw, 'name'));
+            return Promise.reject(new PlayerProfileIncompleteError(playerRaw, 'name_orig'));
         }
 
         if (!playerRaw.email ||
@@ -163,11 +162,36 @@ limit :limit
             return Promise.reject(new PlayerProfileIncompleteError(playerRaw, 'email'));
         }
 
-        winston.debug('[PlayersController] createOrUpdatePlayer()');
+        if (playerExtraRaw) {
+            if (!playerExtraRaw.name ||
+                playerExtraRaw.name.length <= 0) {
+                return Promise.reject(new PlayerProfileIncompleteError(playerRaw, 'name_extra'));
+            }
+        }
 
-        const playerData = _.pick(playerRaw, ['sub', 'name', 'email', 'picture_url']);
-        if (playerRaw.picture) {
+        winston.debug('[PlayersController] registerPlayer()');
+
+        const playerData = {
+            sub: playerRaw.sub,
+            name_orig: playerRaw.name,
+            email: playerRaw.email,
+        };
+
+        if (playerRaw.picture &&
+            playerRaw.picture.length > 0) {
             playerData.picture_url = playerRaw.picture;
+        } else if (playerRaw.picture_url &&
+            playerRaw.picture_url.length > 0) {
+            playerData.picture_url = playerRaw.picture_url;
+        }
+
+        if (playerExtraRaw) {
+            playerData.name_extra = playerExtraRaw.name;
+
+            if (playerExtraRaw.picture_url &&
+                playerExtraRaw.picture_url.length > 0) {
+                playerData.picture_url = playerExtraRaw.picture_url;
+            }
         }
 
         return database.transaction((transaction) =>
@@ -180,13 +204,21 @@ limit :limit
                 .then((player) => {
                     if (player) {
                         _.merge(player, playerData);
+                        player.name = player.name_extra || player.name_orig;
 
                         return player.save({transaction});
                     }
                     else {
+                        if (!playerExtraRaw) {
+                            throw new PlayerProfileIncompleteError('name_extra', playerRaw.sub);
+                        }
+
+                        playerData.name = playerData.name_extra || playerData.name_orig;
+
                         return PlayerModel.create(playerData, {transaction});
                     }
                 })
+                .then((player) => _.pick(player, ['name', 'picture_url']))
                 .catch(Sequelize.ValidationError, (err) => {
                     throw new PlayerValidationError(err.message);
                 })

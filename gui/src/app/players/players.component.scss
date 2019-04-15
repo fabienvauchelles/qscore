@@ -1,11 +1,26 @@
-.img-avatar {
-    height: 35px;
-
-    margin-right: 5px;
-}
-
 .table-players {
     td, th {
         vertical-align: middle;
     }
+}
+
+.player-cell {
+    display: flex;
+    flex-flow: row;
+    align-items: center;
+}
+
+.img-avatar {
+    height: 35px;
+    margin-right: 5px;
+}
+
+.player-name {
+    display: flex;
+    flex-flow: column;
+}
+
+.player-name-sub {
+    font-size: 13px;
+    font-style: italic;
 }

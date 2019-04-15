@@ -61,7 +61,7 @@ describe('Submissions - score reverse order', function test() {
             url: `api/competitions/${competition.id}/register`,
         };
 
-        return requestPlayer(opts, player1data.sub)
+        return requestPlayer(opts, player1data.base.sub)
             .then((res) => {
                 expect(res.statusCode).to.eql(204);
             })
@@ -78,7 +78,7 @@ describe('Submissions - score reverse order', function test() {
             url: `api/competitions/${competition.id}`,
         };
 
-        return requestPlayer(opts, player1data.sub)
+        return requestPlayer(opts, player1data.base.sub)
             .then((res) => {
                 expect(res.statusCode).to.eql(200);
 
@@ -96,7 +96,7 @@ describe('Submissions - score reverse order', function test() {
             url: `api/competitions/${competition.id}/register`,
         };
 
-        return requestPlayer(opts, player2data.sub)
+        return requestPlayer(opts, player2data.base.sub)
             .then((res) => {
                 expect(res.statusCode).to.eql(204);
             })
@@ -113,7 +113,7 @@ describe('Submissions - score reverse order', function test() {
             url: `api/competitions/${competition.id}`,
         };
 
-        return requestPlayer(opts, player2data.sub)
+        return requestPlayer(opts, player2data.base.sub)
             .then((res) => {
                 expect(res.statusCode).to.eql(200);
 
@@ -184,7 +184,7 @@ describe('Submissions - score reverse order', function test() {
             url: `api/competitions/${competition.id}/bestsubmission`,
         };
 
-        return requestPlayer(opts, player2data.sub)
+        return requestPlayer(opts, player2data.base.sub)
             .then((res) => {
                 expect(res.statusCode).to.eql(200);
 
@@ -211,15 +211,15 @@ describe('Submissions - score reverse order', function test() {
 
                 const lead1found = leadsFound[0];
                 expect(lead1found.rank).to.be.eql(1);
-                expect(lead1found.player_name).to.be.eql(player1data.name);
-                expect(lead1found.player_picture_url).to.be.eql(player1data.picture_url);
+                expect(lead1found.player_name).to.be.eql(player1data.merge.name);
+                expect(lead1found.player_picture_url).to.be.eql(player1data.merge.picture_url);
                 expect(lead1found.score).to.be.eql(0.2);
                 expect(lead1found.submissions_count).to.be.eql(1);
 
                 const lead2found = leadsFound[1];
                 expect(lead2found.rank).to.be.eql(2);
-                expect(lead2found.player_name).to.be.eql(player2data.name);
-                expect(lead2found.player_picture_url).to.be.eql(player2data.picture_url);
+                expect(lead2found.player_name).to.be.eql(player2data.merge.name);
+                expect(lead2found.player_picture_url).to.be.eql(player2data.merge.picture_url);
                 expect(lead2found.score).to.be.eql(0.3);
                 expect(lead2found.submissions_count).to.be.eql(1);
             })
@@ -263,7 +263,7 @@ describe('Submissions - score reverse order', function test() {
             url: `api/competitions/${competition.id}/bestsubmission`,
         };
 
-        return requestPlayer(opts, player2data.sub)
+        return requestPlayer(opts, player2data.base.sub)
             .then((res) => {
                 expect(res.statusCode).to.eql(200);
 
@@ -290,12 +290,12 @@ describe('Submissions - score reverse order', function test() {
 
                 const lead1found = leadsFound[0];
                 expect(lead1found.rank).to.be.eql(1);
-                expect(lead1found.player_name).to.be.eql(player2data.name);
+                expect(lead1found.player_name).to.be.eql(player2data.merge.name);
                 expect(lead1found.score).to.be.eql(0.1);
 
                 const lead2found = leadsFound[1];
                 expect(lead2found.rank).to.be.eql(2);
-                expect(lead2found.player_name).to.be.eql(player1data.name);
+                expect(lead2found.player_name).to.be.eql(player1data.merge.name);
                 expect(lead2found.score).to.be.eql(0.2);
             })
         ;

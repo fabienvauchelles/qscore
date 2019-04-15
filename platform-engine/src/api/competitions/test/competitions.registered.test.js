@@ -292,7 +292,7 @@ describe('Competitions - (player) registered', function test() {
                 expect(playersFound).to.have.lengthOf(1);
 
                 const playerFound = playersFound[0];
-                expect(playerFound.email).to.eql(playerData.email);
+                expect(playerFound.email).to.eql(playerData.merge.email);
             })
         ;
     });

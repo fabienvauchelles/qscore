@@ -28,14 +28,13 @@ export class AppComponent implements OnInit {
     constructor(public informationsService: InformationsService,
                 private _router: Router,
                 eventsService: EventsService,
-                authService: AuthService) {
+                private _authService: AuthService) {
 
         window._ = _;
         window.moment = moment;
         window.qscore = {};
 
         eventsService.init();
-        authService.init();
     }
 
 
