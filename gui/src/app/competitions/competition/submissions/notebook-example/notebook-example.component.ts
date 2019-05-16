@@ -1,6 +1,7 @@
 import 'rxjs/add/operator/debounceTime';
 import {Subscription} from 'rxjs/Subscription';
 import 'codemirror/mode/python/python';
+import 'codemirror/mode/r/r';
 import {Component, Input, ViewChild, OnInit, OnDestroy} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {InformationsService} from '../../../../common/informations/informations.service';
@@ -26,7 +27,7 @@ export class NotebookExampleComponent implements OnInit, OnDestroy {
     code1: string;
     code2: string;
 
-    config: object = {
+    config: any = {
         lineNumbers: true,
         mode: 'text/x-python',
         readOnly: true
@@ -92,6 +93,8 @@ export class NotebookExampleComponent implements OnInit, OnDestroy {
 
         switch (this._language) {
             case 'python3': {
+                this.config.mode = 'text/x-python';
+
                 this.code1 = `import io, math, requests
 
 def submit_prediction(df, sep=',', comment='', **kwargs):
@@ -112,6 +115,8 @@ def submit_prediction(df, sep=',', comment='', **kwargs):
             }
 
             case 'python2': {
+                this.config.mode = 'text/x-python';
+
                 this.code1 = `import io, math, requests
 
 def submit_prediction(df, sep=',', comment='', **kwargs):
@@ -127,6 +132,39 @@ def submit_prediction(df, sep=',', comment='', **kwargs):
         raise Exception(r.text)`;
 
                 this.code2 = 'submit_prediction(df_submission, sep=\',\', index=True, comment=\'my submission\')';
+
+                break;
+            }
+
+            case 'r': {
+                this.config.mode = 'text/x-rsrc';
+
+                this.code1 = `
+library(httr)
+submit_prediction <- function(predictions, comment) {
+    # write the dataset with predictions on your current directory
+    token <- '${this._token}'
+    url <- '${origin}/api/submissions'
+
+    f <- write.csv(predictions, file = 'predictions.csv', row.names = F)
+    response <- POST(url = url,
+                     add_headers(Authorization = paste0('Bearer ', token)),
+                     body = list(datafile = upload_file('predictions.csv'),
+                                 comment = comment)
+                     )
+
+    if (response$status_code == 429) {
+        stop(sprintf('Submissions are too close. Next submission is only allowed in %s seconds.',
+                     ceiling(strtoi(response$headers$'x-rate-limit-remaining') / 1000.0)
+                     )
+        )
+    }
+    else if (response$status_code != 200) {
+        stop(content(response, type = 'text'))
+    }
+}`;
+
+                this.code2 = 'submit_prediction(predictions, \'my submission\')';
 
                 break;
             }
