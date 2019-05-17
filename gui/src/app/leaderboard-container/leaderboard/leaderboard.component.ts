@@ -158,14 +158,6 @@ export class LeaderboardComponent implements OnInit {
     private _formatDiff(d) {
         const texts = [];
 
-        // Final countdown
-        if (d.days <= 0 &&
-            d.hours <= 0 &&
-            d.minutes <= 0 &&
-            d.seconds <= 10) {
-            return `${d.seconds}.${this._formatNumberLength(d.milliseconds, 3)}`;
-        }
-
         if (d.days > 0) {
             if (d.days === 1) {
                 texts.push('1 day');
@@ -217,14 +209,5 @@ export class LeaderboardComponent implements OnInit {
                 return `${texts[0]}, ${texts[1]}, ${texts[2]} and ${texts[3]}`;
             }
         }
-    }
-
-
-    private _formatNumberLength(num, length) {
-        let r = Math.trunc(num).toString();
-        while (r.length < length) {
-            r = `0${r}`;
-        }
-        return r;
     }
 }
