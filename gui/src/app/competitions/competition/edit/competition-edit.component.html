@@ -86,15 +86,48 @@
 
                         <div class="row form-group">
                             <label class="col-12 col-md-2 col-form-label"
-                                   for="password">Password</label>
+                                   for="register_strategy_type">Register Strategy</label>
 
                             <div class="col-12 col-md-10">
-                                <input type="password"
-                                       class="form-control"
-                                       id="password"
-                                       placeholder="Enter the password for the competition"
-                                       name="password"
-                                       formControlName="password">
+                                <select class="form-control"
+                                        [ngClass]="{'is-invalid' : register_strategy_type.invalid && (register_strategy_type.dirty || register_strategy_type.touched)}"
+                                        id="register_strategy_type"
+                                        name="register_strategy_type"
+                                        formControlName="register_strategy_type">
+                                    <option value="0">0 - No authentication</option>
+                                    <option value="1">1 - Password</option>
+                                    <option value="2">2 - Password for a Location</option>
+                                </select>
+
+                                <div *ngIf="register_strategy_type.invalid && (register_strategy_type.dirty || register_strategy_type.touched)"
+                                     class="invalid-feedback">
+
+                                    <div *ngIf="register_strategy_type.errors.required">
+                                        Register Strategy is required.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label class="col-form-label">Register Strategy Configuration</label>
+
+                                    <codemirror id="register_strategy"
+                                                [config]="codemirrorConfigJson"
+                                                class="form-control"
+                                                [ngClass]="{'is-invalid' : register_strategy.invalid && (register_strategy.dirty || register_strategy.touched)}"
+                                                formControlName="register_strategy"></codemirror>
+
+                                    <div *ngIf="register_strategy.invalid && (register_strategy.dirty || register_strategy.touched)"
+                                         class="invalid-feedback">
+
+                                        <div *ngIf="register_strategy.errors.required">
+                                            Register Strategy configuration is required.
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 

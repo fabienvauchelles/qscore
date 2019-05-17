@@ -4,22 +4,28 @@
 
 const
     _ = require('lodash'),
-    {expect} = require('chai');
+    Promise = require('bluebird'),
+    fs = require('fs'),
+    {expect} = require('chai'),
+    path = require('path');
 
 
 const
     config = require('../../../config'),
-    {requestPlayer, requestPlayerAdmin, testHooksCleanInit, playersData, competitionsData} = require('../../../../test');
+    {request, requestPlayer, requestPlayerAdmin, testHooksCleanInit, playersData, competitionsData} = require('../../../../test');
 
 
 
-describe('Competitions - password', function test() {
+describe('Competitions - Register strategy - Password', function test() {
     this.timeout(config.test.timeout);
 
     const
         playerData = _.merge({}, playersData[0]),
         competitionData = _.merge({}, competitionsData[0], {
-            password: 'thereisapassword',
+            register_strategy_type: 1,
+            register_strategy: {
+                password: 'thereisapassword',
+            },
         });
 
 
@@ -44,8 +50,8 @@ describe('Competitions - password', function test() {
                 expect(res.statusCode).to.eql(200);
 
                 competition = res.body[0];
-
-                expect(competition.password).to.eql(competitionData.password);
+                expect(competition.register_strategy_type).to.eql(competitionData.register_strategy_type);
+                expect(competition.register_strategy).to.deep.eql(competitionData.register_strategy);
             })
         ;
     });
@@ -124,7 +130,7 @@ describe('Competitions - password', function test() {
         this.timeout(config.test.timeout);
 
         const payload = {
-            password: competitionData.password,
+            password: competitionData.register_strategy.password,
         };
 
         const opts = {
@@ -136,6 +142,74 @@ describe('Competitions - password', function test() {
         return requestPlayer(opts)
             .then((res) => {
                 expect(res.statusCode).to.eql(204);
+            })
+        ;
+    });
+
+
+    it('should get the registered competition with token', () => {
+        this.timeout(config.test.timeout);
+
+        const opts = {
+            method: 'GET',
+            url: `api/competitions/${competition.id}`,
+        };
+
+        return requestPlayer(opts)
+            .then((res) => {
+                expect(res.statusCode).to.eql(200);
+
+                competition = res.body;
+            })
+            ;
+    });
+
+
+    it('should submit a valid file with score 0.1', () => {
+        this.timeout(config.test.timeout);
+
+        const formData = {
+            datafile: fs.createReadStream(path.join(__dirname, '../../submissions/test', 'score-010.csv')),
+        };
+
+        const opts = {
+            method: 'POST',
+            url: 'api/submissions',
+            formData,
+            auth: {
+                bearer: competition.token,
+            },
+        };
+
+        return request(opts)
+            .then((res) => {
+                expect(res.statusCode).to.eql(200);
+            })
+        ;
+    });
+
+
+    it('should wait to process submission', () => Promise.delay(config.test.submissions.wait));
+
+
+    it('should have a lead with a 1 score of 0.1', () => {
+        this.timeout(config.test.timeout);
+
+        const opts = {
+            method: 'GET',
+            url: `api/leads/${competition.id}`,
+        };
+
+        return request(opts)
+            .then((res) => {
+                expect(res.statusCode).to.eql(200);
+
+                const leadsFound = res.body;
+                expect(leadsFound).to.have.lengthOf(1);
+
+                const leadFound = leadsFound[0];
+                expect(leadFound.rank).to.be.eql(1);
+                expect(leadFound.score).to.be.eql(0.1);
             })
         ;
     });

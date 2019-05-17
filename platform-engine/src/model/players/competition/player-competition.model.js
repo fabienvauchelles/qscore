@@ -16,10 +16,13 @@ const playerCompetitionMapping = {
         primaryKey: true,
     },
 
+    player_location: {
+        type: Sequelize.STRING,
+    },
+
     allow_leaderboard: {
         type: Sequelize.BOOLEAN,
         allowNull: false,
-        defaultValue: true,
     },
 };
 

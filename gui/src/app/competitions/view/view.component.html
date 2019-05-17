@@ -7,7 +7,7 @@
     <div class="card-body">
         <div class="competition-title">
             <i class="fa fa-lock"
-               *ngIf="competition.password_needed"></i>
+               *ngIf="competition.register_strategy_type > 0"></i>
 
             <i class="fa fa-user-secret"
                *ngIf="competition.hidden"></i>

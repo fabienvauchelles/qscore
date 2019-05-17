@@ -26,6 +26,8 @@ export class InternalLeaderboardComponent implements OnInit, OnDestroy {
     itemsPerPage = 8;
     totalItems = 0;
 
+    registerStrategyType: number;
+
 
     private _subscription: Subscription = new Subscription();
 
@@ -100,6 +102,7 @@ export class InternalLeaderboardComponent implements OnInit, OnDestroy {
             .subscribe({
                 next: (leadsPaginated) => {
                     this.totalItems = leadsPaginated.totalCount;
+                    this.registerStrategyType = leadsPaginated.registerStrategyType;
                     this.leads = leadsPaginated.leads;
                 },
                 error: (err) => {

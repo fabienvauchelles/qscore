@@ -346,6 +346,7 @@ describe('Submissions - 1 player', function test() {
                 expect(leadFound.rank).to.be.eql(1);
                 expect(leadFound.player_name).to.be.eql(playerData.merge.name);
                 expect(leadFound.player_picture_url).to.be.eql(playerData.merge.picture_url);
+                expect(leadFound.player_location).to.be.null;
                 expect(leadFound.score).to.be.eql(0.1);
                 expect(leadFound.submissions_count).to.be.eql(1);
             })
@@ -462,6 +463,7 @@ describe('Submissions - 1 player', function test() {
                 const leadFound = leadsFound[0];
                 expect(leadFound.rank).to.be.eql(1);
                 expect(leadFound.player_name).to.be.eql(playerData.merge.name);
+                expect(leadFound.player_location).to.be.null;
                 expect(leadFound.score).to.be.eql(0.2);
                 expect(leadFound.submissions_count).to.be.eql(2);
             })
@@ -575,6 +577,7 @@ describe('Submissions - 1 player', function test() {
                 const leadFound = leadsFound[0];
                 expect(leadFound.rank).to.be.eql(1);
                 expect(leadFound.player_name).to.be.eql(playerData.merge.name);
+                expect(leadFound.player_location).to.be.null;
                 expect(leadFound.score).to.be.eql(0.2);
                 expect(leadFound.submissions_count).to.be.eql(3);
             })
@@ -668,6 +671,7 @@ describe('Submissions - 1 player', function test() {
                 const leadFound = leadsFound[0];
                 expect(leadFound.rank).to.be.eql(1);
                 expect(leadFound.player_name).to.be.eql(playerData.merge.name);
+                expect(leadFound.player_location).to.be.null;
                 expect(leadFound.score).to.be.eql(0.2);
                 expect(leadFound.submissions_count).to.be.eql(3);
             })

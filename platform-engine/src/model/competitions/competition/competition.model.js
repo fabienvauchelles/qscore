@@ -46,13 +46,13 @@ const competitionMapping = {
         defaultValue: 0,
     },
 
-    password: {
-        type: Sequelize.STRING,
+    register_strategy_type: {
+        type: Sequelize.INTEGER,
         allowNull: false,
     },
 
-    password_needed: {
-        type: Sequelize.BOOLEAN,
+    register_strategy: {
+        type: Sequelize.JSON,
         allowNull: false,
     },
 

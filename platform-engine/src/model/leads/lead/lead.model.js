@@ -15,6 +15,10 @@ const leadMapping = {
         primaryKey: true,
     },
 
+    player_location: {
+        type: Sequelize.STRING,
+    },
+
     score: {
         type: Sequelize.DOUBLE,
         allowNull: false,

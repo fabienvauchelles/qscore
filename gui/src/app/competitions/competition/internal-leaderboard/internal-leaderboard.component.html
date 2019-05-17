@@ -35,6 +35,8 @@
                             <thead>
                                 <tr>
                                     <th class="rank center">#</th>
+                                    <th class="center"
+                                        *ngIf="registerStrategyType === 2">Location</th>
                                     <th>Name</th>
                                     <th class="center">Score</th>
                                     <th class="center">Count</th>
@@ -45,6 +47,8 @@
                             <tbody>
                                 <tr *ngFor="let lead of leads; trackBy: trackByLead">
                                     <td class="rank center">{{lead.rank}}</td>
+                                    <td class="center"
+                                        *ngIf="registerStrategyType === 2">{{lead.player_location || 'N/A'}}</td>
                                     <td>
                                         <img class="img-avatar"
                                              [src]="lead.player_picture_url" />

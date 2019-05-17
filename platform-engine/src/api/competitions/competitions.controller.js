@@ -12,11 +12,13 @@ const
     {
         competitionsController,
         CompetitionNotFoundError,
-        CompetitionWrongPasswordError,
-        CompetitionNotOpenedError,
         CompetitionValidationError,
         CompetitionAlreadyRegisteredError,
-    } = require('../../model/competitions/competitions.controller');
+    } = require('../../model/competitions/competitions.controller'),
+    {
+        RegisterStrategyNotOpenedError,
+        RegisterStrategyWrongPasswordError,
+    } = require('../../model/competitions/register-strategy');
 
 
 
@@ -196,11 +198,11 @@ class CompetitionsController extends Controller {
         const
             competitionId = req.params.competitionId,
             playerSub = req.user.sub,
-            password = req.body.password,
+            auth = req.body,
             viewAll = req.admin;
 
         return competitionsController
-            .registerCompetition(competitionId, playerSub, password, viewAll)
+            .registerCompetition(competitionId, playerSub, auth, viewAll)
             .then(() => {
                 this.sendNoData(res);
             })
@@ -210,13 +212,10 @@ class CompetitionsController extends Controller {
             .catch(CompetitionNotFoundError, (err) => {
                 throw new ResourceNotFoundError(err.message);
             })
-            .catch(CompetitionWrongPasswordError, (err) => {
+            .catch(RegisterStrategyNotOpenedError, (err) => {
                 throw new AccessDeniedError(err.message);
             })
-            .catch(CompetitionWrongPasswordError, (err) => {
-                throw new AccessDeniedError(err.message);
-            })
-            .catch(CompetitionNotOpenedError, (err) => {
+            .catch(RegisterStrategyWrongPasswordError, (err) => {
                 throw new AccessDeniedError(err.message);
             })
         ;

@@ -3,7 +3,6 @@
 const
     _ = require('lodash'),
     Promise = require('bluebird'),
-    moment = require('moment'),
     Sequelize = require('sequelize'),
     winston = require('winston');
 
@@ -12,6 +11,7 @@ const
     database = require('../../common/database'),
     PlayerModel = require('../players/player/player.model'),
     PlayerCompetitionModel = require('../players/competition/player-competition.model'),
+    {loadRegisterStrategy} = require('./register-strategy'),
     {WrongParameterError} = require('../../common/exceptions');
 
 
@@ -32,20 +32,6 @@ class CompetitionNotFoundError extends CompetitionError {
     }
 }
 
-
-
-class CompetitionWrongPasswordError extends CompetitionError {
-    constructor(competitionId) {
-        super(`Competition ${competitionId} wrong password`, competitionId);
-    }
-}
-
-
-class CompetitionNotOpenedError extends CompetitionError {
-    constructor(competitionId) {
-        super(`Competition ${competitionId} is not opened`, competitionId);
-    }
-}
 
 
 class CompetitionValidationError extends Error {
@@ -77,7 +63,9 @@ class CompetitionTokenNotFoundError extends Error {
 
 const
     _FIELDS_ADMIN = _.keys(CompetitionModel.attributes),
-    _FIELDS_ONE = _.difference(_FIELDS_ADMIN, ['created_at', 'updated_at', 'scorer_class', 'password', 'hidden']),
+    _FIELDS_ONE = _.difference(_FIELDS_ADMIN, [
+        'created_at', 'updated_at', 'scorer_class', 'register_strategy', 'hidden',
+    ]),
     _FIELDS_ALL = _.difference(_FIELDS_ONE, [
         'description', 'eval_metric', 'eval_format',
         'rules', 'materials_description',
@@ -238,7 +226,7 @@ class CompetitionsController {
             where: {
                 id: competitionId,
             },
-            attributes: ['id', 'title', 'picture_url', 'rules', 'password_needed'],
+            attributes: ['id', 'title', 'picture_url', 'rules', 'register_strategy_type'],
         };
 
         if (!viewAll) {
@@ -341,7 +329,7 @@ class CompetitionsController {
                 competition_id: submission.competition_id,
                 player_sub: submission.player_sub,
             },
-            attributes: ['id', 'allow_leaderboard'],
+            attributes: ['id', 'player_location', 'allow_leaderboard'],
         });
     }
 
@@ -353,8 +341,6 @@ class CompetitionsController {
         }
 
         winston.debug('[CompetitionsController] createCompetition()');
-
-        competitionRaw.password_needed = !!(competitionRaw.password && competitionRaw.password.length > 0);
 
         return CompetitionModel
             .create(competitionRaw)
@@ -377,8 +363,6 @@ class CompetitionsController {
         }
 
         winston.debug('[CompetitionsController] updateCompetition(): competitionId=', competitionId);
-
-        competitionRaw.password_needed = !!(competitionRaw.password && competitionRaw.password.length > 0);
 
         return database.transaction((transaction) => CompetitionModel
             .find({
@@ -435,7 +419,7 @@ class CompetitionsController {
     }
 
 
-    registerCompetition(competitionId, playerSub, password, viewAll = false) {
+    registerCompetition(competitionId, playerSub, auth, viewAll = false) {
         if (!competitionId ||
             competitionId.length <= 0) {
             return Promise.reject(new WrongParameterError('competitionId'));
@@ -462,38 +446,30 @@ class CompetitionsController {
         return database.transaction((transaction) =>
             CompetitionModel
                 .find({where, transaction})
-                .tap((competition) => {
+                .then((competition) => {
                     if (!competition) {
                         throw new CompetitionNotFoundError(competitionId);
                     }
 
-                    // Not admin
-                    if (!viewAll) {
-                        // If competition password exists
-                        if (competition.password_needed &&
-                            password !== competition.password) {
-                            // And password is wrong
-                            throw new CompetitionWrongPasswordError(competitionId);
-                        }
+                    const strategyOpts = loadRegisterStrategy(competition).register(auth, viewAll);
 
-                        // Is opened ?
-                        const now = moment();
-                        if (now.isBefore(competition.date_start) ||
-                            now.isSameOrAfter(competition.date_end)) {
-                            throw new CompetitionNotOpenedError(competitionId);
-                        }
-                    }
+                    return [competition, strategyOpts];
                 })
-                .then((competition) => PlayerCompetitionModel.create({
-                    player_sub: playerSub,
-                    competition_id: competitionId,
-                }, {transaction})
-                    .then(() => {
-                        ++competition.players_count;
+                .spread((competition, strategyOpts) => {
+                    const opts = _.merge({
+                        player_sub: playerSub,
+                        competition_id: competitionId,
+                    }, strategyOpts);
 
-                        return competition.save({transaction});
-                    })
-                )
+                    return PlayerCompetitionModel
+                        .create(opts, {transaction})
+                        .then(() => {
+                            ++competition.players_count;
+
+                            return competition.save({transaction});
+                        })
+                    ;
+                })
                 .catch(Sequelize.UniqueConstraintError, () => {
                     throw new CompetitionAlreadyRegisteredError(competitionId, playerSub);
                 })
@@ -781,8 +757,6 @@ module.exports = {
     competitionsController: new CompetitionsController(),
     CompetitionError,
     CompetitionNotFoundError,
-    CompetitionWrongPasswordError,
-    CompetitionNotOpenedError,
     CompetitionValidationError,
     CompetitionAlreadyRegisteredError,
     CompetitionTokenNotFoundError,

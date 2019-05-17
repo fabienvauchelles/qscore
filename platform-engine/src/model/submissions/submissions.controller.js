@@ -369,7 +369,7 @@ class SubmissionsController {
                     const [submission, pc] = results;
 
                     if (pc.allow_leaderboard) {
-                        return leadsController.createOrUpdateLeadFromSubmission(submission, transaction);
+                        return leadsController.createOrUpdateLeadFromSubmission(submission, pc, transaction);
                     }
                 })
         )

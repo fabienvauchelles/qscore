@@ -65,16 +65,17 @@ class LeadsController {
             '/ limit=', limit);
 
         return competitionsController
-            .getCompetitionAttributes(competitionId, ['score_order', 'leaderboard_hidden'])
+            .getCompetitionAttributes(competitionId, ['score_order', 'leaderboard_hidden', 'register_strategy_type'])
             .then((attributes) => {
                 if (attributes.leaderboard_hidden && !admin) {
                     throw new LeadNotAllowedError(competitionId);
                 }
 
-                return Promise.all([
+                return Promise.join(
                     getPaginatedLeads(competitionId, attributes.score_order, offset, limit),
                     getLeadsCount(competitionId),
-                ]);
+                    attributes.register_strategy_type
+                );
             })
             .catch(CompetitionNotFoundError, () => {
                 throw new LeadNotFoundError(competitionId);
@@ -104,7 +105,7 @@ class LeadsController {
                 where: {
                     competition_id: cId,
                 },
-                attributes: ['player_sub', 'score', 'score_updated_at', 'submissions_count'],
+                attributes: ['player_sub', 'player_location', 'score', 'score_updated_at', 'submissions_count'],
                 order: [
                     ['score', scoreOrder],
                     ['score_updated_at', 'ASC'],
@@ -203,10 +204,15 @@ where player_sub=:playerSub
     }
 
 
-    createOrUpdateLeadFromSubmission(submission, transaction) {
+    createOrUpdateLeadFromSubmission(submission, pc, transaction) {
         if (!submission ||
             !_.isObject(submission)) {
             return Promise.reject(new WrongParameterError('submission'));
+        }
+
+        if (!pc ||
+            !_.isObject(pc)) {
+            return Promise.reject(new WrongParameterError('pc'));
         }
 
         if (!transaction ||
@@ -241,6 +247,7 @@ where player_sub=:playerSub
                             }
                         }
 
+                        lead.player_location = pc.player_location;
                         lead.submissions_count++;
 
                         return lead.save({transaction});
@@ -248,6 +255,7 @@ where player_sub=:playerSub
                     else {
                         return LeadModel.create({
                             player_sub: submission.player_sub,
+                            player_location: pc.player_location,
                             competition_id: submission.competition_id,
                             score: submission.score,
                             score_updated_at: new Date(),

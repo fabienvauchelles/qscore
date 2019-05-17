@@ -25,6 +25,7 @@ export class LeadsService {
             })
             .map((resp) => new LeadsPaginated(
                 parseInt(resp.headers.get('total-count')),
+                parseInt(resp.headers.get('register-strategy-type')),
                 resp.body
             ))
         ;

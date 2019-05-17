@@ -16,8 +16,9 @@ class LeadsController extends Controller {
 
         return leadsController
             .getAllLeads(competitionId, admin, offset, limit)
-            .spread((leads, totalCount) => {
+            .spread((leads, totalCount, registerStrategyType) => {
                 res.set('total-count', totalCount);
+                res.set('register-strategy-type', registerStrategyType);
 
                 this.sendData(res, leads);
             })

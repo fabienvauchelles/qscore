@@ -65,6 +65,12 @@ export abstract class CompetitionEditComponent implements OnInit, HasModificatio
         mode: 'text/javascript',
     };
 
+    codemirrorConfigJson: object = {
+        lineNumbers: true,
+        lineWrapping: true,
+        mode: 'application/json',
+    };
+
 
     constructor(protected _route: ActivatedRoute,
                 protected _router: Router,
@@ -74,7 +80,8 @@ export abstract class CompetitionEditComponent implements OnInit, HasModificatio
             title: [void 0, Validators.required],
             title_short: [void 0, Validators.required],
             scorer_class: [void 0, Validators.required],
-            password: [void 0],
+            register_strategy_type: [void 0, Validators.required],
+            register_strategy: [void 0, Validators.required],
             published: [void 0, Validators.required],
             hidden: [void 0, Validators.required],
             leaderboard_hidden: [void 0, Validators.required],
@@ -120,8 +127,12 @@ export abstract class CompetitionEditComponent implements OnInit, HasModificatio
         return this.form.get('scorer_class');
     }
 
-    get password() {
-        return this.form.get('password');
+    get register_strategy_type() {
+        return this.form.get('register_strategy_type');
+    }
+
+    get register_strategy() {
+        return this.form.get('register_strategy');
     }
 
     get published() {
@@ -194,10 +205,17 @@ export abstract class CompetitionEditComponent implements OnInit, HasModificatio
 
 
     get competition(): CompetitionCreate {
-        const c = _.omit(this.form.value, ['date_start', 'date_end']);
+        const c = _.omit(this.form.value, ['date_start', 'date_end', 'register_strategy']);
 
         c.date_start = text2date(this.form.value.date_start);
         c.date_end = text2date(this.form.value.date_end);
+
+        try {
+            c.register_strategy = JSON.parse(this.form.value.register_strategy);
+        }
+        catch (err) {
+            c.register_strategy = void 0;
+        }
 
         return c;
     }
@@ -207,7 +225,8 @@ export abstract class CompetitionEditComponent implements OnInit, HasModificatio
             title: newCompetition.title,
             title_short: newCompetition.title_short,
             scorer_class: newCompetition.scorer_class,
-            password: newCompetition.password,
+            register_strategy_type: newCompetition.register_strategy_type,
+            register_strategy: JSON.stringify(newCompetition.register_strategy),
             hidden: newCompetition.hidden,
             leaderboard_hidden: newCompetition.leaderboard_hidden,
             published: newCompetition.published,

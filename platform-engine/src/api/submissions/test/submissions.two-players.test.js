@@ -433,6 +433,7 @@ describe('Submissions - 2 players', function test() {
                 expect(lead1found.rank).to.be.eql(1);
                 expect(lead1found.player_name).to.be.eql(player2data.merge.name);
                 expect(lead1found.player_picture_url).to.be.eql(player2data.merge.picture_url);
+                expect(lead1found.player_location).to.be.null;
                 expect(lead1found.score).to.be.eql(0.2);
                 expect(lead1found.submissions_count).to.be.eql(1);
 
@@ -440,6 +441,7 @@ describe('Submissions - 2 players', function test() {
                 expect(lead2found.rank).to.be.eql(2);
                 expect(lead2found.player_name).to.be.eql(player1data.merge.name);
                 expect(lead2found.player_picture_url).to.be.eql(player1data.merge.picture_url);
+                expect(lead2found.player_location).to.be.null;
                 expect(lead2found.score).to.be.eql(0.1);
                 expect(lead2found.submissions_count).to.be.eql(1);
             })
@@ -494,6 +496,7 @@ describe('Submissions - 2 players', function test() {
                 expect(lead1found.rank).to.be.eql(1);
                 expect(lead1found.player_name).to.be.eql(player2data.merge.name);
                 expect(lead1found.player_picture_url).to.be.eql(player2data.merge.picture_url);
+                expect(lead1found.player_location).to.be.null;
                 expect(lead1found.score).to.be.eql(0.2);
                 expect(lead1found.submissions_count).to.be.eql(1);
 
@@ -501,6 +504,7 @@ describe('Submissions - 2 players', function test() {
                 expect(lead2found.rank).to.be.eql(2);
                 expect(lead2found.player_name).to.be.eql(player1data.merge.name);
                 expect(lead2found.player_picture_url).to.be.eql(player1data.merge.picture_url);
+                expect(lead2found.player_location).to.be.null;
                 expect(lead2found.score).to.be.eql(0.2);
                 expect(lead2found.submissions_count).to.be.eql(2);
             })
