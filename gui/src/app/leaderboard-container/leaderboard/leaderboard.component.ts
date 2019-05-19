@@ -44,6 +44,21 @@ export class LeaderboardComponent implements OnInit {
     }
 
 
+    @Input('bestLocationsLeads')
+    set bestLocationsLeads(val: Lead[]) {
+        window.qscore = window.qscore || {};
+        window.qscore.bestLocationsLeads = val;
+    }
+
+    get bestLocationsLeads() {
+        if (!window.qscore) {
+            return;
+        }
+
+        return window.qscore.bestLocationsLeads;
+    }
+
+
     private _templateHtml: string;
     leaderboardHtml = '';
 

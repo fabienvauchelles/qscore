@@ -122,7 +122,7 @@ describe('Submissions - Hide leaderboard', function test() {
             .then((res) => {
                 expect(res.statusCode).to.eql(200);
 
-                expect(res.body[0].score).to.be.eql(0.1);
+                expect(res.body.leads[0].score).to.be.eql(0.1);
             })
         ;
     });
@@ -140,7 +140,7 @@ describe('Submissions - Hide leaderboard', function test() {
             .then((res) => {
                 expect(res.statusCode).to.eql(200);
 
-                expect(res.body[0].score).to.be.eql(0.1);
+                expect(res.body.leads[0].score).to.be.eql(0.1);
             })
         ;
     });
@@ -195,7 +195,7 @@ describe('Submissions - Hide leaderboard', function test() {
             .then((res) => {
                 expect(res.statusCode).to.eql(200);
 
-                expect(res.body[0].score).to.be.eql(0.1);
+                expect(res.body.leads[0].score).to.be.eql(0.1);
             })
         ;
     });
@@ -234,7 +234,7 @@ describe('Submissions - Hide leaderboard', function test() {
             .then((res) => {
                 expect(res.statusCode).to.eql(200);
 
-                expect(res.body[0].score).to.be.eql(0.1);
+                expect(res.body.leads[0].score).to.be.eql(0.1);
             })
         ;
     });

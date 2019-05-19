@@ -16,11 +16,13 @@ class LeadsController extends Controller {
 
         return leadsController
             .getAllLeads(competitionId, admin, offset, limit)
-            .spread((leads, totalCount, registerStrategyType) => {
-                res.set('total-count', totalCount);
-                res.set('register-strategy-type', registerStrategyType);
-
-                this.sendData(res, leads);
+            .spread((leads, best_locations_leads, total_count, register_strategy_type) => {
+                this.sendData(res, {
+                    leads,
+                    best_locations_leads,
+                    total_count,
+                    register_strategy_type
+                });
             })
             .catch(LeadNotFoundError, (err) => {
                 throw new ResourceNotFoundError(err.message);

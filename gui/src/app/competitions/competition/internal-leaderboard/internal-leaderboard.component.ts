@@ -101,8 +101,8 @@ export class InternalLeaderboardComponent implements OnInit, OnDestroy {
             .getAllLeads$(this.competitionId, offset, this.itemsPerPage)
             .subscribe({
                 next: (leadsPaginated) => {
-                    this.totalItems = leadsPaginated.totalCount;
-                    this.registerStrategyType = leadsPaginated.registerStrategyType;
+                    this.totalItems = leadsPaginated.total_count;
+                    this.registerStrategyType = leadsPaginated.register_strategy_type;
                     this.leads = leadsPaginated.leads;
                 },
                 error: (err) => {

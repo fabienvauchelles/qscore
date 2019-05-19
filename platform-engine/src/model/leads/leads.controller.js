@@ -73,6 +73,7 @@ class LeadsController {
 
                 return Promise.join(
                     getPaginatedLeads(competitionId, attributes.score_order, offset, limit),
+                    getBestLocations(competitionId, attributes.score_order),
                     getLeadsCount(competitionId),
                     attributes.register_strategy_type
                 );
@@ -143,6 +144,30 @@ class LeadsController {
                     competition_id: cId,
                 },
             });
+        }
+
+        function getBestLocations(cId, order) {
+            return database.query(`
+SELECT DISTINCT ON (player_location)
+    id, player_sub, player_location, score, score_updated_at, submissions_count, name as player_name, picture_url as player_picture_url,
+    rank() over (order by score ${order ? 'DESC' : 'ASC'}, score_updated_at ) as rank 
+FROM leads, players
+WHERE competition_id=:competitionId AND leads.player_sub = players.sub
+ORDER BY player_location, score ${order ? 'DESC' : 'ASC'}, score_updated_at ASC
+`,
+                {
+                    replacements: {
+                        competitionId: cId,
+                    },
+                    type: Sequelize.QueryTypes.SELECT,
+                })
+                .then((results) => results.map((lObj) => {
+                    lObj.hash = createHash(lObj.player_sub);
+                    delete lObj.player_sub;
+
+                    return lObj;
+                }))
+            ;
         }
     }
 

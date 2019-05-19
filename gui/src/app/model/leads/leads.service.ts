@@ -1,7 +1,7 @@
 import {Observable} from 'rxjs/Rx';
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Lead, LeadsPaginated} from './lead.model';
+import {LeadsPaginated} from './lead.model';
 
 
 
@@ -19,15 +19,7 @@ export class LeadsService {
 
         return this
             ._http
-            .get<Lead[]>(`api/leads/${competitionId}`, {
-                params,
-                observe: 'response',
-            })
-            .map((resp) => new LeadsPaginated(
-                parseInt(resp.headers.get('total-count')),
-                parseInt(resp.headers.get('register-strategy-type')),
-                resp.body
-            ))
+            .get<LeadsPaginated>(`api/leads/${competitionId}`, {params})
         ;
     }
 }

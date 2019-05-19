@@ -11,12 +11,13 @@ import {CompetitionsService} from '../model/competitions/competitions.service';
 
 
 @Component({
-    template: '<leaderboard [competition]="competition" [leads]="leads" *ngIf="competition"></leaderboard>'
+    template: '<leaderboard [competition]="competition" [leads]="leads" [bestLocationsLeads]="bestLocationsLeads" *ngIf="competition"></leaderboard>'
 })
 export class LeaderboardContainerComponent implements OnInit, OnDestroy {
 
     competition: Competition;
     leads: Lead[] = [];
+    bestLocationsLeads: Lead[] = [];
 
     private _competitionId: string;
     private _subscription: Subscription = new Subscription();
@@ -88,6 +89,7 @@ export class LeaderboardContainerComponent implements OnInit, OnDestroy {
             .subscribe({
                 next: (leadsPaginated) => {
                     this.leads = leadsPaginated.leads;
+                    this.bestLocationsLeads = leadsPaginated.best_locations_leads;
                 },
                 error: (err) => {
                     console.error('Error:', err);

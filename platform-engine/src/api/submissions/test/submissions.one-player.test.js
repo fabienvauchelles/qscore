@@ -198,7 +198,7 @@ describe('Submissions - 1 player', function test() {
             .then((res) => {
                 expect(res.statusCode).to.eql(200);
 
-                const leadsFound = res.body;
+                const leadsFound = res.body.leads;
 
                 expect(leadsFound).to.be.an('array').that.is.empty;
             })
@@ -339,7 +339,7 @@ describe('Submissions - 1 player', function test() {
             .then((res) => {
                 expect(res.statusCode).to.eql(200);
 
-                const leadsFound = res.body;
+                const leadsFound = res.body.leads;
                 expect(leadsFound).to.have.lengthOf(1);
 
                 const leadFound = leadsFound[0];
@@ -457,7 +457,7 @@ describe('Submissions - 1 player', function test() {
             .then((res) => {
                 expect(res.statusCode).to.eql(200);
 
-                const leadsFound = res.body;
+                const leadsFound = res.body.leads;
                 expect(leadsFound).to.have.lengthOf(1);
 
                 const leadFound = leadsFound[0];
@@ -571,7 +571,7 @@ describe('Submissions - 1 player', function test() {
             .then((res) => {
                 expect(res.statusCode).to.eql(200);
 
-                const leadsFound = res.body;
+                const leadsFound = res.body.leads;
                 expect(leadsFound).to.have.lengthOf(1);
 
                 const leadFound = leadsFound[0];
@@ -665,7 +665,7 @@ describe('Submissions - 1 player', function test() {
             .then((res) => {
                 expect(res.statusCode).to.eql(200);
 
-                const leadsFound = res.body;
+                const leadsFound = res.body.leads;
                 expect(leadsFound).to.have.lengthOf(1);
 
                 const leadFound = leadsFound[0];

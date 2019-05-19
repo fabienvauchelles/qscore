@@ -13,8 +13,9 @@ export class Lead {
 
 
 export class LeadsPaginated {
-    constructor(public totalCount: number,
-                public registerStrategyType: number,
-                public leads: Lead[]) {
+    constructor(public total_count: number,
+                public register_strategy_type: number,
+                public leads: Lead[],
+                public best_locations_leads: Lead[]) {
     }
 }
