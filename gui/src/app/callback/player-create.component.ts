@@ -42,6 +42,15 @@ export class PlayerCreateComponent implements OnInit {
         return this.form.get('picture_url');
     }
 
+    get picture_url_css() {
+        try {
+            return `url(${this.form.get('picture_url').value})`;
+        }
+        catch (e) {
+            return;
+        }
+    }
+
 
     get player(): PlayerUpdate {
         return new PlayerUpdate(
