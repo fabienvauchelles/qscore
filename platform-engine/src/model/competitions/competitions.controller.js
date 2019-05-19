@@ -406,6 +406,7 @@ class CompetitionsController {
                     where: {
                         id: competitionId,
                     },
+                    attributes: ['id'],
                     transaction,
                 })
                 .tap((competition) => {

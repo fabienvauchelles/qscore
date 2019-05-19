@@ -243,6 +243,7 @@ limit :limit
                     sub: playerSub,
                 },
                 transaction,
+                attributes: ['sub'],
             })
             .tap((player) => {
                 if (!player) {
