@@ -1,0 +1,91 @@
+<div class="animated fadeIn">
+
+    <form novalidate
+          [formGroup]="form"
+          (ngSubmit)="updateWithConfirm()">
+
+        <div class="row">
+            <div class="col-12">
+
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fa fa-user"></i>
+                        Player Information
+                    </div>
+
+                    <div class="card-body">
+                        <div class="row form-group">
+                            <div class="col-12">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <i class="icon-user"></i>
+                                </span>
+                                    </div>
+
+                                    <input type="text"
+                                           class="form-control"
+                                           [ngClass]="{'is-invalid' : name.invalid && (name.dirty || name.touched)}"
+                                           id="name"
+                                           placeholder="Enter your name"
+                                           name="name"
+                                           formControlName="name">
+
+                                    <div *ngIf="name.invalid && (name.dirty || name.touched)"
+                                         class="invalid-feedback">
+
+                                        <div *ngIf="name.errors.required">
+                                            Name is required.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <div class="col-12">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            <i class="icon-picture"></i>
+                                        </span>
+                                    </div>
+
+                                    <input type="text"
+                                           class="form-control"
+                                           [ngClass]="{'is-invalid' : picture_url.invalid && (picture_url.dirty || picture_url.touched)}"
+                                           id="picture_url"
+                                           placeholder="Enter your picture URL"
+                                           name="picture_url"
+                                           formControlName="picture_url">
+
+                                    <div *ngIf="picture_url.invalid && (picture_url.dirty || picture_url.touched)"
+                                         class="invalid-feedback">
+
+                                        <div *ngIf="picture_url.errors.required">
+                                            Picture URL is required.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-footer">
+                        <div class="pull-right">
+                            <button type="submit"
+                                    class="btn btn-sm btn-primary"
+                                    [disabled]="!form.valid || form.pristine"
+                                    [processing]="updateProcessing">
+                                <i class="fa fa-save"></i>
+                                <span>Update</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </form>
+</div>

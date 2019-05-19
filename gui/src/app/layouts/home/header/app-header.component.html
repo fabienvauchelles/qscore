@@ -30,6 +30,11 @@
             </a>
 
             <div class="dropdown-menu dropdown-menu-right" *dropdownMenu aria-labelledby="simple-dropdown">
+                <a class="dropdown-item"
+                   [routerLink]="['/player']">
+                    <i class="fa fa-user"></i> My profile
+                </a>
+
                 <button type="click"
                         class="dropdown-item"
                         (click)="logout()">

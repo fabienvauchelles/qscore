@@ -16,7 +16,7 @@ export class PlayersPaginated {
 
 
 
-export class PlayerCreate {
+export class PlayerUpdate {
     constructor(public name: string,
                 public picture_url: string) {
     }

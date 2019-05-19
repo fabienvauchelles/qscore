@@ -20,6 +20,11 @@ export const routes: Routes = [
         canActivate: [AuthGuard],
         children: [
             {
+                path: 'player',
+                loadChildren: './player/player.module#PlayerModule',
+            },
+
+            {
                 path: 'competitions',
                 loadChildren: './competitions/competitions.module#CompetitionsModule',
             },

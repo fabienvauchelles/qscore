@@ -1,7 +1,7 @@
 import {Observable} from 'rxjs/Rx';
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Player, PlayerCreate, PlayersPaginated} from './player.model';
+import {Player, PlayerUpdate, PlayersPaginated} from './player.model';
 
 
 
@@ -33,13 +33,13 @@ export class PlayersService {
     }
 
 
-    registerMe$(token: string, player: PlayerCreate) {
+    registerMe$(token: string, player: PlayerUpdate): Observable<PlayerUpdate> {
         const data: any = {token};
         if (player) {
             data.player = player.toJson();
         }
 
-        return this._http.post<void>('api/players/me', data);
+        return this._http.post<PlayerUpdate>('api/players/me', data);
     }
 
 

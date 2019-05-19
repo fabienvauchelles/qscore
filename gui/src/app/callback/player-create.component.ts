@@ -3,7 +3,7 @@ import {Router} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {AuthService} from '../common/auth/auth.service';
 import {InformationsService} from '../common/informations/informations.service';
-import {PlayerCreate} from "../model/players/player.model";
+import {PlayerUpdate} from "../model/players/player.model";
 
 
 const
@@ -43,15 +43,15 @@ export class PlayerCreateComponent implements OnInit {
     }
 
 
-    get player(): PlayerCreate {
-        return new PlayerCreate(
+    get player(): PlayerUpdate {
+        return new PlayerUpdate(
             this.form.value.name,
             this.form.value.picture_url,
         );
     }
 
 
-    set player(newPlayer: PlayerCreate) {
+    set player(newPlayer: PlayerUpdate) {
         this.form.patchValue({
             name: newPlayer.name,
             picture_url: newPlayer.picture_url,
@@ -68,17 +68,20 @@ export class PlayerCreateComponent implements OnInit {
                 this.authResult = authResult;
 
                 this._authService
-                    .registerMe(this.authResult, null)
-                    .then(() => {
-                        this._router.navigate(['/']);
-                    })
-                    .catch(() => {
-                        this.player = new PlayerCreate(
-                            this.authResult.idTokenPayload.name,
-                            this.authResult.idTokenPayload.picture,
-                        );
+                    .registerMe$(this.authResult, null)
+                    .subscribe({
+                        next: () => {
+                            this._router.navigate(['/']);
+                        },
 
-                        this.completed = false;
+                        error: () => {
+                            this.player = new PlayerUpdate(
+                                this.authResult.idTokenPayload.name,
+                                this.authResult.idTokenPayload.picture,
+                            );
+
+                            this.completed = false;
+                        }
                     })
                 ;
             })
@@ -116,29 +119,31 @@ export class PlayerCreateComponent implements OnInit {
         this.registerProcessing = true;
 
         this._authService
-            .registerMe(this.authResult, this.player)
-            .then(() => {
-                this._router.navigate(['/']);
-            })
-            .catch((err) => {
-                console.error('Error:', err);
+            .registerMe$(this.authResult, this.player)
+            .subscribe({
+                next: () => {
+                    this._router.navigate(['/']);
+                },
+                error: (err) => {
+                    console.error('Error:', err);
 
-                if (err.errorDescription) {
-                    this._informationsService.error(
-                        err.error,
-                        err.errorDescription
-                    );
-                } else {
-                    this._informationsService.error(
-                        'Login Error',
-                        err.error,
-                    );
+                    if (err.errorDescription) {
+                        this._informationsService.error(
+                            err.error,
+                            err.errorDescription
+                        );
+                    } else {
+                        this._informationsService.error(
+                            'Login Error',
+                            err.error,
+                        );
+                    }
+
+                    // Retry login after 5 seconds
+                    setTimeout(() => {
+                        this._authService.logout();
+                    }, 5000);
                 }
-
-                // Retry login after 5 seconds
-                setTimeout(() => {
-                    this._authService.logout();
-                }, 5000);
             })
         ;
     }

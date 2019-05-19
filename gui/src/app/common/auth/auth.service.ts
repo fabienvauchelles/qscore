@@ -1,13 +1,13 @@
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/timer';
-import 'rxjs/add/operator/mergeMap';
-import {Injectable} from '@angular/core';
-import * as auth0 from 'auth0-js';
-import {environment} from '../../../environments/environment';
-import {PlayersService} from '../../model/players/players.service';
-import {PlayerCreate} from "../../model/players/player.model";
 
+import * as auth0 from 'auth0-js';
+import {Injectable} from '@angular/core';
+
+import {PlayersService} from '../../model/players/players.service';
+import {PlayerUpdate} from "../../model/players/player.model";
+import {environment} from '../../../environments/environment';
 
 
 @Injectable()
@@ -93,23 +93,36 @@ export class AuthService {
     }
 
 
-    registerMe(authResult: any, player: PlayerCreate) {
+    registerMe$(authResult: any, player: PlayerUpdate): Observable<PlayerUpdate> {
         console.log('[AuthService] registerMe()');
 
-        return new Promise((resolve, reject) => {
-            this._playersService.registerMe$(authResult.idToken, player)
-                .subscribe({
-                    next: (profile) => {
-                        this._saveAuthResult(authResult, profile);
+        return this._playersService
+            .registerMe$(authResult.idToken, player)
+            .map((profile) => {
+                this._saveAuthResult(authResult, profile);
 
-                        this._scheduleRenewal();
+                this._scheduleRenewal();
 
-                        return resolve();
-                    },
-                    error: (err) => reject(err)
-                })
-            ;
-        });
+                return profile;
+            })
+        ;
+    }
+
+
+    updateMe$(player: PlayerUpdate): Observable<PlayerUpdate> {
+        console.log('[AuthService] updateMe()');
+
+        return Observable.create(observer => {
+            this._auth0.checkSession({}, (err, authResult) => {
+                if (err) {
+                    return observer.error(err);
+                }
+
+                return observer.next(authResult);
+            });
+        })
+            .mergeMap((authResult) => this.registerMe$(authResult, player))
+        ;
     }
 
 
