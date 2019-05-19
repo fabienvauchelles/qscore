@@ -106,7 +106,7 @@ class CompetitionsController {
             include: [
                 {
                     model: PlayerCompetitionModel,
-                    attributes: ['id'],
+                    attributes: ['id', 'allow_leaderboard', 'player_location'],
                     where: {player_sub: playerSub},
                     required: false,
                 },
@@ -173,7 +173,7 @@ class CompetitionsController {
             include: [
                 {
                     model: PlayerCompetitionModel,
-                    attributes: ['id'],
+                    attributes: ['id', 'allow_leaderboard', 'player_location'],
                     where: {player_sub: playerSub},
                     required: false,
                 },
@@ -740,7 +740,10 @@ limit :limit
     _convertCompetitionToJson(competition) {
         const cObj = competition.toJSON();
         if (cObj.player_competitions.length > 0) {
-            cObj.token = cObj.player_competitions[0].id;
+            const pc = cObj.player_competitions[0];
+            cObj.token = pc.id;
+            cObj.allow_leaderboard = pc.allow_leaderboard;
+            cObj.player_location = pc.player_location;
         }
 
         delete cObj.player_competitions;

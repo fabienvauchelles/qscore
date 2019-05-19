@@ -20,6 +20,15 @@
             <span class="badge badge-pill badge-danger"
                   *ngIf="!competition.published">closed</span>
 
+            <span class="badge badge-pill badge-success"
+                  *ngIf="competition.allow_leaderboard === true">competitor</span>
+
+            <span class="badge badge-pill badge-danger"
+                  *ngIf="competition.allow_leaderboard === false">observer</span>
+
+            <span class="badge badge-pill badge-info"
+                  *ngIf="competition.player_location">{{competition.player_location}}</span>
+
             <span class="competition-players-count float-right">
                 <i class="fa fa-users"></i>
                 {{competition.players_count}}

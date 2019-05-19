@@ -160,8 +160,10 @@ describe('Competitions - Register strategy - Password', function test() {
                 expect(res.statusCode).to.eql(200);
 
                 competition = res.body;
+
+                expect(competition.player_location).to.be.null;
             })
-            ;
+        ;
     });
 
 

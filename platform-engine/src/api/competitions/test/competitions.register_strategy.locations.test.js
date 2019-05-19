@@ -163,6 +163,8 @@ describe('Competitions - Register strategy - Location', function test() {
                 expect(res.statusCode).to.eql(200);
 
                 competition = res.body;
+
+                expect(competition.player_location).to.eql('location1');
             })
         ;
     });
@@ -269,6 +271,8 @@ describe('Competitions - Register strategy - Location', function test() {
                 expect(res.statusCode).to.eql(200);
 
                 competition = res.body;
+
+                expect(competition.player_location).to.eql('location2');
             })
         ;
     });

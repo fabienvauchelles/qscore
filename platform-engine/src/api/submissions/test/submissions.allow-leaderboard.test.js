@@ -87,6 +87,26 @@ describe('Submissions - Allow leaderboard', function test() {
     });
 
 
+    it('should get the allowed information on competition info', () => {
+        this.timeout(config.test.timeout);
+
+        const opts = {
+            method: 'GET',
+            url: `api/competitions/${competition.id}`,
+        };
+
+        return requestPlayer(opts)
+            .then((res) => {
+                expect(res.statusCode).to.eql(200);
+
+                const competitionFound = res.body;
+
+                expect(competitionFound.allow_leaderboard).to.be.true;
+            })
+            ;
+    });
+
+
     it('should have 1 allowed player in the competition', () => {
         this.timeout(config.test.timeout);
 
@@ -175,6 +195,26 @@ describe('Submissions - Allow leaderboard', function test() {
     });
 
 
+    it('should get the allowed information on competition info', () => {
+        this.timeout(config.test.timeout);
+
+        const opts = {
+            method: 'GET',
+            url: `api/competitions/${competition.id}`,
+        };
+
+        return requestPlayer(opts)
+            .then((res) => {
+                expect(res.statusCode).to.eql(200);
+
+                const competitionFound = res.body;
+
+                expect(competitionFound.allow_leaderboard).to.be.true;
+            })
+        ;
+    });
+
+
     it('should have again a lead with a 1 score of 0.1', () => {
         this.timeout(config.test.timeout);
 
@@ -209,6 +249,26 @@ describe('Submissions - Allow leaderboard', function test() {
         return requestPlayerAdmin(opts)
             .then((res) => {
                 expect(res.statusCode).to.eql(204);
+            })
+        ;
+    });
+
+
+    it('should get the forbidden information on competition info', () => {
+        this.timeout(config.test.timeout);
+
+        const opts = {
+            method: 'GET',
+            url: `api/competitions/${competition.id}`,
+        };
+
+        return requestPlayer(opts)
+            .then((res) => {
+                expect(res.statusCode).to.eql(200);
+
+                const competitionFound = res.body;
+
+                expect(competitionFound.allow_leaderboard).to.be.false;
             })
         ;
     });
