@@ -3,6 +3,16 @@
     <div class="row">
         <div class="col-12">
             <tabset>
+                <!-- Notebook example -->
+                <tab (select)="notebook.refresh()">
+                    <ng-template tabHeading>
+                        <i class="fa fa-code"></i>
+                        Submit from your Notebook
+                    </ng-template>
+
+                    <notebook-example [token]="token" #notebook></notebook-example>
+                </tab>
+
                 <!-- File example -->
                 <tab>
                     <ng-template tabHeading>
@@ -11,16 +21,6 @@
                     </ng-template>
 
                     <submission-add [token]="token"></submission-add>
-                </tab>
-
-                <!-- Notebook example -->
-                <tab (select)="notebook.refresh()">
-                    <ng-template tabHeading>
-                        <i class="fa fa-code"></i>
-                        Submit from your Python Notebook
-                    </ng-template>
-
-                    <notebook-example [token]="token" #notebook></notebook-example>
                 </tab>
             </tabset>
         </div>
