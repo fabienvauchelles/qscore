@@ -200,6 +200,7 @@ class Controller {
                         fileSize: config.submissions.maxSize,
                     },
                 });
+                busboy.on('error', (err) => reject(new FileError(err.message)));
 
                 const fields = {};
                 busboy.on('field', (fieldname, val) => {
@@ -209,6 +210,8 @@ class Controller {
                 let targetFile;
                 let fileStarted = false;
                 busboy.on('file', (fieldname, file) => {
+                    file.on('error', (err) => reject(new FileError(err.message)));
+
                     if (fieldname !== 'datafile') {
                         return reject(new FileError('Only fieldname \'datafile\' is allowed'));
                     }
@@ -243,7 +246,6 @@ class Controller {
 
                     return resolve([targetFile, fields]);
                 });
-                busboy.on('error', (err) => reject(new FileError(err.message)));
 
                 req.pipe(busboy);
             }
