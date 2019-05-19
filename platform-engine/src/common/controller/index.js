@@ -2,7 +2,8 @@
 
 const
     Promise = require('bluebird'),
-    Busboy = require('busboy');
+    Busboy = require('busboy'),
+    zlib = require('zlib');
 
 const
     UploadFile = require('./upload-file');
@@ -244,7 +245,25 @@ class Controller {
                         return reject(new FileError('File is empty'));
                     }
 
-                    return resolve([targetFile, fields]);
+                    switch (fields.compression) {
+                        case 'gzip': {
+                            zlib.gunzip(targetFile.buffer, (err, bufferUnzip) => {
+                                if (err) {
+                                    return reject(new FileError(err.message));
+                                }
+
+                                targetFile = new UploadFile(bufferUnzip);
+
+                                return resolve([targetFile, fields]);
+                            });
+
+                            break;
+                        }
+
+                        default: {
+                            return resolve([targetFile, fields]);
+                        }
+                    }
                 });
 
                 req.pipe(busboy);

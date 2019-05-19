@@ -30,8 +30,7 @@
                     name="language"
                     class="form-control"
                     [formControl]="languageControl">
-                <option value="python3">Python 3</option>
-                <option value="python2">Python 2</option>
+                <option value="python">Python</option>
             </select>
         </div>
     </div>
@@ -41,12 +40,5 @@
     Copy and paste this code into your notebook:
 </p>
 
-<codemirror [(ngModel)]="code1" [config]="config" #cm1>
-</codemirror>
-
-<p>
-    And use this code to submit:
-</p>
-
-<codemirror [(ngModel)]="code2" [config]="config" #cm2>
+<codemirror [(ngModel)]="code" [config]="config" #cm>
 </codemirror>

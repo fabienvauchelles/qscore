@@ -14,8 +14,7 @@ import {InformationsService} from '../../../../common/informations/informations.
 })
 export class NotebookExampleComponent implements OnInit, OnDestroy {
 
-    @ViewChild('cm1') cm1;
-    @ViewChild('cm2') cm2;
+    @ViewChild('cm') cm;
 
     languageControl = new FormControl();
     languageControlSub: Subscription;
@@ -23,8 +22,7 @@ export class NotebookExampleComponent implements OnInit, OnDestroy {
     private _token: string;
     private _language: string;
 
-    code1: string;
-    code2: string;
+    code: string;
 
     config: object = {
         lineNumbers: true,
@@ -57,7 +55,7 @@ export class NotebookExampleComponent implements OnInit, OnDestroy {
                 this._updateCode();
             });
 
-        this.languageControl.patchValue('python3');
+        this.languageControl.patchValue('python');
     }
 
 
@@ -67,8 +65,7 @@ export class NotebookExampleComponent implements OnInit, OnDestroy {
 
 
     refresh() {
-        this.cm1.refresh();
-        this.cm2.refresh();
+        this.cm.refresh();
     }
 
 
@@ -91,42 +88,20 @@ export class NotebookExampleComponent implements OnInit, OnDestroy {
         const origin = `${l.protocol}//${l.host}`;
 
         switch (this._language) {
-            case 'python3': {
-                this.code1 = `import io, math, requests
+            case 'python': {
+                this.code = `import math, requests
 
-def submit_prediction(df, sep=',', comment='', **kwargs):
+def submit_prediction(df, sep=',', comment='', compression='gzip', **kwargs):
     TOKEN='${this._token}'
     URL='${origin}/api/submissions'
-    buffer = io.StringIO()
-    df.to_csv(buffer, sep=sep, **kwargs)
-    buffer.seek(0)
-    r = requests.post(URL, headers={'Authorization': 'Bearer {}'.format(TOKEN)},files={'datafile': buffer},data={'comment':comment})
+    df.to_csv('temporary.dat', sep=sep, compression=compression, **kwargs)
+    r = requests.post(URL, headers={'Authorization': 'Bearer {}'.format(TOKEN)},files={'datafile': open('temporary.dat', 'rb')},data={'comment':comment, 'compression': compression})
     if r.status_code == 429:
         raise Exception('Submissions are too close. Next submission is only allowed in {} seconds.'.format(int(math.ceil(int(r.headers['x-rate-limit-remaining']) / 1000.0))))
     if r.status_code != 200:
-        raise Exception(r.text)`;
-
-                this.code2 = 'submit_prediction(df_submission, sep=\',\', index=True, comment=\'my submission\')';
-
-                break;
-            }
-
-            case 'python2': {
-                this.code1 = `import io, math, requests
-
-def submit_prediction(df, sep=',', comment='', **kwargs):
-    TOKEN='${this._token}'
-    URL='${origin}/api/submissions'
-    buffer = io.BytesIO()
-    df.to_csv(buffer, sep=sep, **kwargs)
-    buffer.seek(0)
-    r = requests.post(URL, headers={'Authorization': 'Bearer {}'.format(TOKEN)},files={'datafile': buffer},data={'comment':comment})
-    if r.status_code == 429:
-        raise Exception('Submissions are too close. Next submission is only allowed in {} seconds.'.format(int(math.ceil(int(r.headers['x-rate-limit-remaining']) / 1000.0))))
-    if r.status_code != 200:
-        raise Exception(r.text)`;
-
-                this.code2 = 'submit_prediction(df_submission, sep=\',\', index=True, comment=\'my submission\')';
+        raise Exception(r.text)
+        
+submit_prediction(df_submission, sep=',', index=True, comment='my submission')`;
 
                 break;
             }
