@@ -224,59 +224,34 @@ class SubmissionsController {
     }
 
 
-    createSubmission(token, comment, file) {
+    createSubmissionCheck(token) {
         if (!token ||
             token.length <= 0) {
             return Promise.reject(new WrongParameterError('token'));
         }
 
-        if (!file ||
-            !_.isObject(file)) {
-            return Promise.reject(new WrongParameterError('file'));
-        }
-
-        winston.debug('[SubmissionsController] createSubmission(): token=', token,
-            ' / comment=', comment, ' / file.length=', file.length);
+        winston.debug('[SubmissionsController] createSubmissionCheck(): token=', token);
 
         return database.transaction((transaction) =>
             competitionsController.getPlayerCompetitionByToken(token, transaction)
-            .tap((pc) => {
-                // Is opened ?
-                const now = moment();
-                if (now.isBefore(pc.competition.date_start) ||
-                    now.isSameOrAfter(pc.competition.date_end)) {
-                    throw new SubmissionTokenNotOpenedError(token);
-                }
-            })
-            .tap(
-                (pc) => getRemainingTime(pc.competition_id, pc.player_sub, pc.competition.submission_delay, transaction)
+                .tap((pc) => {
+                    // Is opened ?
+                    const now = moment();
+                    if (now.isBefore(pc.competition.date_start) ||
+                        now.isSameOrAfter(pc.competition.date_end)) {
+                        throw new SubmissionTokenNotOpenedError(token);
+                    }
+                })
+                .tap((pc) => getRemainingTime(
+                    pc.competition_id, pc.player_sub, pc.competition.submission_delay, transaction
+                )
                     .then((remainingTime) => {
                         if (remainingTime > 0) {
                             throw new SubmissionTokenTooCloseError(token, remainingTime);
                         }
                     })
-            )
-            .then((pc) => {
-                const payload = {
-                    competition_id: pc.competition_id,
-                    player_sub: pc.player_sub,
-                    datafile: file.buffer,
-                };
-
-                const cComment = clean(comment);
-                if (cComment) {
-                    payload.comment = cComment;
-                }
-
-                return SubmissionModel.create(payload, {transaction});
-            })
-        )
-            // Send to azure
-            .tap((submission) => {
-                events.emit(submission.competition_id, `submissions::${token}`, 'submissions::submitted');
-            })
-            .tap((submission) => this._askSubmissionProcessing(submission))
-        ;
+                )
+        );
 
 
         ////////////
@@ -314,6 +289,40 @@ class SubmissionsController {
                 })
             ;
         }
+    }
+
+
+    createSubmission(token, pc, comment, file) {
+        if (!file ||
+            !_.isObject(file)) {
+            return Promise.reject(new WrongParameterError('file'));
+        }
+
+        winston.debug('[SubmissionsController] createSubmission(): file.length=', file.length);
+
+        return database.transaction((transaction) => {
+            const payload = {
+                competition_id: pc.competition_id,
+                player_sub: pc.player_sub,
+                datafile: file.buffer,
+            };
+
+            const cComment = clean(comment);
+            if (cComment) {
+                payload.comment = cComment;
+            }
+
+            return SubmissionModel.create(payload, {transaction});
+        })
+            // Send to azure
+            .tap((submission) => {
+                events.emit(submission.competition_id, `submissions::${token}`, 'submissions::submitted');
+            })
+            .tap((submission) => this._askSubmissionProcessing(submission))
+        ;
+
+
+        ////////////
 
         function clean(a) {
             if (!a) {

@@ -83,8 +83,10 @@ class SubmissionsController extends Controller {
     createSubmission(req, res) {
         const token = req.token;
 
-        return this.readFile(req)
-            .spread((file, fields) => submissionsController.createSubmission(token, fields.comment, file))
+        return submissionsController.createSubmissionCheck(token)
+            .then((pc) => this.readFile(req)
+                    .spread((file, fields) => submissionsController.createSubmission(token, pc, fields.comment, file))
+            )
             .then((submission) => {
                 this.sendData(res, submission);
             })
