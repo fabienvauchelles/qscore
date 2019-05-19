@@ -662,15 +662,15 @@ limit :limit
                         model: PlayerModel,
                         required: true,
                         where: {
-                            [Sequelize.Op.or]: [
+                            $or: [
                                 {
                                     name: {
-                                        [Sequelize.Op.iLike]: `%${srh}%`,
+                                        $iLike: `%${srh}%`,
                                     },
                                 },
                                 {
                                     email: {
-                                        [Sequelize.Op.iLike]: `%${srh}%`,
+                                        $iLike: `%${srh}%`,
                                     },
                                 },
                             ],

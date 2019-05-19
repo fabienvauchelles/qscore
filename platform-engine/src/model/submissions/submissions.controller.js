@@ -452,10 +452,10 @@ class SubmissionsController {
                 where: {
                     status: 'SUBMITTED',
                     updated_at: {
-                        [Sequelize.Op.lt]: new Date(new Date() - config.submissions.retryDelay),
+                        $lt: new Date(new Date() - config.submissions.retryDelay),
                     },
                     retry: {
-                        [Sequelize.Op.lt]: config.submissions.maxRetries,
+                        $lt: config.submissions.maxRetries,
                     },
                 },
                 attributes: {

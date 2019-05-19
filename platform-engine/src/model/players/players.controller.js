@@ -101,15 +101,15 @@ limit :limit
         function getPlayersCount(srh) {
             return PlayerModel.count({
                 where: {
-                    [Sequelize.Op.or]: [
+                    $or: [
                         {
                             name: {
-                                [Sequelize.Op.iLike]: `%${srh}%`,
+                                $iLike: `%${srh}%`,
                             },
                         },
                         {
                             email: {
-                                [Sequelize.Op.iLike]: `%${srh}%`,
+                                $iLike: `%${srh}%`,
                             },
                         },
                     ],
