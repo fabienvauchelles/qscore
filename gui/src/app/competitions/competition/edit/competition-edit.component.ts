@@ -1,46 +1,11 @@
 import * as _ from 'lodash';
-import * as moment from 'moment';
 import {OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {CompetitionCreate} from '../../../model/competitions/competiton.model';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {HasModification} from '../../../common/modals/confirm/confirm.guard';
 import 'codemirror/mode/htmlmixed/htmlmixed';
-
-
-
-const
-    PATTERN_URL = /^(http[s]?:\/\/){0,1}(www\.){0,1}[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,5}[\.]{0,1}/,
-    PATTERN_DATE = /\d{1,2}\/\d{1,2}\/\d{4} \d{1,2}:\d{2}/;
-
-
-
-function date2text(dt) {
-    if (!dt) {
-        return;
-    }
-
-    const mDt = moment(dt);
-    if (!mDt.isValid()) {
-        return;
-    }
-
-    return mDt.format('DD/MM/YYYY HH:mm')
-}
-
-function text2date(txt) {
-    if (!txt || txt.length <= 0) {
-        return;
-    }
-
-    const mDt = moment(txt, 'DD/MM/YYYY HH:mm');
-    if (!mDt.isValid()) {
-        return;
-    }
-
-    return mDt.toDate();
-}
-
+import {date2text, text2date, PATTERN_URL, PATTERN_DATE} from '../../../common/helpers';
 
 
 export abstract class CompetitionEditComponent implements OnInit, HasModification {

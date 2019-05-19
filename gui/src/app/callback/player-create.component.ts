@@ -3,11 +3,8 @@ import {Router} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {AuthService} from '../common/auth/auth.service';
 import {InformationsService} from '../common/informations/informations.service';
-import {PlayerUpdate} from "../model/players/player.model";
-
-
-const
-    PATTERN_URL = /^(http[s]?:\/\/){0,1}(www\.){0,1}[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,5}[\.]{0,1}/;
+import {PlayerUpdate} from '../model/players/player.model';
+import {PATTERN_URL} from '../common/helpers';
 
 
 @Component({
