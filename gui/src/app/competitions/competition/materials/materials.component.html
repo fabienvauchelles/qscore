@@ -2,33 +2,13 @@
 
     <div class="row"
          *ngIf="competition">
+
+
         <div class="col-12">
 
             <div class="card">
                 <div class="card-header">
                     <i class="fa fa-database"></i>
-                    Competition Data
-                </div>
-
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-12 col-lg-6 material"
-                             *ngFor="let material of materials">
-                            <i class="fa fa-file"></i>
-                            <a href="{{getLink(material)}}"
-                               target="_blank">{{material.filename}}</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-        <div class="col-12">
-
-            <div class="card">
-                <div class="card-header">
-                    <i class="fa fa-align-justify"></i>
                     Data Description
                 </div>
 
@@ -37,6 +17,32 @@
                 </div>
             </div>
 
+        </div>
+
+        <div class="col-12"
+             *ngFor="let material of materials">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fa fa-align-justify"></i>
+                    File: {{material.filename}}
+                </div>
+
+                <div class="card-body"
+                     [innerHTML]="material.description"
+                     *ngIf="material.description && material.description.length > 0">
+                </div>
+
+                <div class="card-footer">
+                    <div class="pull-right">
+                        <a class="btn btn-sm btn-primary"
+                           href="{{getLink(material)}}"
+                           target="_blank">
+                            <i class="fa fa-download"></i>
+                            Download
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

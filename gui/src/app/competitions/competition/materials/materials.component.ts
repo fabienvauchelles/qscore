@@ -53,7 +53,7 @@ export class MaterialsComponent implements OnInit {
 
         this
             ._materialsService
-            .getAllMaterials(this._competitionId)
+            .getAllMaterials$(this._competitionId)
             .subscribe({
                 next: (materials) => {
                     this.materials = materials;
@@ -72,6 +72,6 @@ export class MaterialsComponent implements OnInit {
 
 
     getLink(material) {
-        return `/api/competitions/${this.competition.id}/materials/${material.id}?token=${this._authService.accessToken}`;
+        return `/api/competitions/${this.competition.id}/materials/${material.id}/download?token=${this._authService.accessToken}`;
     }
 }

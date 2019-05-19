@@ -16,6 +16,7 @@ const materialMapping = {
         primaryKey: true,
     },
 
+
     filename: {
         type: Sequelize.STRING,
         allowNull: false,
@@ -23,6 +24,17 @@ const materialMapping = {
             notEmpty: true,
         },
     },
+
+
+    release_at: {
+        type: Sequelize.DATE,
+    },
+
+
+    description: {
+        type: Sequelize.TEXT,
+    },
+
 
     datafile: {
         type: Sequelize.BLOB,

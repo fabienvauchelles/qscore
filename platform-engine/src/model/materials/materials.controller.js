@@ -8,6 +8,7 @@ const
 
 const
     MaterialModel = require('./material/materiel.model'),
+    database = require('../../common/database'),
     {WrongParameterError} = require('../../common/exceptions');
 
 
@@ -43,26 +44,48 @@ class MaterialsController {
     constructor() {}
 
 
-    getAllMaterials(competitionId) {
+    getAllMaterials(competitionId, viewAll = false) {
         if (!competitionId ||
             competitionId.length <= 0) {
             return Promise.reject(new WrongParameterError('competitionId'));
         }
 
         winston.debug(
-            '[MaterialsController] getAllMaterials(): competitionId=', competitionId
+            '[MaterialsController] getAllMaterials(): competitionId=', competitionId,
+            ' / viewAll=', viewAll
         );
 
 
-        return MaterialModel.findAll({
+        const opts = {
             where: {
                 competition_id: competitionId,
             },
             order: [
                 ['filename'],
             ],
-            attributes: ['id', 'filename'],
-        });
+            attributes: ['id', 'filename', 'release_at', 'description'],
+        };
+
+        if (!viewAll) {
+            _.merge(opts, {
+                where: {
+                    $or: [
+                        {
+                            release_at: {
+                                $eq: null,
+                            },
+                        },
+                        {
+                            release_at: {
+                                $lte: Sequelize.fn('NOW'),
+                            },
+                        },
+                    ],
+                },
+            });
+        }
+
+        return MaterialModel.findAll(opts);
     }
 
 
@@ -82,13 +105,75 @@ class MaterialsController {
             ' / materialId=', materialId
         );
 
+        const opts = {
+            where: {
+                competition_id: competitionId,
+                id: materialId,
+            },
+        };
+
         return MaterialModel
             .find({
                 where: {
                     competition_id: competitionId,
                     id: materialId,
                 },
+                attributes: ['id', 'filename', 'release_at', 'description'],
             })
+            .tap((material) => {
+                if (!material) {
+                    throw new MaterialNotFoundError(materialId);
+                }
+            })
+        ;
+    }
+
+
+    getMaterialDownloadById(competitionId, materialId, viewAll = false) {
+        if (!competitionId ||
+            competitionId.length <= 0) {
+            return Promise.reject(new WrongParameterError('competitionId'));
+        }
+
+        if (!materialId ||
+            materialId.length <= 0) {
+            return Promise.reject(new WrongParameterError('materialId'));
+        }
+
+        winston.debug(
+            '[MaterialsController] getMaterialDownloadById(): competitionId=', competitionId,
+            ' / materialId=', materialId
+        );
+
+        const opts = {
+            where: {
+                competition_id: competitionId,
+                id: materialId,
+            },
+            attributes: ['id', 'filename', 'datafile'],
+        };
+
+        if (!viewAll) {
+            _.merge(opts, {
+                where: {
+                    $or: [
+                        {
+                            release_at: {
+                                $eq: null,
+                            },
+                        },
+                        {
+                            release_at: {
+                                $lte: Sequelize.fn('NOW'),
+                            },
+                        },
+                    ],
+                },
+            });
+        }
+
+        return MaterialModel
+            .find(opts)
             .tap((material) => {
                 if (!material) {
                     throw new MaterialNotFoundError(materialId);
@@ -132,6 +217,63 @@ class MaterialsController {
     }
 
 
+    updateMaterial(competitionId, materialId, materialRaw) {
+        if (!competitionId ||
+            competitionId.length <= 0) {
+            return Promise.reject(new WrongParameterError('competitionId'));
+        }
+
+        if (!materialId ||
+            materialId.length <= 0) {
+            return Promise.reject(new WrongParameterError('materialId'));
+        }
+
+        if (!materialRaw ||
+            !_.isObject(materialRaw)) {
+            return Promise.reject(new WrongParameterError('materialRaw'));
+        }
+
+        winston.debug('[CompetitionsController] updateMaterial(): competitionId=', competitionId,
+            ' / materialId=', materialId);
+
+        return database.transaction((transaction) => MaterialModel
+            .find({
+                where: {
+                    competition_id: competitionId,
+                    id: materialId,
+                },
+                attributes: ['id', 'datafile'],
+                transaction,
+            })
+            .tap((material) => {
+                if (!material) {
+                    throw new MaterialNotFoundError(materialId);
+                }
+            })
+            .then((material) => {
+                const materialUpdate = _.merge(
+                    {},
+                    material,
+                    _.omit(materialRaw, ['id', 'created_at', 'updated_at', 'datafile'])
+                );
+
+                if (!materialRaw.release_at) {
+                    materialUpdate.release_at = null;
+                }
+
+                if (!materialRaw.description) {
+                    materialUpdate.description = null;
+                }
+
+                return material.update(materialUpdate, {transaction});
+            })
+            .catch(Sequelize.ValidationError, (err) => {
+                throw new MaterialValidationError(err.message);
+            })
+        );
+    }
+
+
     removeMaterialById(competitionId, materialId) {
         if (!competitionId ||
             competitionId.length <= 0) {
@@ -148,20 +290,23 @@ class MaterialsController {
             ' / materialId=', materialId
         );
 
-        return MaterialModel
-            .find({
-                where: {
-                    competition_id: competitionId,
-                    id: materialId,
-                },
-                attributes: ['id'],
-            })
-            .tap((material) => {
-                if (!material) {
-                    throw new MaterialNotFoundError(materialId);
-                }
-            })
-            .then((material) => material.destroy())
+        return database.transaction((transaction) =>
+            MaterialModel
+                .find({
+                    where: {
+                        competition_id: competitionId,
+                        id: materialId,
+                    },
+                    attributes: ['id'],
+                    transaction,
+                })
+                .tap((material) => {
+                    if (!material) {
+                        throw new MaterialNotFoundError(competitionId);
+                    }
+                })
+                .then((material) => material.destroy({transaction}))
+            )
         ;
     }
 }

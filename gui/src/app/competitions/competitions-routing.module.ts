@@ -11,6 +11,7 @@ import {MaterialsComponent} from './competition/materials/materials.component';
 import {CompetitionJoinComponent} from './competition-join/competition-join.component';
 import {CompetitionCreateComponent} from './competition/edit/competition-create.component';
 import {CompetitionUpdateComponent} from './competition/edit/competition-update.component';
+import {MaterialUpdateComponent} from "./competition/edit/material/material-update.component";
 import {ConfirmGuard} from '../common/modals/confirm/confirm.guard';
 import {AdminGuard} from '../common/auth/admin.guard';
 import {CompetitionPlayersComponent} from './competition/players/competition-players.component';
@@ -39,6 +40,12 @@ const routes: Routes = [
             {
                 path: 'update',
                 component: CompetitionUpdateComponent,
+                canActivate: [AdminGuard],
+                canDeactivate: [ConfirmGuard],
+            },
+            {
+                path: 'update/materials/:materialId',
+                component: MaterialUpdateComponent,
                 canActivate: [AdminGuard],
                 canDeactivate: [ConfirmGuard],
             },

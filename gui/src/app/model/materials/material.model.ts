@@ -1,5 +1,7 @@
 export class MaterialCreate {
-    constructor(public filename: string) {
+    constructor(public filename: string,
+                public release_at: Object,
+                public description: string) {
     }
 }
 
@@ -8,8 +10,10 @@ export class MaterialCreate {
 export class Material extends MaterialCreate {
 
     constructor(public id: string,
-                filename: string
+                filename: string,
+                release_at: Object,
+                description: string,
     ) {
-        super(filename);
+        super(filename, release_at, description);
     }
 }

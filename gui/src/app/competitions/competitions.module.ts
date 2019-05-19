@@ -18,11 +18,10 @@ import {EvaluationComponent} from './competition/evaluation/evaluation.component
 import {RulesComponent} from './competition/rules/rules.component';
 import {MaterialsComponent} from './competition/materials/materials.component';
 import {CompetitionPlayersComponent} from './competition/players/competition-players.component';
+import {MaterialUpdateComponent} from "./competition/edit/material/material-update.component";
 
 // Routing
 import {CompetitionsRoutingModule} from './competitions-routing.module';
-
-
 
 @NgModule({
     imports: [
@@ -50,6 +49,7 @@ import {CompetitionsRoutingModule} from './competitions-routing.module';
         SubmissionAddComponent,
         InternalLeaderboardComponent,
         CompetitionPlayersComponent,
+        MaterialUpdateComponent,
     ],
 })
 export class CompetitionsModule {

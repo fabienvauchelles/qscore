@@ -1,7 +1,7 @@
 import {Observable} from 'rxjs/Rx';
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Material} from './material.model';
+import {Material, MaterialCreate} from './material.model';
 
 
 
@@ -12,7 +12,7 @@ export class MaterialsService {
     }
 
 
-    getAllMaterials(competitionId: string): Observable<Material[]> {
+    getAllMaterials$(competitionId: string): Observable<Material[]> {
         return this
             ._http
             .get<Material[]>(`api/competitions/${competitionId}/materials`)
@@ -20,7 +20,16 @@ export class MaterialsService {
     }
 
 
-    createMaterial(
+    getMaterialById$(competitionId: string,
+                    materialId: string): Observable<Material> {
+        return this
+            ._http
+            .get<Material>(`api/competitions/${competitionId}/materials/${materialId}`)
+        ;
+    }
+
+
+    createMaterial$(
         competitionId: string,
         datafile: File
     ): Observable<Material> {
@@ -35,7 +44,19 @@ export class MaterialsService {
     }
 
 
-    removeMaterialById(
+    updateMaterialById$(
+        competitionId: string,
+        materialId: string,
+        material: MaterialCreate,
+    ): Observable<Material> {
+        return this
+            ._http
+            .put<Material>(`api/competitions/${competitionId}/materials/${materialId}`, material)
+        ;
+    }
+
+
+    removeMaterialById$(
         competitionId: string,
         materialId: string
     ): Observable<void> {

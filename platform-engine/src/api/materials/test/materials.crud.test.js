@@ -132,7 +132,7 @@ describe('Materials - CRUD', function test() {
 
         const opts = {
             method: 'GET',
-            url: `api/competitions/${competitions[0].id}/materials/00000000-0000-0000-0000-000000000000`,
+            url: `api/competitions/${competitions[0].id}/materials/00000000-0000-0000-0000-000000000000/download`,
             qs: {token},
         };
 
@@ -208,10 +208,32 @@ describe('Materials - CRUD', function test() {
                 expect(materialFound.id).to.be.equals(material.id);
                 expect(materialFound.filename).to.be.equals(material.filename);
             })
+        ;
     });
 
 
-    it('should get 1 material file', () => {
+    it('should get material info', () => {
+        this.timeout(config.test.timeout);
+
+        const opts = {
+            method: 'GET',
+            url: `api/competitions/${competitions[0].id}/materials/${material.id}`,
+        };
+
+        return requestPlayerAdmin(opts)
+            .then((res) => {
+                expect(res.statusCode).to.eql(200);
+
+                const materialFound = res.body;
+                expect(materialFound.filename).to.eql(data.files[0].filename);
+                expect(materialFound.release_at).to.be.null;
+                expect(materialFound.description).to.be.null;
+            })
+        ;
+    });
+
+
+    it('should download 1 material file', () => {
         this.timeout(config.test.timeout);
 
         const token = signPlayer({
@@ -221,7 +243,7 @@ describe('Materials - CRUD', function test() {
 
         const opts = {
             method: 'GET',
-            url: `api/competitions/${competitions[0].id}/materials/${material.id}`,
+            url: `api/competitions/${competitions[0].id}/materials/${material.id}/download`,
             qs: {token},
         };
 
@@ -234,6 +256,72 @@ describe('Materials - CRUD', function test() {
                 expect(res.body).to.be.equals(fileContent);
             })
         ;
+    });
+
+
+    it('should update a material', () => {
+        this.timeout(config.test.timeout);
+
+        const opts = {
+            method: 'PUT',
+            url: `api/competitions/${competitions[0].id}/materials/${material.id}`,
+            json: {
+                description: 'desc0',
+            },
+        };
+
+        return requestPlayerAdmin(opts)
+            .then((res) => {
+                expect(res.statusCode).to.eql(200);
+            })
+        ;
+    });
+
+
+    it('should get new material info', () => {
+        this.timeout(config.test.timeout);
+
+        const opts = {
+            method: 'GET',
+            url: `api/competitions/${competitions[0].id}/materials/${material.id}`,
+        };
+
+        return requestPlayerAdmin(opts)
+            .then((res) => {
+                expect(res.statusCode).to.eql(200);
+
+                const materialFound = res.body;
+                expect(materialFound.filename).to.eql(data.files[0].filename);
+                expect(materialFound.release_at).to.be.null;
+                expect(materialFound.description).to.eql('desc0');
+            })
+            ;
+    });
+
+
+    it('should download 1 material file without modification', () => {
+        this.timeout(config.test.timeout);
+
+        const token = signPlayer({
+            sub: playerData.base.sub,
+            scope: '',
+        });
+
+        const opts = {
+            method: 'GET',
+            url: `api/competitions/${competitions[0].id}/materials/${material.id}/download`,
+            qs: {token},
+        };
+
+        return request(opts)
+            .then((res) => {
+                expect(res.statusCode).to.eql(200);
+                expect(res.headers['content-disposition']).to.be.equals(`attachment; filename=${material.filename}`);
+
+                const fileContent = fs.readFileSync(path.join(__dirname, 'data_1.csv')).toString();
+                expect(res.body).to.be.equals(fileContent);
+            })
+            ;
     });
 
 
@@ -306,6 +394,8 @@ describe('Materials - CRUD', function test() {
 
                 const materialsFound = res.body;
                 expect(materialsFound).to.have.lengthOf(1);
+
+                material = materialsFound[0];
             })
         ;
     });

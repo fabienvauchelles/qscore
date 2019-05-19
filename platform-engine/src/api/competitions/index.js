@@ -97,11 +97,18 @@ router.get(
     materialsController.getAllMaterials
 );
 
-// GET /:competitionId/materials/:materialId
+// GET /:competitionId/materials/:materialId (admin)
 router.get(
     '/:competitionId/materials/:materialId',
-    competitionsController.canAccessToCompetitionOrAdmin,
+    authService.isAdmin(),
     materialsController.getMaterialById
+);
+
+// GET /:competitionId/materials/:materialId/download
+router.get(
+    '/:competitionId/materials/:materialId/download',
+    competitionsController.canAccessToCompetitionOrAdmin,
+    materialsController.getMaterialDownloadById
 );
 
 // POST /:competitionId/materials (admin)
@@ -109,6 +116,13 @@ router.post(
     '/:competitionId/materials',
     authService.isAdmin(),
     materialsController.createMaterial
+);
+
+// PUT /:competitionId/materials/:materialId (admin)
+router.put(
+    '/:competitionId/materials/:materialId',
+    authService.isAdmin(),
+    materialsController.updateMaterial
 );
 
 // DELETE /:competitionId/materials/:materialId (admin)

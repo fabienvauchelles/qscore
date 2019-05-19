@@ -512,9 +512,14 @@
                                         <div class="material-name">{{material.filename}}</div>
 
                                         <div class="material-actions">
-                                            <button type="click"
-                                                    (click)="removeMaterialWithConfirm(material, $event)"
-                                                    class="btn btn-sm btn-outline-danger">
+                                            <a class="btn btn-sm btn-primary"
+                                               [routerLink]="['materials', material.id]">
+                                                <i class="fa fa-edit"></i>
+                                            </a>
+
+                                            <button class="btn btn-sm btn-danger"
+                                                    type="button"
+                                                    (click)="removeMaterialWithConfirm(material, $event)">
                                                 <i class="fa fa-trash"></i>
                                             </button>
                                         </div>

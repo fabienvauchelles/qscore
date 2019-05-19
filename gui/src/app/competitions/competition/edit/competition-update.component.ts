@@ -108,7 +108,7 @@ export class CompetitionUpdateComponent extends CompetitionEditComponent {
 
         this
             ._materialsService
-            .createMaterial(this._competitionId, this.datafile)
+            .createMaterial$(this._competitionId, this.datafile)
             .subscribe({
                 next: () => {
                     this._refreshMaterials();
@@ -137,7 +137,7 @@ export class CompetitionUpdateComponent extends CompetitionEditComponent {
         this
             ._modalsService.confirm$(
             'Materials',
-            `Do you want to delete material '${material.filename}' ?`
+            `Do you want to remove material ${material.filename}?`
         )
             .subscribe((confirmation) => {
                 if (!confirmation) {
@@ -153,7 +153,7 @@ export class CompetitionUpdateComponent extends CompetitionEditComponent {
     private _removeMaterial(materialId: string) {
         this
             ._materialsService
-            .removeMaterialById(this._competitionId, materialId)
+            .removeMaterialById$(this._competitionId, materialId)
             .subscribe({
                 next: () => {
                     this._refreshMaterials();
@@ -179,7 +179,7 @@ export class CompetitionUpdateComponent extends CompetitionEditComponent {
     private _refreshMaterials() {
         this
             ._materialsService
-            .getAllMaterials(this._competitionId)
+            .getAllMaterials$(this._competitionId)
             .subscribe({
                 next: (materials) => {
                     this.materials = materials;

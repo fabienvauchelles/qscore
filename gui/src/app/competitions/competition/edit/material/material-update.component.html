@@ -1,0 +1,87 @@
+<div class="animated fadeIn">
+
+    <form novalidate
+          [formGroup]="form"
+          (ngSubmit)="update()">
+
+        <div class="row">
+            <div class="col-12">
+
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fa fa-database"></i>
+                        Update Data file
+                    </div>
+
+                    <div class="card-body">
+                        <div class="row form-group">
+                            <label class="col-12 col-md-2 col-form-label"
+                                   for="filename">Filename</label>
+
+                            <div class="col-12 col-md-10">
+                                <input type="text"
+                                       class="form-control"
+                                       [ngClass]="{'is-invalid' : filename.invalid && (filename.dirty || filename.touched)}"
+                                       id="filename"
+                                       placeholder="Enter the name of the file"
+                                       name="filename"
+                                       formControlName="filename">
+
+                                <div *ngIf="filename.invalid && (filename.dirty || filename.touched)"
+                                     class="invalid-feedback">
+
+                                    <div *ngIf="filename.errors.required">
+                                        Filename is required.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <label class="col-12 col-md-2 col-form-label"
+                                   for="release_at">Release at</label>
+
+                            <div class="col-12 col-md-10">
+                                <input type="text"
+                                       class="form-control"
+                                       [ngClass]="{'is-invalid' : release_at.invalid && (release_at.dirty || release_at.touched)}"
+                                       id="release_at"
+                                       placeholder="Enter the date and time of the release of the file"
+                                       name="release_at"
+                                       formControlName="release_at">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label class="col-form-label">Description (HTML)</label>
+
+                                    <codemirror id="description"
+                                                [config]="codemirrorConfigHtml"
+                                                class="form-control"
+                                                [ngClass]="{'is-invalid' : description.invalid && (description.dirty || description.touched)}"
+                                                formControlName="description"></codemirror>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-footer">
+                        <div class="pull-right">
+                            <button type="submit"
+                                    class="btn btn-sm btn-primary"
+                                    [disabled]="!form.valid || form.pristine"
+                                    [processing]="updateProcessing">
+                                <i class="fa fa-save"></i>
+                                <span>Update</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </form>
+</div>

@@ -1,12 +1,6 @@
 @import "../../../../scss/variables";
 
 
-.materials {
-    button i.fa {
-        margin-right: 0;
-    }
-}
-
 .material {
     display: flex;
 
@@ -14,6 +8,14 @@
     padding-left: 5px;
 
     border-left: 5px solid $input-border-color;
+
+    .btn {
+        margin-left: 5px;
+    }
+
+    i.fa {
+        margin-right: 0;
+    }
 }
 
 
