@@ -33,7 +33,7 @@ services:
       - platform.env
 
   haproxy:
-    image: haproxy
+    image: haproxy:1.8.20
     ports:
       - "3001:3001"
     volumes:
