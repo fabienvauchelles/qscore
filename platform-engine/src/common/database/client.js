@@ -16,6 +16,7 @@ const
     config = require('../../config');
 
 
+const logging = config.node_env !== 'production';
 
 const client = new Sequelize(
     config.database.database,
@@ -27,6 +28,7 @@ const client = new Sequelize(
         host: config.database.host,
         pool: config.database.pool,
         quoteIdentifiers: false,
+        logging,
     }
 );
 
