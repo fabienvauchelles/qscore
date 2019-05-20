@@ -1,6 +1,7 @@
 import 'rxjs/add/operator/debounceTime';
 import {Subscription} from 'rxjs/Subscription';
 import 'codemirror/mode/python/python';
+import 'codemirror/mode/r/r';
 import {Component, Input, ViewChild, OnInit, OnDestroy} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {InformationsService} from '../../../../common/informations/informations.service';
@@ -23,12 +24,7 @@ export class NotebookExampleComponent implements OnInit, OnDestroy {
     private _language: string;
 
     code: string;
-
-    config: object = {
-        lineNumbers: true,
-        mode: 'text/x-python',
-        readOnly: true
-    };
+    config: object;
 
 
     @Input('token')
@@ -102,6 +98,49 @@ def submit_prediction(df, sep=',', comment='', compression='gzip', **kwargs):
         raise Exception(r.text)
         
 submit_prediction(df_submission, sep=',', index=True, comment='my submission')`;
+
+                this.config = {
+                    lineNumbers: true,
+                    mode: 'text/x-python',
+                    readOnly: true
+                };
+
+                break;
+            }
+
+            case 'R': {
+                // Thanks to Olivier Dolle et Yohann Le Faou!
+                this.code = `library(httr)
+library(R.utils)
+submit_prediction <- function(predictions, comment = '') {
+    #write the dataset with predictions on your current directory
+    token <- '${this._token}'
+    url <- '${origin}/api/submissions'
+    f <- write.csv(predictions, file = 'temporary.csv', row.names = F)
+    fgzip <- gzip('temporary.csv', overwrite=TRUE)
+    response <- POST(url = url,
+                     add_headers(Authorization = paste0('Bearer ', token)),
+                     body = list(datafile = upload_file('temporary.csv.gz'),
+                                 compression = 'gzip',
+                                 comment = comment)
+    )
+    
+    if (response$status_code == 429) {
+        stop(sprintf('Submissions are too close. Next submission is only allowed in %s seconds.',
+                     ceiling(strtoi(response$headers$'x-rate-limit-remaining') / 1000.0)
+        ))
+    }
+    else if (response$status_code != 200) {
+        stop(content(response, type = 'text'))
+    }
+}
+submit_prediction(d)`;
+
+                this.config = {
+                    lineNumbers: true,
+                    mode: 'text/x-rsrc',
+                    readOnly: true
+                };
 
                 break;
             }
