@@ -43,9 +43,10 @@ const config = {
         password: ENV.POSTGRES_PASSWORD,
         database: ENV.POSTGRES_DB,
         pool: {
-            max: 2,
-            min: 1,
-            idle: 10000,
+            max: 5,
+            min: 0,
+            idle: 20000,
+            acquire: 20000,
         },
 
         get url() {
