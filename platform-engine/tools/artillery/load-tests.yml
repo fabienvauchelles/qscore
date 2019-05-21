@@ -1,8 +1,8 @@
 config:
-  target: 'http://localhost:3001/api'
+  target: 'https://qscore-perf.datascience-olympics.com/api'
   phases:
-    - duration: 120
-      arrivalRate: 10
+    - duration: 1
+      arrivalRate: 1
       name: "Warm up the application"
   processor: "./build-jwt.js"
 scenarios:
@@ -12,6 +12,7 @@ scenarios:
         beforeRequest:
           - generateToken
           - fillTokenToBody
+          - fillPlayerToBody
     - get:
         url: "/competitions"
         beforeRequest: fillTokenToHeaders
@@ -19,10 +20,10 @@ scenarios:
           json: "$[0].id"
           as: "competitionId"
     - post:
-        url: "/competitions/{{ competitionId }}/register"
+        url: "/competitions/{{ $processEnvironment.COMPETITION_ID }}/register"
         beforeRequest: fillTokenToHeaders
     - get:
-        url: "/competitions/{{ competitionId }}"
+        url: "/competitions/{{ $processEnvironment.COMPETITION_ID }}"
         beforeRequest: fillTokenToHeaders
         capture:
           json: "$.token"
