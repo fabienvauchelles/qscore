@@ -210,7 +210,7 @@ limit :limit
                     }
                     else {
                         if (!playerExtraRaw) {
-                            throw new PlayerProfileIncompleteError('name_extra', playerRaw.sub);
+                            throw new PlayerProfileIncompleteError(playerRaw.sub, 'name_extra');
                         }
 
                         playerData.name = playerData.name_extra || playerData.name_orig;
