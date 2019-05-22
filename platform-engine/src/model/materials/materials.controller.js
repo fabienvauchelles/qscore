@@ -175,11 +175,16 @@ class MaterialsController {
                     throw new MaterialNotFoundError(materialId);
                 }
             })
-            .then((material) => {
-                material.stream = this._storage.download(material.id);
+            .then((material) => this._storage.read(material.id)
+                .then((fileBuffer) => {
+                    material.fileBuffer = fileBuffer;
 
-                return material;
-            })
+                    return material;
+                })
+                .catch((err) => {
+                    throw new MaterialError(err.message);
+                })
+            )
         ;
     }
 
@@ -210,7 +215,7 @@ class MaterialsController {
                 filename,
                 competition_id: competitionId,
             })
-            .tap((material) => this._storage.store(fileBuffer, material.id))
+            .tap((material) => this._storage.write(fileBuffer, material.id))
             .catch(Sequelize.ValidationError, (err) => {
                 throw new MaterialValidationError(err.message);
             })

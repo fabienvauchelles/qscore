@@ -10,6 +10,7 @@ const
     {CompetitionNotFoundError} = require('../../model/competitions/competitions.controller'),
     {
         materialsController,
+        MaterialError,
         MaterialNotFoundError,
         MaterialValidationError,
     } = require('../../model/materials/materials.controller');
@@ -61,10 +62,13 @@ class MaterialsController extends Controller {
                 res.setHeader('Content-Type', 'application/octet-stream');
                 res.setHeader('Content-Disposition', `attachment; filename=${material.filename}`);
 
-                material.stream.pipe(res);
+                res.send(material.fileBuffer);
             })
             .catch(MaterialNotFoundError, (err) => {
                 throw new ResourceNotFoundError(err.message);
+            })
+            .catch(MaterialError, (err) => {
+                throw new BadRequestError(err.message);
             })
         ;
     }

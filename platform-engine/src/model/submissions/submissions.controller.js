@@ -222,11 +222,16 @@ class SubmissionsController {
                     throw new SubmissionNotFoundError(submissionId);
                 }
             })
-            .then((submission) => {
-                submission.stream = this._storage.download(submission.id);
+            .then((submission) => this._storage.read(submission.id)
+                .then((fileBuffer) => {
+                    submission.fileBuffer = fileBuffer;
 
-                return submission;
-            })
+                    return submission;
+                })
+                .catch((err) => {
+                    throw new SubmissionError(err.message);
+                })
+            )
         ;
     }
 
@@ -320,7 +325,7 @@ class SubmissionsController {
 
             return SubmissionModel.create(payload, {transaction});
         })
-            .tap((submission) => this._storage.store(fileBuffer, submission.id))
+            .tap((submission) => this._storage.write(fileBuffer, submission.id))
             // Send to azure
             .tap((submission) => {
                 events.emit(submission.competition_id, `submissions::${token}`, 'submissions::submitted');

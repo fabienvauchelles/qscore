@@ -21,13 +21,13 @@ class Storage {
     }
 
 
-    download(filename) {
+    read(filename) {
         const filepath = path.join(this._storagePath, filename);
 
-        return fs.createReadStream(filepath);
+        return fs.readFileAsync(filepath);
     }
 
-    store(fileBuffer, filename) {
+    write(fileBuffer, filename) {
         const filepath = path.join(this._storagePath, filename);
 
         return fs.writeFileAsync(filepath, fileBuffer);

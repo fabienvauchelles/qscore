@@ -16,6 +16,7 @@ const
     } = require('../../model/competitions/competitions.controller'),
     {
         submissionsController,
+        SubmissionError,
         SubmissionNotFoundError,
         SubmissionTokenTooCloseError,
         SubmissionTokenNotOpenedError,
@@ -71,10 +72,13 @@ class SubmissionsController extends Controller {
             .then((submission) => {
                 res.setHeader('Content-Type', 'application/octet-stream');
 
-                submission.stream.pipe(res);
+                res.send(submission.fileBuffer);
             })
             .catch(SubmissionNotFoundError, (err) => {
                 throw new ResourceNotFoundError(err.message);
+            })
+            .catch(SubmissionError, (err) => {
+                throw new BadRequestError(err.message);
             })
         ;
     }
