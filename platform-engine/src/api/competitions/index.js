@@ -108,7 +108,7 @@ router.get(
 router.get(
     '/:competitionId/materials/:materialId/download',
     competitionsController.canAccessToCompetitionOrAdmin,
-    materialsController.getMaterialDownloadById
+    materialsController.getMaterialDataById
 );
 
 // POST /:competitionId/materials (admin)

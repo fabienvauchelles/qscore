@@ -49,19 +49,19 @@ class MaterialsController extends Controller {
     }
 
 
-    getMaterialDownloadById(req, res) {
+    getMaterialDataById(req, res) {
         const
             competitionId = req.params.competitionId,
             materialId = req.params.materialId,
             viewAll = req.admin;
 
         return materialsController
-            .getMaterialDownloadById(competitionId, materialId, viewAll)
+            .getMaterialDataById(competitionId, materialId, viewAll)
             .then((material) => {
                 res.setHeader('Content-Type', 'application/octet-stream');
                 res.setHeader('Content-Disposition', `attachment; filename=${material.filename}`);
 
-                res.send(material.datafile);
+                material.stream.pipe(res);
             })
             .catch(MaterialNotFoundError, (err) => {
                 throw new ResourceNotFoundError(err.message);
@@ -74,7 +74,7 @@ class MaterialsController extends Controller {
         const competitionId = req.params.competitionId;
 
         return this.readFile(req)
-            .spread((file, fields) => materialsController.createMaterial(competitionId, fields.filename, file))
+            .spread((fileBuffer, fields) => materialsController.createMaterial(competitionId, fields.filename, fileBuffer))
             .then((material) => {
                 this.sendData(res, material);
             })

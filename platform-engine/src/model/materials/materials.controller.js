@@ -9,6 +9,7 @@ const
 const
     MaterialModel = require('./material/materiel.model'),
     database = require('../../common/database'),
+    Storage = require('../../common/storage'),
     {WrongParameterError} = require('../../common/exceptions');
 
 
@@ -41,7 +42,9 @@ class MaterialValidationError extends Error {
 
 class MaterialsController {
 
-    constructor() {}
+    constructor() {
+        this._storage = new Storage('materials');
+    }
 
 
     getAllMaterials(competitionId, viewAll = false) {
@@ -105,13 +108,6 @@ class MaterialsController {
             ' / materialId=', materialId
         );
 
-        const opts = {
-            where: {
-                competition_id: competitionId,
-                id: materialId,
-            },
-        };
-
         return MaterialModel
             .find({
                 where: {
@@ -129,7 +125,7 @@ class MaterialsController {
     }
 
 
-    getMaterialDownloadById(competitionId, materialId, viewAll = false) {
+    getMaterialDataById(competitionId, materialId, viewAll = false) {
         if (!competitionId ||
             competitionId.length <= 0) {
             return Promise.reject(new WrongParameterError('competitionId'));
@@ -141,7 +137,7 @@ class MaterialsController {
         }
 
         winston.debug(
-            '[MaterialsController] getMaterialDownloadById(): competitionId=', competitionId,
+            '[MaterialsController] getMaterialDataById(): competitionId=', competitionId,
             ' / materialId=', materialId
         );
 
@@ -150,7 +146,7 @@ class MaterialsController {
                 competition_id: competitionId,
                 id: materialId,
             },
-            attributes: ['id', 'filename', 'datafile'],
+            attributes: ['id', 'filename'],
         };
 
         if (!viewAll) {
@@ -179,11 +175,16 @@ class MaterialsController {
                     throw new MaterialNotFoundError(materialId);
                 }
             })
+            .then((material) => {
+                material.stream = this._storage.download(material.id);
+
+                return material;
+            })
         ;
     }
 
 
-    createMaterial(competitionId, filename, file) {
+    createMaterial(competitionId, filename, fileBuffer) {
         if (!competitionId ||
             competitionId.length <= 0) {
             return Promise.reject(new WrongParameterError('competitionId'));
@@ -194,22 +195,22 @@ class MaterialsController {
             return Promise.reject(new WrongParameterError('filename'));
         }
 
-        if (!file ||
-            !_.isObject(file)) {
-            return Promise.reject(new WrongParameterError('file'));
+        if (!fileBuffer ||
+            !_.isObject(fileBuffer)) {
+            return Promise.reject(new WrongParameterError('fileBuffer'));
         }
 
         winston.debug(
             '[MaterialsController] createMaterial(): competitionId=', competitionId,
-            ' / file.length=', file.length
+            ' / fileBuffer.length=', fileBuffer.length
         );
 
         return MaterialModel
             .create({
                 filename,
                 competition_id: competitionId,
-                datafile: file.buffer,
             })
+            .tap((material) => this._storage.store(fileBuffer, material.id))
             .catch(Sequelize.ValidationError, (err) => {
                 throw new MaterialValidationError(err.message);
             })
@@ -242,7 +243,7 @@ class MaterialsController {
                     competition_id: competitionId,
                     id: materialId,
                 },
-                attributes: ['id', 'datafile'],
+                attributes: ['id'],
                 transaction,
             })
             .tap((material) => {
@@ -254,7 +255,7 @@ class MaterialsController {
                 const materialUpdate = _.merge(
                     {},
                     material,
-                    _.omit(materialRaw, ['id', 'created_at', 'updated_at', 'datafile'])
+                    _.omit(materialRaw, ['id', 'created_at', 'updated_at'])
                 );
 
                 if (!materialRaw.release_at) {

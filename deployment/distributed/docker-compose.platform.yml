@@ -11,24 +11,32 @@ services:
   platform-engine1:
     image: qscoreregistry.azurecr.io/qscore/platform-engine:latest
     restart: always
+    volumes:
+      - ./storage:/storage
     env_file:
       - platform.env
 
   platform-engine2:
     image: qscoreregistry.azurecr.io/qscore/platform-engine:latest
     restart: always
+    volumes:
+      - ./storage:/storage
     env_file:
       - platform.env
 
   platform-engine3:
     image: qscoreregistry.azurecr.io/qscore/platform-engine:latest
     restart: always
+    volumes:
+      - ./storage:/storage
     env_file:
       - platform.env
 
   platform-engine4:
     image: qscoreregistry.azurecr.io/qscore/platform-engine:latest
     restart: always
+    volumes:
+      - ./storage:/storage
     env_file:
       - platform.env
 

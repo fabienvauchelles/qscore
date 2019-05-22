@@ -14,6 +14,7 @@ const
     {competitionsController} = require('../competitions/competitions.controller'),
     {leadsController, LeadValidationError} = require('../leads/leads.controller'),
     SubmissionModel = require('./submission/submission.model'),
+    Storage = require('../../common/storage'),
     {WrongParameterError} = require('../../common/exceptions');
 
 const
@@ -69,7 +70,9 @@ class SubmissionTokenNotOpenedError extends SubmissionTokenError {
 
 class SubmissionsController {
 
-    constructor() {}
+    constructor() {
+        this._storage = new Storage('submissions');
+    }
 
 
     start(processSubmission = true) {
@@ -212,14 +215,18 @@ class SubmissionsController {
         return SubmissionModel
             .find({
                 where: {id: submissionId},
-                attributes: ['datafile'],
+                attributes: ['id'],
             })
             .tap((submission) => {
                 if (!submission) {
                     throw new SubmissionNotFoundError(submissionId);
                 }
             })
-            .then((submission) => submission.datafile)
+            .then((submission) => {
+                submission.stream = this._storage.download(submission.id);
+
+                return submission;
+            })
         ;
     }
 
@@ -292,19 +299,18 @@ class SubmissionsController {
     }
 
 
-    createSubmission(token, pc, comment, file) {
-        if (!file ||
-            !_.isObject(file)) {
-            return Promise.reject(new WrongParameterError('file'));
+    createSubmission(token, pc, comment, fileBuffer) {
+        if (!fileBuffer ||
+            !_.isObject(fileBuffer)) {
+            return Promise.reject(new WrongParameterError('fileBuffer'));
         }
 
-        winston.debug('[SubmissionsController] createSubmission(): file.length=', file.length);
+        winston.debug('[SubmissionsController] createSubmission(): fileBuffer.length=', fileBuffer.length);
 
         return database.transaction((transaction) => {
             const payload = {
                 competition_id: pc.competition_id,
                 player_sub: pc.player_sub,
-                datafile: file.buffer,
             };
 
             const cComment = clean(comment);
@@ -314,12 +320,17 @@ class SubmissionsController {
 
             return SubmissionModel.create(payload, {transaction});
         })
+            .tap((submission) => this._storage.store(fileBuffer, submission.id))
             // Send to azure
             .tap((submission) => {
                 events.emit(submission.competition_id, `submissions::${token}`, 'submissions::submitted');
             })
             .tap((submission) => this._askSubmissionProcessing(submission))
+            .catch((err) => {
+                throw err;
+            })
         ;
+
 
 
         ////////////
@@ -352,9 +363,6 @@ class SubmissionsController {
             SubmissionModel
                 .find({
                     where: {id: submissionId},
-                    attributes: {
-                        exclude: ['datafile'],
-                    },
                     transaction,
                 })
                 .tap((submission) => {
@@ -362,11 +370,11 @@ class SubmissionsController {
                         throw new SubmissionNotFoundError(submissionId);
                     }
                 })
+                .tap((submission) => this._storage.remove(submission.id))
                 .then((submission) => {
                     submission.score = score;
                     submission.status = 'VALID';
                     submission.error = null;
-                    submission.datafile = null;
 
                     return submission.save({transaction});
                 })
@@ -412,9 +420,6 @@ class SubmissionsController {
         return database.transaction((transaction) =>
             SubmissionModel.find({
                 where: {id: submissionId},
-                attributes: {
-                    exclude: ['datafile'],
-                },
                 transaction,
             })
             .tap((submission) => {
@@ -422,11 +427,11 @@ class SubmissionsController {
                     throw new SubmissionNotFoundError(submissionId);
                 }
             })
+            .tap((submission) => this._storage.remove(submission.id))
             .then((submission) => {
                 submission.score = null;
                 submission.status = 'INVALID';
                 submission.error = message;
-                submission.datafile = null;
 
                 return submission.save({transaction});
             })
@@ -457,9 +462,6 @@ class SubmissionsController {
                     retry: {
                         $lt: config.submissions.maxRetries,
                     },
-                },
-                attributes: {
-                    exclude: ['datafile'],
                 },
             })
             .then((submissions) => Promise.mapSeries(submissions,

@@ -116,6 +116,8 @@ const config = {
         maxRetries: parseInt(ENV.SUBMISSIONS_MAX_RETRIES || '2'),
         retryDelay: parseInt(ENV.SUBMISSIONS_RETRY_DELAY || '15000'),
     },
+
+    storage: ENV.STORAGE || '/storage',
 };
 
 const test = {

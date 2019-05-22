@@ -68,10 +68,10 @@ class SubmissionsController extends Controller {
 
         return submissionsController
             .getSubmissionDataById(submissionId)
-            .then((datafile) => {
+            .then((submission) => {
                 res.setHeader('Content-Type', 'application/octet-stream');
 
-                res.send(datafile);
+                submission.stream.pipe(res);
             })
             .catch(SubmissionNotFoundError, (err) => {
                 throw new ResourceNotFoundError(err.message);
@@ -85,7 +85,7 @@ class SubmissionsController extends Controller {
 
         return submissionsController.createSubmissionCheck(token)
             .then((pc) => this.readFile(req)
-                    .spread((file, fields) => submissionsController.createSubmission(token, pc, fields.comment, file))
+                    .spread((fileBuffer, fields) => submissionsController.createSubmission(token, pc, fields.comment, fileBuffer))
             )
             .then((submission) => {
                 this.sendData(res, submission);

@@ -34,12 +34,6 @@ const materialMapping = {
     description: {
         type: Sequelize.TEXT,
     },
-
-
-    datafile: {
-        type: Sequelize.BLOB,
-        allowNull: false,
-    },
 };
 
 

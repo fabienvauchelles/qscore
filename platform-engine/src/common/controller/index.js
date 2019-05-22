@@ -6,9 +6,6 @@ const
     zlib = require('zlib');
 
 const
-    UploadFile = require('./upload-file');
-
-const
     config = require('../../config');
 
 
@@ -208,11 +205,9 @@ class Controller {
                     fields[fieldname] = val;
                 });
 
-                let targetFile;
+                let fileBuffer;
                 let fileStarted = false;
                 busboy.on('file', (fieldname, file) => {
-                    file.on('error', (err) => reject(new FileError(err.message)));
-
                     if (fieldname !== 'datafile') {
                         return reject(new FileError('Only fieldname \'datafile\' is allowed'));
                     }
@@ -223,55 +218,69 @@ class Controller {
                     fileStarted = true;
 
                     const buffers = [];
-                    file.on('data', (buffer) => {
-                        buffers.push(buffer);
-                    });
-                    file.on('limit', () => {
-                        req.unpipe(busboy);
-                        return reject(new FileError('File too large'));
-                    });
+                    file
+                        .on('error', (err) => reject(new FileError(err.message)))
+                        .on('limit', () => {
+                            req.unpipe(busboy);
 
-                    file.on('end', () => {
-                        targetFile = new UploadFile(Buffer.concat(buffers));
-                    });
+                            return reject(new FileError('File too large'));
+                        })
+                        .on('data', (buffer) => {
+                            buffers.push(buffer);
+                        })
+                        .on('end', () => {
+                            fileBuffer = Buffer.concat(buffers);
+                        })
+                    ;
                 });
 
-                busboy.on('finish', () => {
-                    if (!targetFile) {
-                        return reject(new FileError('No file found'));
-                    }
-
-                    if (targetFile.length <= 0) {
-                        return reject(new FileError('File is empty'));
-                    }
-
-                    switch (fields.compression) {
-                        case 'gzip': {
-                            zlib.gunzip(targetFile.buffer, (err, bufferUnzip) => {
-                                if (err) {
-                                    return reject(new FileError(err.message));
-                                }
-
-                                targetFile = new UploadFile(bufferUnzip);
-
-                                return resolve([targetFile, fields]);
-                            });
-
-                            break;
-                        }
-
-                        default: {
-                            return resolve([targetFile, fields]);
-                        }
-                    }
-                });
+                busboy.on('finish', () => resolve([fileBuffer, fields]));
 
                 req.pipe(busboy);
             }
             catch (err) {
                 return reject(new FileError(err.message));
             }
-        });
+        })
+            .tap((vals) => {
+                const fileBuffer = vals[0];
+
+                if (!fileBuffer) {
+                    throw new FileError('No file found');
+                }
+
+                if (fileBuffer.length <= 0) {
+                    throw new FileError('File is empty');
+                }
+            })
+            .spread((fileBuffer, fields) => {
+                switch (fields.compression) {
+                    case 'gzip': {
+                        return gunzip(fileBuffer)
+                            .then((fileBufferUnzipped) => [fileBufferUnzipped, fields]);
+                    }
+
+                    default: {
+                        return [fileBuffer, fields];
+                    }
+                }
+            })
+        ;
+
+
+        ////////////
+
+        function gunzip(src) {
+            return new Promise((resolve, reject) => {
+                zlib.gunzip(src, (err, dst) => {
+                    if (err) {
+                        return reject(new FileError(err.message));
+                    }
+
+                    return resolve(dst);
+                });
+            });
+        }
     }
 }
 

@@ -42,10 +42,6 @@ const submissionMapping = {
         defaultValue: 0,
         allowNull: false,
     },
-
-    datafile: {
-        type: Sequelize.BLOB,
-    },
 };
 
 
